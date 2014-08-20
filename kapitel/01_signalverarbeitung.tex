@@ -2,13 +2,58 @@
 
 \section{Signalverarbeitung}
 
+Die erste Aufgabe der Signalverarbeitung ist eine Vorverarbeitung. So muss z.B. ein analoges elektrisches Sensorsignal digitalisiert werden bevor es in einem Rechner verarbeitet werden kann. Anschließend wird durch die Signalverarbeitung die relevante Information aus dem Signal extrahiert. Oder in anderen Worten: Unwichtige Informationen sollen herausgefiltert werden. Beispiele für unwichtige Informationen:
+\begin{itemize}
+	\item Sprecheridentität (sprecherabhängigen Anteile)
+	\item Hintergrundgeräusche, Hall, Echo, absolute Lautstärke
+	\item Rotationen in Bildern
+	\item Helligkeit
+\end{itemize}
+
+\subsection{Faltung\index{Faltung}}
+
+In der Mathematik und besonders in der Funktionalanalysis beschreibt die Faltung einen mathematischen Operator, welcher für zwei Funktionen $f$ und $g$ eine dritte Funktion liefert. Diese gibt eine Art "{}Überlappung"{} zwischen $f$ und einer gespiegelten und verschobenen Version von $g$ an.
+Definition: $$\begin{array}{cl} (f * g)(t) = \int\limits_{- \infty}^{+ \infty} f(t - \tau) g(\tau) d \tau & \quad \textrm{(kontinuierlich)} \\ (f * g)[i] = \sum\limits_{j = - \infty}^{\infty} f[i - j] g[j] & \quad \textrm{(diskret)} \end{array}$$
+Bedeutung: \\
+Eine anschauliche Deutung der Faltung ist die Gewichtung einer Funktion mit einer anderen. Der Funktionswert der Gewichtsfunktion an einer Stelle $t$ gibt an, wie stark der um $t$ zurückliegende Wert der gewichteten Funktion in den Wert der Ergebnisfunktion eingeht. \\
+Faltung der Zeitfunktion: $$F(f_1(t) * f_2(t)) = F_1(\omega) \cdot F_2(\omega)$$
+Multiplikation der Zeitfunktionen: $$F(f_1(t) \cdot f_2(t)) = F_1(\omega) * F_2(\omega)$$
+Faltung zweier Funktionen entspricht dem Filtern eines Signals. \\[0,1cm]
+Beipiel mit den folgenden zwei Funktionen:
+$$f(x) = \left\{ \begin{array}{ccc} A & \textrm{ für } & x \in [-L;L] \\ 0 & \textrm{sonst} & \end{array} \right. \quad \textrm{und} \quad g(x) = \left\{ \begin{array}{ccc} A & \textrm{ für } & x \in [0;2L] \\ 0 & \textrm{sonst} & \end{array} \right.$$
+
+% Bild der beiden Funktionen
+\mypic{10}{faltung1}
+
+Die Faltung der beiden Funktionen sieht folgendermaßen aus:
+
+% Bild der Faltung
+\mypic{5}{faltung2}
+
+Die Faltung lässt sich wiefolgt ermitteln:
+\begin{enumerate}
+	\item Symbolisch: Lösung des Integrals
+	\item Grafisch: Spiegelung von $f$ und über $g$ schieben. Wert der Faltung für t entspricht der Fläche der Überlappung
+\end{enumerate}
+
 \subsection{Grundlegendes}
 
 \begin{description}
 \item[Erfassen/Messen von Signalen:] \quad
 \begin{itemize}
-\item Signal als Funktion: Akustik $f(t)$; Bilder $f(x,y)$; Energie als Funktion der Zeit oder des Raumes; Energie: Lautstärke, Helligkeit, Grauwertintensität; Farbe, Stereo, Bildsequenzen
-\item Eigenschaften: Hinlänglich glatt; $0 \leq f(x,y) < \infty$ (wertbeschränkt)
+\item Signal als Funktion: 
+\begin{itemize}
+	\item Akustik $f(t)$
+	\item Bilder $f(x,y)$
+	\item Energie als Funktion der Zeit oder des Raumes
+	\item Energie: Lautstärke, Helligkeit, Grauwertintensität
+	\item Farbe, Stereo, Bildsequenzen
+\end{itemize}
+\item Eigenschaften: 
+\begin{itemize}
+	\item Hinlänglich glatt
+	\item $0 \leq f(x,y) < \infty$ (wertbeschränkt)
+\end{itemize} 
 \end{itemize}
 \item[Abtastung und Sampling\index{Sampling}:] \quad
 \begin{itemize}
@@ -38,26 +83,6 @@
 \item $A \delta(x - x_0)$ Impuls mit Stärke $A$ an der Stelle $x = x_0$
 \end{itemize}
 \end{description}
-
-\subsection{Faltung\index{Faltung}}
-
-In der Mathematik und besonders in der Funktionalanalysis beschreibt die Faltung einen mathematischen Operator, welcher für zwei Funktionen $f$ und $g$ eine dritte Funktion liefert. Diese gibt eine Art "{}Überlappung"{} zwischen $f$ und einer gespiegelten und verschobenen Version von $g$ an.
-Definition: $$\begin{array}{cl} (f * g)(t) = \int\limits_{- \infty}^{+ \infty} f(t - \tau) g(\tau) d \tau & \quad \textrm{(kontinuierlich)} \\ (f * g)[i] = \sum\limits_{j = - \infty}^{\infty} f[i - j] g[j] & \quad \textrm{(diskret)} \end{array}$$
-Bedeutung: \\
-Eine anschauliche Deutung der Faltung ist die Gewichtung einer Funktion mit einer anderen. Der Funktionswert der Gewichtsfunktion an einer Stelle $t$ gibt an, wie stark der um $t$ zurückliegende Wert der gewichteten Funktion in den Wert der Ergebnisfunktion eingeht. \\
-Faltung der Zeitfunktion: $$F(f_1(t) * f_2(t)) = F_1(\omega) \cdot F_2(\omega)$$
-Multiplikation der Zeitfunktionen: $$F(f_1(t) \cdot f_2(t)) = F_1(\omega) * F_2(\omega)$$
-Faltung zweier Funktionen entspricht dem Filtern eines Signals. \\[0,1cm]
-Beipiel mit den folgenden zwei Funktionen:
-$$f(x) = \left\{ \begin{array}{ccc} A & \textrm{ für } & x \in [-L;L] \\ 0 & \textrm{sonst} & \end{array} \right. \quad \textrm{und} \quad g(x) = \left\{ \begin{array}{ccc} A & \textrm{ für } & x \in [0;2L] \\ 0 & \textrm{sonst} & \end{array} \right.$$
-
-% Bild der beiden Funktionen
-\mypic{10}{faltung1}
-
-Die Faltung der beiden Funktionen sieht folgendermaßen aus:
-
-% Bild der Faltung
-\mypic{5}{faltung2}
 
 \subsection{Fouriertransformation\index{Fouriertransformation}}
 
@@ -107,14 +132,27 @@ Signal & $\Rightarrow$ & Transformierte \\ Transformierte & $\Leftarrow$ & Signa
 \item Je stärker die Übergänge im Signal, desto höher die Frequenz der Komponenten, um so breiter das Spektrum.
 \end{itemize}
 
-\subsection{Fourierreihen\index{Fourierreihen}}
 
-\subsubsection*{Fourierreihen und -transformationen}
+\subsection{Kurzzeitspektralanalyse\index{Kurzzeitspektralanalyse}}
+
 Problem: Beide kontinuierlich, schwer digital darzustellen
 \begin{itemize}
 \item Diskrete Zeit (\textsl{discrete time}) Fouriertransformation: \\ Eingabe: diskret, aperiodisch \\ Ergebnis: periodisch, kontinuierlich
-\item Diskrete Fouriertransformation (DFT, FFT): \\ Eingabe: periodisch, diskret \\ Ergebnis: diskret, periodisch \\ Spezialfall der Z-Transformation. Periodische Eingabe? Man schneidet ein Fenster aus und tut so, als ob es so periodisch unendlich fortgesetzt wird.
+\item Diskrete Fouriertransformation (DFT, FFT): \\ Eingabe: periodisch, diskret \\ Ergebnis: diskret, periodisch \\ Spezialfall der Z-Transformation. \\ Periodische Eingabe? Man schneidet ein Fenster aus und tut so, als ob es so periodisch unendlich fortgesetzt wird.
 \end{itemize}
+
+Spektrum einer ganzen Aufnahme ist häufig nicht hilfreich bzw. kann die Analyse ja immer nur für ein endliches Intervall erfolgen. Problem: Frequenzauflösung vs. Zeitauflösung.
+
+Beispiel Phoneme: Phoneme haben eine Länge von 10-100ms. Es wird angenommen, dass Sprache stationär ist in einem kurzen Zeitbereich. Es wird deshalb die Frequenzverteilung in kurzen Segmenten analysiert. Eine Herrausforderung ist es eine Abwägung zwischen zeitlicher Auflösung und der Frequenzauflösung zu finden. Es wird deshalb ein überlappender Ausschnitt aus einem Signal verwendet.
+
+Fensterung erfolgt
+\begin{itemize}
+	\item Es wird Periodizität des ausgesuchten Signals angenommen. Daher DFT.
+	\item Problem: Periodizität des gefensterten Signals. Periodische Fortsetzung kann unstetig sein.
+\end{itemize}
+Weiterer Effekt der Fensterung ist der Leck-Effekt. Ein Ausschneiden eines Stückes aus einem Signal entspricht im zeitbereich einer Multiplikation mit einer Rechteck-Funktion. Im Frequenzbereich entspricht dies einer Faltung des originalen Spektrums mit der sinc-Funktion. Die Ideale Fensterung wäre keine Fensterung. Dies entspricht im frequenzbereich einer Faltung mit einem Dirac. Eine sinc-Funktion weicht also sehr stark von einem Dirac ab. Eine Verringerung des Leck-Effekts lässt sich nur erreichen wenn das Fenster am Rand sehr viele Ableitungen hat die gegen 0 gehen. Ein solches Fenster ist das Hanning-Fenster.
+
+\subsection{Fourierreihen\index{Fourierreihen}}
 
 \subsubsection*{Fourierreihenzerlegung\index{Fourierreihenzerlegung}}
 \begin{itemize}
@@ -185,7 +223,37 @@ A(m) &=& \sum\limits_i f(i) f(i-m) \\ A(m,n) &=& \sum\limits_i \sum\limits_j f(i
 \end{itemize}
 
 
+\subsection{Fähigkeitencheck für die Klausur}
+\begin{itemize}
+	\item Bestimmung der Faltung grafisch
+	\item Bestimmung der Faltung rechnerisch
+	\item Digitalisierung von Signalen, Abtastung, Tritt Aliasing auf?
+	\item Filtern mit Filter (Fourietransformation)
+	\item Berechnung von Samplingrate, Grenzfrequenz, Frequenzauflösung, Zeitauflösung für DFT
+\end{itemize}
 
+\subsection{Fragen zum Kapitel}
+\begin{enumerate}
+  % SS12 Klausur: Aufgabe 4
+	\item Wenn im Frequenzbereich eine Faltung durchgeführt wird, welche Operation tritt dann im Zeitbereich auf?
+	% Antwort: Multiplikation
+  % SS12 Klausur: Aufgabe 4
+	\item Welche Eigenschaft muss ein Signal haben, damit eine Fourierreihenzerlegung für das Signal durchgeführt werden kann?
+	% Antwort: Das Signal muss kontinuierlich und periodisch sein.
 
+	% SS12 Klausur: Aufgabe 4
+	\item In der Spracherkennung wird häufig das Spektrum eines kurzen Intervalls berechnet. Leider wird dadurch eine Annahme verletzt und es tritt ein Effekt auf. Was ist die Annahme und welcher Effekt tritt auf?
+	% Antwort: Es wird angenommen das sich das Signal aus dem Intervall periodisch fortsetzt. Im Spektrum tretten Frequenzen auf die im Signal nicht auftreten. Dies wird als der Leck-Effekt bezeichnet.
+	% SS12 Klausur: Aufgabe 5
+	\item Was besagt das Abtasttheorem?
+	% Antwort: Habe ein kontinuierliches Signal mit $f_{max}$ die größte auftretende Frequenz, so muss die Abtastfrequenz mindestens das doppelte von $f_{max}$ sein um das Signal zu rekonstruieren.
+	\item Welches Problem entsteht wenn es nicht beachtet wird?
+	% Antwort: Aliasing. Das Spektrum ist verfälscht und das Signal kann nicht rekonstruiert werden.
+	\item Mit welchen zwei Methoden kann diesem Problem entgegengewirkt werden? Welche Nachteile haben diese Methoden?
+	% Antwort: 1. Erhöhung Abtastfrequenz (Nachteil: Erhöhtes Daten aufkommen). 2. Tiffpassfilterung des Signals (Nachteil: Verlust von Information). 
+	\item Skizzieren Sie den Unterschied zwischen einer Rechteck-Fensterfunktion und einer Fensterfunktion die den Leck-Effekt vermindert.
+	% WS12 Klausur: Aufgabe 5
+	%\item Was ist ein Spektrum? Was ist ein Spektogramm?
+\end{enumerate}
 
 \textit{}
