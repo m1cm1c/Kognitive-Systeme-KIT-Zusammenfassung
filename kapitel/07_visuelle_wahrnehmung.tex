@@ -1,7 +1,76 @@
 % !TeX root = summary.tex
 
-\section{Visuelle Wahrnehmung des Menschen}
+\chapter{Visuelle Wahrnehmung des Menschen}
 Klausurrelevant Folien 1-24
+\subsection{Bewegungserfassung I}
+Problemstellung beim Human Motion Capture (HMC):
+\begin{itemize}
+	\item Eingabe: Sequenz von Bildern bzw. Bildpaaren oder Bildtupeln
+	\item Ausgabe: Geschätzte Konfiguration (Gelenkwinkel) für jedes Frame bezüglich eines zuvor definierten Menschmodells
+	\item Schwierigkeit: Hohe Dimensionalität des Suchraumes
+\end{itemize}
+\subsubsection{Menschmodell}
+Menschmodell für HMC setzt sich zusammen aus
+\begin{itemize}
+	\item Kinematischem Modell
+	\item Geometrischen Modell
+	\begin{itemize}
+		\item Meist aus Festköpern
+		\item Optional: deformierbares Hautmodell
+	\end{itemize}
+\end{itemize}
+Aus Gründen der Rechenzeit werden vereinfachte Modelle verwendet.
+\subsubsection{Kinematisches Modell}
+\begin{itemize}
+	\item Definiert die Anzahl und Art der Gelenke
+	\item Definiert die Segmentlängen zwischen der Gelenken
+	\item Für die Erfassung wird die Schulter meist durch ein einzelnes Kugelgelenk modelliert
+	\end{itemize}
+\subsubsection{Geometrisches Modell}
+\begin{itemize}
+	\item Definiert die 3D-Form der einzelnen Segmente
+	\item Übliche 3D-Primitive:
+	
+	\begin{itemize}
+		\item Zylinder
+		\item Kegelausschnitte (Kreis- oder Ellipsenförmiger Querschnitt)
+	\end{itemize}
+\end{itemize}
+\subsubsection{Berechnung}
+Berechnung der projizierten Kontur $\overline{P_1 P_2}$ und $\overline{P_3 P_4}$ eines Kegelausschnitts mit kreisförmigem Querschnitt.
+Gegeben:
+\begin{itemize}
+	\item Porjektionszentrum=Ursprung $Z$
+	\item Fußpunkt $c$
+	\item Richtung $n$
+	\item Länge $L$
+	\item Radien $r$,$R$
+\end{itemize}
+Berechnung
+\begin{itemize}
+	\item $u=\frac{n\times c}{\left|n\times c\right|}$
+	\item $c_t=c+L \cdot \frac{n}{\left|n\right|}$
+	\item $p_{1,3}=c \pm R \cdot u$
+	\item $p_{2,4}=c_t \pm r \cdot u$
+\end{itemize}
+\subsubsection{Bildbasiert mit Partikelfilter}
+Den Kern bildet eine Wahrscheinlichkeitsfunktion, welche bewertet, wie gut eine gegeben Konfiguration des Menschmodells zu den aktuellen Beobachtungen (Bilddaten) passt.
+
+Hinweise (engl. Cues) für die Bewertung, die aus den Bilddaten gewonnen werden können sind:
+\begin{itemize}
+	\item Region Cue \cite{Deutscher.2000}
+	\item Kanten Cue \cite{Deutscher.2000}
+	\item Distanz Cue [Azad]
+\end{itemize}
+\subsubsection{Region Cue}
+\begin{itemize}
+	\item Benötigt Segmentierung der Person vom Hintergrund
+	\item Bewertet den Abgleich des Segmentierungsergebnisses mit der Projektion der Körpersegmente
+	\item Hierzu werden Punkte innerhalb der projizierten Kontur überprüft
+	\item Bewertungsfunktion:
+\end{itemize}
+\subsection{Iterative Closet Point (ICP)}
+\subsection{Bewegungserfassung II}
 
 
 

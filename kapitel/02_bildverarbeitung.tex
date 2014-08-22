@@ -6,9 +6,9 @@
 \end{tabular}
 }
 
-\section{Bildverarbeitung}
+\chapter{Bildverarbeitung}
 
-\subsection{Bildgenerierung}
+\section{Bildgenerierung}
 
 \begin{itemize}
 \item Heute werden oftmals Digitalkameras verwendet (meist CCD, aber auch CMOS)
@@ -29,19 +29,18 @@
 \end{itemize}
 \end{itemize}
 
-\subsection{Bildrepräsentation}
+\section{Bildrepräsentation}
 
 \textbf{Monochrombild:} Diskrete Funktion
 \begin{eqnarray*}
 Img \, : \, [0 \dots n-1] \times [0 \dots m-1] &\to& [0 \dots q] \\ (u,v) &\mapsto& Img(u,v)
 \end{eqnarray*}
 Üblich: $q = 255$; $n = 640$, $m=480$ (VGA) oder $n = 768$, $m=576$ (PAL) \\[0,1cm]
-\textbf{Farbbild:}
+\subsection{Farbbild}
 \begin{itemize}
 \item Viele verschiedene Farbmodelle für unterschiedliche Anwendungen
 \item Klassifikation nach erreichbarem Farbraum
-\end{itemize}
-\textbf{Beispiele:}
+\item
 \begin{itemize}
 \item S/W, Grauwertstufen
 \item RGB-Modell: speziell für Monitore (Phosphor-Kristalle), sehr üblich $$Img(u,v) \in \mathbb{R}^3 = (r,g,b)^T$$
@@ -50,8 +49,9 @@ Img \, : \, [0 \dots n-1] \times [0 \dots m-1] &\to& [0 \dots q] \\ (u,v) &\maps
 \item CMYK- Modell: Farbdrucker (subtraktive Farbmischung)
 \item YIQ: Fernsehmodell
 \end{itemize}
+\end{itemize}
 
-\subsubsection*{RGB-Modell}\index{RGB-Modell}
+\subsubsection{RGB-Modell}\index{RGB-Modell}
 
 \begin{eqnarray*}
 Img \, : \, [0 \dots n-1] \times [0 \dots m-1] &\to& [0 \dots R] \times [0 \dots G] \times [0 \dots B] \\ (u,v) &\mapsto& Img(u,v) = (r,g,b)
@@ -62,7 +62,7 @@ Img \, : \, [0 \dots n-1] \times [0 \dots m-1] &\to& [0 \dots R] \times [0 \dots
 \item oft verwendet von Kamera-Treibern
 \end{itemize}
 
-\subsubsection*{HSI-/HSV-Modell\index{HSI-/HSV-Modell}}
+\subsubsection{HSI-/HSV-Modell\index{HSI-/HSV-Modell}}
 
 \begin{itemize}
 \item Hue (Farbnuancen), Saturation (Sättigung), Intensity/Value (Helligkeit)
@@ -76,7 +76,7 @@ S &=& 1 - \frac{3}{R+G+B} \min (R,G,B) \\
 I &=& \frac{1}{3} (R + G + B)
 \end{eqnarray*}
 
-\subsubsection*{Hinterlegung}
+\subsubsection{Hinterlegung}
 
 \begin{itemize}
 \item Hinterlegung eines 8bit Graustufen-Bildes im Speicher
@@ -91,7 +91,7 @@ I &=& \frac{1}{3} (R + G + B)
 \end{itemize}
 \end{itemize}
 
-\subsubsection*{Grauwert-Transformation}
+\subsubsection{Grauwert-Transformation}
 
 Transformation von RGB24 nach 8bit Graustufen:
 \begin{itemize}
@@ -145,7 +145,7 @@ Bild eines Objekts in Tiefe $Z$ wird in Abstand von der Linse $Z'$ gebildet mit:
 \item Vereinfachung wegen $Z >> Z'$: \\ $\Rightarrow$ Perpektivgleichungen aus dem Lochkameramodell können weiterverwendet werden! $$\frac{1}{Z} + \frac{1}{Z'} \thickapprox \frac{1}{Z'} \quad \Rightarrow \quad \frac{1}{Z'} \thickapprox \frac{1}{f}$$
 \end{itemize}
 
-\subsection{Bildverarbeitung}
+\section{Bildverarbeitung}
 
 \subsubsection*{Konzepte}
 
@@ -651,6 +651,20 @@ Das Partikel Filter modelliert die Wahrscheinlichkeitsdichtefunktion oder engl. 
 \item Modell: \\ Quadrat fester Größe mit Kantenlänge $k$ mit Konfigurationsraum $R^2$ (Koordinaten $u,v$ im Bild)
 \item Bewertungsfunktion: $$\myprob{z}{s} \propto e^{- \frac{1}{2 \sigma^2} \left( k^2 - \sum_{m \in M} g_m \right)}$$ wobei $M$ die Menge aller Pixel im binarisierten Bild $z$ (Beobachtungen) im durch $s$ (Konfiguration) definierten Quadrat beschreibt und $g_m$ deren Intensität aus $\{0,1\}$.
 \end{itemize}
+
+\subsection{Fragen zum Kapitel}
+\begin{enumerate}
+  %SS 12 Klausur
+	\item Was ist der maximale Korrelationswert, den die Zero Mean Normalized Cross Correlation (ZNCC) liefern kann?
+	%WS 12 Klausur
+	\item Warum kann man mit Hilfe der Epipolargeometrie das Sterokorrespondenzproblem schneller lösen?
+\end{enumerate}
+
+% Fähigkeiten
+% 1. Anwendung aller besprochener Filter
+% 2. Quaternionen rechnen
+% 3. Rechnen mit Rotationen und Translationen
+% 4. Eine Spreizung vornehmen können
 
 
 

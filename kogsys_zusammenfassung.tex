@@ -5,7 +5,7 @@
 % an Creative Commons, 444 Castro Street, Suite 900, Mountain View, California,
 % 94041, USA.
 
-\documentclass[10pt,a4paper,german,twoside]{article}
+\documentclass[10pt,a4paper,german,twoside]{book}
 
 \synctex=1
 
@@ -75,6 +75,12 @@
 \include{kapitel/06_3d-bildverarbeitung}
 \include{kapitel/07_visuelle_wahrnehmung}
 \include{kapitel/08_wissen_und_planung}
+
+\addcontentsline{toc}{chapter}{Literaturverzeichnis}
+%\nocite{*} %Auch nicht-zitierte BibTeX-Einträge werden angezeigt.
+\bibliographystyle{alpha} %Art der Ausgabe: plain / apalike / amsalpha / ...
+%\bibliography{literatur} %Eine Datei 'literatur.bib' wird hierfür benötigt.
+\bibliography{bib}
 
 
 %============= Register ==================================================================
