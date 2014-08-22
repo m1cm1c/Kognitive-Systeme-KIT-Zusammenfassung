@@ -162,28 +162,22 @@ $\to$ Unterdrückung von Störungen, "{}Verschönern"{} von Bildern, Verformen v
 Anwendung: $$Img'(u,v) = f(Img(u,v))$$
 Unabhängig von der Position bzw. den Nachbarn des Pixels. Implementierung der Funktion $f$ oftmals als Look-Up-Table (Hardware).
 
-\subsubsection*{Affine Punktoperatoren\index{Affine Punktoperatoren}}
+\subsection{Affine Punktoperatoren\index{Affine Punktoperatoren}}
 
-Affine Punktoperatoren:
 \begin{eqnarray*}
 f \, : \, [0 \dots q] &\to& [0 \dots q] \\ x &\mapsto& ax+b
 \end{eqnarray*}
 Parameter $a$ und $b$ legen die Funktion fest. Anwendungen:
 \begin{itemize}
-\item Kontrasterhöhung: $b=0$, $a > 0$ \\ Kontrastverminderung: $b=0$, $a < 0$
-\item Helligkeitserhöhung: $b > 0$, $a = 1$ \\ Helligkeitsverminderung: $b < 0$, $a = 1$
+\item Kontrasterhöhung: $b=0$, $a > 0$ 
+\item Kontrastverminderung: $b=0$, $a < 0$
+\item Helligkeitserhöhung: $b > 0$, $a = 1$ 
+\item Helligkeitsverminderung: $b < 0$, $a = 1$
 \item Invertierung: $b = q$, $a = -1$
-\item Kombinationen
+\item Kombinationen: z.B. $b=-50$, $a=2$
 \end{itemize}
 
-Spreizung\index{Spreizung}:
-\begin{itemize}
-\item Intensitäten im Bild werden linear auf gesamten Bereich ausgedehnt
-\item Abbildungsvorschrift: \[Img'(x,y) = q*\frac{Img(x,y)-min}{max-min}\]
-\item Als affine Punktoperation: \[Img'(x,y) =  \frac{q}{max-min}*Img(x,y)-\frac{q*min}{max-min}\]
-\end{itemize}
-
-\subsubsection*{Nicht-Affine Punktoperationen\index{Nicht-Affine Punktoperationen}}
+\subsection{Nicht-Affine Punktoperationen\index{Nicht-Affine Punktoperationen}}
 
 Beliebige Abbildungsfunktion $$f \, : \, [0 \dots q] \to [0 \dots q]$$
 Anwendung:
@@ -193,7 +187,19 @@ Anwendung:
 \item Binarisierung
 \end{itemize}
 
-\subsubsection*{Histogramme\index{Histogramme}}
+\subsection{Automatische Kontrastanpassung}
+
+\subsubsection{Spreizung\index{Spreizung}}
+\begin{itemize}
+\item Berechne min und max Intensität
+\item Bilde das Intervall [min,max] linear auf [0,255] ab
+\item Ist eine affine Punktoperation!
+\item Nachteil: Nicht roboust und nur unter optimalen Bedingungen anwendbar
+\item Abbildungsvorschrift: \[Img'(u,v) = q*\frac{Img(u,v)-min}{max-min}\]
+\item Als affine Punktoperation: \[Img'(u,v) =  \frac{q}{max-min}*Img(u,v)-\frac{q*min}{max-min}\]
+\end{itemize}
+
+\subsubsection{Histogramme\index{Histogramme}}
 
 Histogrammfunktion: gibt die Häufigkeit eines Selektionsmerkmals an. Normalerweise: Grauwert
 $$H_{Img}(x) = \# (u,v) \, : \, Img(u,v) = x \, , \, x \in [0 \dots q]$$
@@ -202,8 +208,9 @@ Histogrammdehnung\index{Histogrammdehung}:
 \begin{itemize}
 \item Verbesserung der Spreizung
 \item Anstatt $min$ und $max$ werden Quantile verwendet
+\item Die Histogrammdehnung ist eine affine Punktoperation
 \item Akkumuliertes Histogramm berechnen: \[H_a(x):=\sum\limits_{k=0}^x H(k)\]
-\item \(H_q(p_{min})\) und \(H_q(p_{max})\) (z.B. \(p_{min} = 0.1\) und \(p_{max} = 0.9\)) bestimmen mit: \[H_q(p) := \inf\{ x \in \{ 0, \dots ,q\}:H_a(x) \geq p*H_a(q) \}\]
+\item \(H_q(p_{min})\) und \(H_q(p_{max})\) (z.B. \(p_{min} = 0.1\) und \(p_{max} = 0.9\)) bestimmen mit: \[H_q(p) := \inf\{ x \in \{ 0, \dots ,q\}:H_a(x) \geq p \cdot H_a(q) \}\]
 \item Falls \(H_q(p_{min}) = H_q(p_{max})\): Bild ist homogen
 \item Sonst:
 \[ a:=\frac{q}{H_q(p_{max}) - H_q(p_{min})} \]
@@ -212,6 +219,11 @@ Histogrammdehnung\index{Histogrammdehung}:
 \end{itemize}
 
 Histogrammausgleich\index{Histogrammausgleich}:
+\begin{itemize}
+	\item Der Histogrammausgleich erhöht den Kontrast in Bereichen in denen ein Grauwert oft vertreten ist. Dies macht diese Bereiche besser für das Auge sichtbarer
+	\item Histogrammausgleich ist eine homogene Punktoperation, aber keine affine Punktoperation
+	\item Nachteil: Kann in der Praxis auch zu einer Verminderung des Kontrast führen (siehe Übung)
+\end{itemize}
 \begin{itemize}
 \item Histogrammausgleich: bessere Anpassung an das Sehvermögen des Menschen; kein Informationsgewinn \\
 $H_n(0)$ \verb|:=| $H_{Img}(0)$ \\
@@ -232,13 +244,7 @@ $H_n(0)$ \verb|:=| $H_{Img}(0)$ \\
 \verb|endfor|
 \end{itemize}
 
-\subsubsection*{Heute}
 
-\begin{itemize}
-\item Bildanalyse durch Frequenzanalyse
-\item Filter in Frequenzbereich
-\item Filter in Ortsbereich
-\end{itemize}
 
 \subsection{Bildanalyse durch Frequenzanalyse}
 
@@ -658,6 +664,8 @@ Das Partikel Filter modelliert die Wahrscheinlichkeitsdichtefunktion oder engl. 
 	\item Was ist der maximale Korrelationswert, den die Zero Mean Normalized Cross Correlation (ZNCC) liefern kann?
 	%WS 12 Klausur
 	\item Warum kann man mit Hilfe der Epipolargeometrie das Sterokorrespondenzproblem schneller lösen?
+	%Selbst ausgedacht
+	\item Bennen Sie alle affinen Punktoperationen die in der Vorlesung behandelt wurden! 
 \end{enumerate}
 
 % Fähigkeiten
