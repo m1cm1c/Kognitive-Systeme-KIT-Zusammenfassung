@@ -328,30 +328,63 @@ Faltung zweier Funktionen 2D zeitdiskret: $$h[x,y] = f[x,y] * g[x,y] = \sum\limi
 \item Die Transferfunktion $H(u,v)$ ist die Fouriertransformierte der Filterfunktion $h(x,y)$.
 \end{itemize}
 
+
+Beispiel Sobel-X Filters:
+\mypic{12}{filterbsp}
+
 \subsubsection*{Filteroperationen}
 
 \begin{itemize}
-\item Glättungsoperatoren (Rauschelimination): Mittelwertfilter, Gauß
-\item Kantendetektoren: Prewitt, Sobel, Roberts, Laplace
-\item kombinierte Filter: Laplacian of Gauß
+\item Tiefpassfilter: Glättung, Rauschelimination
+\begin{itemize}
+	\item Mittelwertfilter
+	\item Gauß-Filter
+\end{itemize}
+\item Hochpassfilter: Kantendetektion
+\begin{itemize}
+	\item Prewitt
+	\item Sobel
+	\item Roberts
+	\item Laplace
+\end{itemize}
+\item Kombinierte Operationen: Laplacian of Gaussian
 \end{itemize}
 
 \subsection{Filter}
 
-\subsubsection*{Gauß\index{Gauß-Filter}}
+\subsubsection{Mittelwertfilter\index{Mittelwertfilter}}
+\begin{itemize}
+	\item Ziel: Rauschunterdrückung \\ Beispiel: Durchschnitt aus 8-Umgebung und Punkt. Größe beliebig wählbar.
+  \item $$m'(x,y) = \sum\limits_{j=-1}^1 \sum\limits_{i=-1}^1 m(i,j) \cdot p(x-j,y-i)$$
+\end{itemize}
 
-Gaußfilter mit Radius $\sigma$ definiert durch die Gaußfunktion $$G(x,y) = \frac{1}{2 \pi \sigma^2} e^{-\frac{x^2 + y^2}{2\sigma^2}}$$
+\subsubsection{Gauß-Filter\index{Gauß-Filter}}
+\begin{itemize}
+  \item Ziel: Rauschunterdrückung, Glättung
+  \item Definiert durch zweidimensionale Gauß-Funktion
+	
+	\begin{itemize}
+		\item Ortsbereich: $f(x,y) = \frac{1}{2 \pi \sigma^2} e^{-\frac{x^2 + y^2}{2\sigma^2}}$
+		\item Frequenzbereich: $F(u,v)=e^{-\frac{u^2 + v^2}{2}\sigma^2}$
+	\end{itemize}
+	
+	\item Approximation von $f(x,y)$ durch einen 3x3-Filter für $\sigma=0.85$: $F_{Gauß}=\frac{1}{16} \left(
+	\begin{array}{ccc}
+	1 & 2 & 1 \\
+	2 & 4 & 2 \\
+	1 & 2 & 1
+	\end{array} \right)
+	$
+	
+	\item Die Stärke der Glättung ist ausschließlich durch den Parameter $\sigma$ bestimmt (je größer $\sigma$ desto stärker die Glättung)
+	\item Die Größe nxn beeinflusst die Güte der Approximation des Filters
+	\item Im Ortsbereich kann als Faustregel für eine ausreichende Approximation $n=2\sigma \cdot 2 +1 $ verwendet werden
+	\item Deshalb: Für eine starke Glättung lohnt sich die Anwendung im Frequenzbereich
+\end{itemize}
 
-\subsubsection*{Mittelwrtfilter\index{Mittelwertfilter}}
 
-Ziel: Störunterdrückung \\ Beispiel: Durchschnitt aus 8-Umgebung und Punkt. Größe beliebig wählbar.
-$$m'(x,y) = \sum\limits_{j=-1}^1 \sum\limits_{i=-1}^1 m(i,j) \cdot p(x-j,y-i)$$
 
-\subsubsection*{Anwendung der nachfolgenden Filter}
-am Beispiel des Sobel-X Filters:
-\mypic{12}{filterbsp}
-
-\subsubsection*{Prewitt\index{Prewitt-Filter}}
+\subsubsection{Prewitt\index{Prewitt-Filter}}
 
 \textbf{Prewitt-X Filter} $$P_x = \frac{\partial g(x,y)}{\partial x}$$ approximiert durch $$p_x = \left( \begin{array}{ccc} -1 & 0 & 1 \\ -1 & 0 & 1 \\ -1 & 0 & 1 \end{array} \right)$$
 Kantendetektion: vertikal gut, horizontal schlecht \\
@@ -363,7 +396,7 @@ Kantendetektion: vertikal schlecht, horizontal gut \\
 \item Danach: Schwellwertfilterung
 \end{itemize}
 
-\subsubsection*{Sobel\index{Sobel-Filter}}
+\subsubsection{Sobel\index{Sobel-Filter}}
 
 \textbf{Sobel-X Filter} $$S_x = \frac{\partial g(x,y)}{\partial x}$$ approximiert durch $$s_x = \left( \begin{array}{ccc} -1 & 0 & 1 \\ -2 & 0 & 2 \\ -1 & 0 & 1 \end{array} \right)$$
 Kantendetektion: vertikal gut, horizontal schlecht \\
@@ -375,7 +408,7 @@ Kantendetektion: vertikal schlecht, horizontal gut \\
 \item Danach: Schwellwertfilterung
 \end{itemize}
 
-\subsubsection*{Roberts\index{Roberts-Filter}}
+\subsubsection{Roberts\index{Roberts-Filter}}
 
 $$R(g(x,y)) = |R_x(g(x,y))| + |R_y(g(x,y))|$$ wobei $$R_x = \left( \begin{array}{rr} -1 & 0 \\ 0 & 1 \end{array} \right) \quad , \quad R_y = \left( \begin{array}{rr} 0 & -1 \\ 1 & 0 \end{array} \right)$$
 Kantendetektion: diagonal gut
@@ -386,20 +419,40 @@ Laplace-Operator: $$\nabla^2 g(x,y) = \frac{\partial^2 g(x,y)}{\partial x^2} + \
 Kantendetektion: Nulldurchgänge markieren Kanten, Subpixelgenauigkeit erreichbar \\ Näherung des Laplace-Operators: $$\nabla^2 \thickapprox \left( \begin{array}{rrr} 1 & 4 & 1 \\ 4 & -20 & 4 \\ 1 & 4 & 1 \end{array} \right)$$
 Kantendetektion: Stärkere Kanten, aber mehr Störkanten
 
-\subsubsection*{Laplacian of Gauß (LoG)\index{Laplacian of Gauß-Filter}}
+\subsubsection{Laplacian of Gauß (LoG)\index{Laplacian of Gauß-Filter}}
 
 Der Laplace-Operator ist gegen Rauschen sehr empfindlich. Wesentlich bessere Ergebnisse erhält man, wenn man das Bild zunächst mit einem Gauß-Filter glättet und danach den Laplace-Operator anwendet. $$LoG(g(x,y)) = \nabla^2 (G(x,y) * g(x,y))$$ Approximation (Faltung mit Matrix): $$\nabla^2 G(x,y) = \left( \begin{array}{rrrrr} 0 & 0 & -1 & 0 & 0 \\ 0 & -1 & -2 & -1 & 0 \\ -1 & -2 & 16 & -2 & -1 \\ 0 & -1 & -2 & -1 & 0 \\ 0 & 0 & -1 & 0 & 0 \end{array} \right)$$
 Kantendetektion: Stärkere Kanten,weniger Rauschen
 
-\subsubsection*{Canny-Kantendetektor\index{Canny-Kantendetektor}}
+\subsubsection{Canny-Kantendetektor\index{Canny-Kantendetektor}}
+\begin{itemize}
+	\item Ziel: Der optimale Kantendetektor
+	\begin{itemize}
+		\item Gute Detektion
+		\item Gute Lokalisierung
+		\item Minimale Antwort ("`dünne Linien"')
+	\end{itemize}
+	\item Canny-Kantendetektor liefert binäre Antwort
+	\begin{itemize}
+		\item 0: keine Kante
+		\item 255: Kante
+	\end{itemize}
+	\item Subpixelgenauigkeit durch Erweiterung möglich
+	\item Algorithmus besteht aus mehreren Schritten
+\end{itemize}
 \begin{enumerate}
 \item Rauschunterdrückung: Gauß-Filter
-\item Kanten detektieren:
+\item Berechnung der Gradienten in horizontaler und in vertikaler Richtung mit Prewitt oder Sobel
 	\begin{itemize}
-	\item Prewitt oder Sobel
-	\item Zusammenrechnen mit \(B' = \sqrt{B_x^2 + B_y^2}\)
-	\item Gradientenrichtung bestimmen: \(\Phi(x,y) = arctan\left(\frac{B_y(x,y)}{B_x(x,y)}\right)\)
-	\item Runden auf 0°, 45°, 90° oder 135°
+	\item Berechnung der Richtung: $\phi=atan(\frac{g_y}{g_x})$
+	\item Einteilung der Richtung in vier Quadranten:
+	\begin{enumerate}
+		\item $[-67,5°,-22,5°)$
+		\item $[-22.5°,22.5°)$
+		\item $[22.5°,67.5°)$
+		\item $[-90°,-67.5°)$ oder
+		\item $[67.5°,90°]$
+	\end{enumerate}
 	\end{itemize}
 \item Non-Maximum Surpression:
 	\begin{itemize}
@@ -420,7 +473,7 @@ Kantendetektion: Stärkere Kanten,weniger Rauschen
 \end{enumerate}
 
 
-\subsection{2D Bildverarbeitung}
+\section{2D Bildverarbeitung}
 
 \subsubsection*{Sensorische Erfassung}
 
@@ -437,7 +490,7 @@ Verfahren zur Lösung dieser Aufgaben:
 \item Lernverfahren
 \end{itemize}
 
-\subsubsection*{Segmentierung\index{Segmentierung}}
+\subsection{Segmentierung\index{Segmentierung}}
 
 Segmentierung ist die Aufteilung eines Bildes in aussagekräftige Bestandteile. Erlaubt:
 \begin{itemize}
@@ -447,11 +500,11 @@ Segmentierung ist die Aufteilung eines Bildes in aussagekräftige Bestandteile. 
 \end{itemize}
 Beliebt sind: Kanten, Ecken, Textur, Farbe
 
-\subsubsection*{Schwellwertfilterung\index{Schwellwertfilterung}}
+\subsubsection{Schwellwertfilterung\index{Schwellwertfilterung}}
 
 Schwellwertfilterung zur Konvertierung eines Grauwertbildes in ein binäres Bild. Ziel: Trennung interessanter Objekte vom Hintergrund. $$Img'(u,v) = \left\{ \begin{array}{cl} q & \textrm{ falls } Img(u,v) \geq T \\ 0 & \textrm{ sonst} \end{array} \right.$$
 
-\subsubsection*{Farbe}
+\subsubsection{Farbe}
 
 Oft können Objekte über ihre Farbe segmentiert werden:
 \begin{itemize}
@@ -479,7 +532,7 @@ C &=& \frac{1}{n-1} \sum\limits_{i=1}^n (x_i - \overline{x})(x_i - \overline{x})
 $$f(H,S,V) = H \geq H_{\min} \wedge H \leq H_{\max} \wedge S \geq S_{\min} \wedge S \leq S_{\max} \wedge V \geq V_{\min} \wedge V \leq V_{\max}$$
 \end{itemize}
 
-\subsubsection*{Morphologische Operatoren\index{Morphologische Operatoren}}
+\subsection{Morphologische Operatoren\index{Morphologische Operatoren}}
 
 \begin{itemize}
 \item Wähle Struckturelement, z.B. Quadrat mit 3x3 Pixel
@@ -492,7 +545,7 @@ $$f(H,S,V) = H \geq H_{\min} \wedge H \leq H_{\max} \wedge S \geq S_{\min} \wedg
 \end{itemize}
 
 
-\subsubsection*{Bewegung}
+\subsubsection{Bewegung}
 
 Einfacher Ansatz: Differenzbilder
 \begin{itemize}
@@ -504,7 +557,7 @@ Einfacher Ansatz: Differenzbilder
 \end{itemize}
 Differenzbilder werden auch für Hintergrundsubtraktion verwendet, dann wird $Img_{t-1}$ durch ein festes $Img_0$ ersetzt. Weitere Ansätze: Optical Flow und Erweiterungen
 
-\subsubsection*{Region Growing\index{Region Growing}}
+\subsubsection{Region Growing\index{Region Growing}}
 
 gegeben: Graustufen-Bild, gesucht: zusammenhängende Regionen \\ Algorithmus in Pseudocode:
 \begin{enumerate}
@@ -513,7 +566,7 @@ gegeben: Graustufen-Bild, gesucht: zusammenhängende Regionen \\ Algorithmus in 
 \item solange $\exists p \in R$, $q \not\in R$ mit $||p-q|| \leq 1$ und $|Img(p_0) - Img(q)| \leq \varepsilon$ mache $R = R \cup \{ q \}$
 \end{enumerate}
 
-\subsubsection*{Kanten}
+\subsubsection{Kanten}
 
 Vom Menschen konstruierte Umgebungen:
 \begin{itemize}
@@ -560,7 +613,7 @@ gegeben: Punkte $P$, Linien $L = \{ \}$, Distanzschwelle $d$
 \end{itemize}
 Unterschied zur Regressionsanalyse: Die Bestimmung der Regressionsgerade ist das geeignetere Verfahren, wenn schon klar ist, welche Pixel eine Gerade bilden sollen; dann ist die Regressionsgerade die optimale Gerade im Sinne der Summe der Fehlerquadrate. Die Regressionsgerade kann jedoch keine Segmentierung vornehmen. Dahingegen lassen sich mit der Hough-Transformation in beliebigen Bildern geradlinige Strukturen berechnen; die punkte dazu müssen jedoch verhältnismäßig exakt auf einer Linie liegen.
 
-\subsubsection*{Punktmerkmale}
+\subsection{Punktmerkmale}
 
 Kanten/Konturen/Farbe können nicht immer für die Segmentierung herangezogen werden. Texturierte Objekte lassen sich in der Regel nicht durch die bislang vorgestellten Verfahren segmentieren. Lösung: Verwendung von \textsl{lokalen} Punktmerkmalen (auch genannt: Textmerkmale):
 \begin{itemize}
@@ -594,14 +647,21 @@ Für die Objekterkennung geschieht das Wiederfinden oftmals unter Verwendung:
 \item von Neuronalen Netzen
 \item oder Kombinationen (zuerst PCA zur Kompression, dann SVM (\textsl{Support Vector Machine}) zur Klassifikation)
 \end{itemize}
+Für die Objekterkennung existieren eine Vielzahl von Repräsentationen von lokalen Merkmalen:
+\begin{itemize}
+	\item SIFT (Scale Invariant Feature Transformation
+	\item SURF (Speeded Up Robust Features)
+	\item MSER (Maximally Stable Extremal Regions)
+	\item Repräsentation eines Bildausschnittes über eine Vielzahl (100-200) synthetisch generierter Ansichten, Matching über PCA (Principal Component Analysis)
+\end{itemize}
 
-\subsection{Geometrische 2D-Transformationen}
+\section{Geometrische 2D-Transformationen}
 
-\subsubsection*{Translation}\index{Translation}
+\subsection{Translation}\index{Translation}
 
 Translation eines 2D-Vektors: $$\left( \begin{array}{c} x_0 \\ y_0 \end{array} \right) + \left( \begin{array}{c} x \\ y \end{array} \right) = \left( \begin{array}{c} x_0 + x \\ y_0 + y \end{array} \right)$$
 
-\subsubsection*{Rotation}\index{Rotation}
+\subsection{Rotation}\index{Rotation}
 
 \begin{itemize}
 \item o.B.d.A. auf Einheitsvektor zurückführbar (Basistransformation)
@@ -626,16 +686,22 @@ $$\myvectwo{x}{y} = R \myvectwo{x_0}{y_0} + t = \myvecfour{r_{11}}{r_{12}}{r_{21
 Darstellung mit Hilfe homogener Koordinaten und einer geschlossenen Transformationsmatrix:
 $$\myvecthree{x}{y}{1} = \left( \begin{array}{cc|c} & R & t \\ \hline 0 & 0 & 1 \end{array} \right) \myvecthree{x_0}{y_0}{1} = \left( \begin{array}{cc|c} r_{11} & r_{12} & t_x \\ r_{21} & r_{22} & t_y \\ \hline 0 & 0 & 1 \end{array} \right) = A \myvecthree{x_0}{y_0}{1}$$
 
-\subsubsection*{Partikel Filter und 2D-Tracking}
-
-Für Tracking-Applikationen wird oftmals das Kalmanfilter, das Partikel Filter oder Kombinationen aus beiden verwendet. Vorteile des Partikel Filters gegenüber dem Kalmanfilter:
+\section{Partikel Filter und 2D-Tracking}
+\begin{itemize}
+\item Für Tracking-Applikationen wird oftmals das Kalmanfilter, das Partikel Filter oder Kombinationen aus beiden verwendet. Vorteile des Partikel Filters gegenüber dem Kalmanfilter:
 \begin{itemize}
 \item Es kann automatisch mehrere, parallel existierende Hypothesen halten $\Rightarrow$ geringere Gefahr in lokalen Minima zu verharren.
 \item Es kann beliebige Wahrscheinlichkeitsdichten modellieren und dadurch nichtlineare Bewegungen auf natürliche Weise verfolgen.
 \end{itemize}
-Nachteil: Rechenaufwand ist proportional zur Anzahl der notwendigen Partikel, welche (bei konstanter Auflösung) mit der Dimension des Konfigurationsraums exponentiell steigt. \\ Im Kern des Partikel Filters befinden sich ein Modell mit Konfigurationsraum $R^n$. \\ \textit{Eingabe:} Beobachtungen $z$; hier: Bilder einer Videosequenz \\ \textit{Ausgabe:} Schätzung der Konfiguration $s \in R^n$, die den aktuellen Beobachtungen $z$ entspricht \\ \textit{Zentrale Funktion:} Bewertungsfunktion $\myprob{z}{s}$, die die a-posteriori Wahrscheinlichkeit berechnet, dass $s$ die zu $z$ passende Konfiguration ist. \\
-Das Partikel Filter modelliert die Wahrscheinlichkeitsdichtefunktion oder engl. \textsl{probability density function (pdf)} durch eine feste Anzahl von $N$ Partikeln. Die Wahrscheinlichkeitsdichtefunktion beschreibt die a-posteriori Wahrscheinlichkeiten für den Konfigurationsraum. Jedes Partikel ist ein Paar $(s_i, \pi_i)$, wobei $s_i$ eine Konfiguration ist und $\pi_i$ die dazugehörige a-posteriori Wahrscheinlichkeit mit $\sum_{i=1}^n \pi_i = 1$. Die aktuelle Schätzung des Partikel Filters erfolgt über das gewichtete Mittel über alle Partikel: $$\overline{s} = \sum\limits_{i=1}^{N} \pi_i \cdot s_i$$
-
+\item Nachteil: Rechenaufwand ist proportional zur Anzahl der notwendigen Partikel, welche (bei konstanter Auflösung) mit der Dimension des Konfigurationsraums exponentiell steigt. 
+\item Im Kern des Partikel Filters befinden sich ein Modell mit Konfigurationsraum $R^n$. 
+\item \textit{Eingabe:} Beobachtungen $z$; hier: Bilder einer Videosequenz
+\item \textit{Ausgabe:} Schätzung der Konfiguration $s \in R^n$, die den aktuellen Beobachtungen $z$ entspricht \item \textit{Zentrale Funktion:} Bewertungsfunktion $p(z|s)$, die die a-posteriori Wahrscheinlichkeit berechnet, dass $s$ die zu $z$ passende Konfiguration ist.
+\item Das Partikel Filter modelliert die Wahrscheinlichkeitsdichtefunktion oder engl. \textsl{probability density function (pdf)} durch eine feste Anzahl von $N$ Partikeln. 
+\item Die Wahrscheinlichkeitsdichtefunktion beschreibt die a-posteriori Wahrscheinlichkeiten für den Konfigurationsraum. 
+\item Jedes Partikel ist ein Paar $(s_i, \pi_i)$, wobei $s_i$ eine Konfiguration ist und $\pi_i$ die dazugehörige a-posteriori Wahrscheinlichkeit mit $\sum_{i=1}^n \pi_i = 1$. 
+\item Die aktuelle Schätzung des Partikel Filters erfolgt über das gewichtete Mittel über alle Partikel: $\overline{s} = \sum\limits_{i=1}^{N} \pi_i \cdot s_i$
+\end{itemize}
 \textbf{\textsl{Algorithmus}}
 
 \begin{enumerate}
@@ -658,14 +724,15 @@ Das Partikel Filter modelliert die Wahrscheinlichkeitsdichtefunktion oder engl. 
 \item Bewertungsfunktion: $$\myprob{z}{s} \propto e^{- \frac{1}{2 \sigma^2} \left( k^2 - \sum_{m \in M} g_m \right)}$$ wobei $M$ die Menge aller Pixel im binarisierten Bild $z$ (Beobachtungen) im durch $s$ (Konfiguration) definierten Quadrat beschreibt und $g_m$ deren Intensität aus $\{0,1\}$.
 \end{itemize}
 
-\subsection{Fragen zum Kapitel}
+\section{Fragen zum Kapitel}
 \begin{enumerate}
   %SS 12 Klausur
 	\item Was ist der maximale Korrelationswert, den die Zero Mean Normalized Cross Correlation (ZNCC) liefern kann?
 	%WS 12 Klausur
 	\item Warum kann man mit Hilfe der Epipolargeometrie das Sterokorrespondenzproblem schneller lösen?
 	%Selbst ausgedacht
-	\item Bennen Sie alle affinen Punktoperationen die in der Vorlesung behandelt wurden! 
+	\item Bennen Sie alle affinen Punktoperationen die in der Vorlesung behandelt wurden!
+	\item Was versteht man unter Non-Maximum Surpression?
 \end{enumerate}
 
 % Fähigkeiten
