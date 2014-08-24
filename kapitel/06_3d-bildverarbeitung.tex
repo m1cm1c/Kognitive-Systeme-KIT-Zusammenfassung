@@ -4,7 +4,7 @@
 
 
 
-\subsection{Geometrische 3D-Transformationen}
+\section{Geometrische 3D-Transformationen}
 
 Grundlage von Sensorik und Aktorik: Beschreibung von Objektposen (Position, Rotation)
 \begin{itemize}
@@ -26,11 +26,11 @@ Zwei Systeme haben sich durchgesetzt:
 \item Quaternionendarstellung (nur für Rotationen)
 \end{itemize}
 
-\subsubsection*{Translation}\index{Translation}
+\subsection{Translation}\index{Translation}
 
 Translation eines 3D-Vektors: $$\myvecthree{x_0}{y_0}{z_0} + \myvecthree{x}{y}{z} = \myvecthree{x_0 + x}{y_0 + y}{z_0 + z}$$
 
-\subsubsection*{Rotation}\index{Rotation}
+\subsection{Rotation}\index{Rotation}
 
 \begin{itemize}
 \item o.B.d.A. auf Einheitsvektor zurückführbar (Basistransformation)
@@ -45,7 +45,7 @@ und mit $(x_0,y_0) = (\cos(\alpha), \sin(\alpha))$:
 $$\left( \begin{array}{c} x \\ y \end{array} \right) = \left( \begin{array}{rr} \cos(\beta) & -\sin(\beta) \\ \sin(\beta) & \cos(\beta) \end{array} \right) \left( \begin{array}{c} x_0 \\ y_0 \end{array} \right)$$
 $z_0$ invariant, da Rotation um $z$!
 
-\subsubsection*{Rotationsmatrix}\index{Rotationsmatrix}
+\subsubsection{Rotationsmatrix}\index{Rotationsmatrix}
 
 Rotationsmatrix allgemein: $$\myvecthree{x}{y}{z} = R \myvecthree{x_0}{y_0}{z_0}$$
 Rotation um $x$: $$R_x(\theta) = \myvecnine{1}{0}{0}{0}{\cos(\theta)}{- \sin(\theta)}{0}{\sin(\theta)}{\cos(\theta)}$$
@@ -71,7 +71,7 @@ Konventionen zur Erstellung von Rotationsmatrizen:
 \item Standard-Beispiel für raumfeste Achsen: $$R_{XYZ} = R_Z(\alpha) R_Y(\beta) R_X(\gamma)$$
 \end{itemize}
 
-\subsubsection*{Homogene 3D-Transformation}
+\subsection{Homogene 3D-Transformation}
 
 Transformation definiert durch Rotation $R$ und Translation $t$:
 $$\myvecthree{x}{y}{z} = R \myvecthree{x_0}{y_0}{z_0} + t = \myvecnine{r_{11}}{r_{12}}{r_{13}}{r_{21}}{r_{22}}{r_{23}}{r_{31}}{r_{32}}{r_{33}} \myvecthree{x_0}{y_0}{z_0} + \myvecthree{t_x}{t_y}{t_z}$$
@@ -86,7 +86,7 @@ $$\myvecqfour{x}{y}{z}{1} = \left( \begin{array}{ccc|c} &&& \\ & R && t \\ &&& \
 \item numerisch unrobust (Singularitäten, Rundungsfehler)
 \end{itemize}
 
-\subsubsection*{Quaternionen\index{Quaternionen}}
+\subsection{Quaternionen\index{Quaternionen}}
 
 Erweiterung der komplexen zahlen ins vierdimensionale. Definition: \\[0,1cm]
 Ein Quaternion $\textbf{q}$ ist eine Zahl
@@ -98,32 +98,64 @@ mit
 i^2 &=& j^2 = k^2 = -1 \\ ij &=& -ji = k \\ jk &=& -kj = i \\ ki &=& -ik = j
 \end{eqnarray*}
 $q_w$ ist der Realteil, $\quaternion_v = (q_x,q_y,q_z)$ der Imaginärteil des Quaternions. Man schreibt einfach $(q_x,q_y,q_z,q_w)$ oder $(\quaternion_v,q_w)$. \\[0,1cm]
-Rechenregeln für Quaternionen:
 
-Konjugation: \[ \overline{\quaternion} = (-\quaternion_v, q_w)\]
+\subsubsection{Rechenregeln für Quaternionen}
 
-Norm: $$N(\quaternion) = \sqrt{\quaternion \overline{\quaternion}} = \sqrt{\overline{\quaternion}\quaternion} = \sqrt{q_x^2 + q_y^2 + q_z^2 + q_w^2}$$
-Quaternionen $\quaternion$ mit $N(\quaternion) = 1$ heißen Einheitsquaternionen\index{Einheitsquaternionen}. \\ Multiplikative Identität: $$I = (0,1)$$ Multiplikative Inverse: $$\quaternion^{-1} = \frac{\overline{\quaternion}}{N^2(\quaternion)}$$
-Rotation mit Quaternionen:
+\begin{itemize}
+	\item Addition: \\ 
+	\begin{center}
+	$\mathbf{q}+\mathbf{r}=(q_w,\mathbf{q}_v)+(r_w,\mathbf{r}_v)=(q_w+r_w,\mathbf{q}_v+\mathbf{r}_v)$
+	\end{center}
+	\item Multiplikation: \\
+	\begin{center}
+	$\mathbf{q} \mathbf{r}=(q_w r_w-\mathbf{q}_v \cdot \mathbf{r}_v,\mathbf{q}_v \times \mathbf{r}_v + q_w \mathbf{r}_v + r_w \mathbf{q}_v)$
+	\end{center}
+	assoziativ, aber nicht kommutativ
+	\item Konjugierter Quaternion:
+		\begin{center}
+	$\overline{\mathbf{q}}=(q_w,-\mathbf{q}_v)$ für $\mathbf{q}=(q_w,\mathbf{q}_v)$
+	\end{center}
+	\item Norm: 
+	\begin{center}
+	$N(\quaternion) = \sqrt{\quaternion \overline{\quaternion}} = \sqrt{\overline{\quaternion}\quaternion} = \sqrt{q_x^2 + q_y^2 + q_z^2 + q_w^2}$
+	\end{center}
+	Quaternionen $\quaternion$ mit $N(\quaternion) = 1$ heißen Einheitsquaternionen\index{Einheitsquaternionen}
+	\item  Multiplikative Identität: 
+	\begin{center}
+	$I = (0,1)$
+	\end{center}
+	\item Multiplikative Inverse:
+	\begin{center}
+	$\quaternion^{-1} = \frac{\overline{\quaternion}}{N^2(\quaternion)}$
+	\end{center}
+\end{itemize}
+
+
+ 
+\subsubsection{Rotation mit Quaternionen}
 \begin{itemize}
 \item Einheitsquaternion $\quaternion$ ist definiert durch Rotationsachse $u$ mit $|u| = 1$ und Winkel $\theta$: $$\quaternion = \left( \cos \frac{\theta}{2} \, , \, u \sin \frac{\theta}{2} \right)$$
 \item Quaternion \textbf{a} ist definiert durch zu rotierenden Vektor $v$: $$\textbf{a} = (v \, , \, 0)$$
 \item Das Produkt $\textbf{qa}\overline{\textbf{q}}$ rotiert $v$ um die Achse $u$ mit dem Winkel $\theta$.
 \end{itemize}
-Interpolation zwischen zwei Quaternionen:
+
+
+\subsubsection{Interpolation zwischen zwei Quaternionen}
 \begin{itemize}
 \item Sphärische Lineare Interpolation (SLERP)
 \item Berechnet für $t \in [0,1]$ die kürzeste Verbindung auf der vierdimensionalen Einheitssphäre zwischen $q$ und $r$.
 \item Analytisch: $$SLERP(q,r,t) = q(rq^{-1})^t$$
 \item Numerisch: $$SLERP(q,r,t) = q \frac{\sin((1-t)\theta)}{\sin(\theta)} + r \frac{\sin(t \theta)}{\sin(\theta)}$$ mit Winkel $\theta$ zwischen $r$ und $q$.
 \end{itemize}
+
+\subsubsection{Umrechnung}
 Quaternion $\to$ Rotationsmatrix: $$\quaternion = (q_x,q_y,q_z,q_w) \Rightarrow M_q = \myvecnine{1-2(q_y^2 + q_z^2)}{2(q_xq_y - q_wq_z)}{2(q_xq_z + q_wq_y}{2(q_xq_y + q_wq_z}{1-2(q_x^2 + q_z^2)}{2(q_yq_z - q_wq_x)}{2(q_xq_z - q_wq_y}{2(q_yq_z + q_wq_x}{1-2(q_x^2 + q_y^2)}$$
 Rotationsmatrix $\to$ Quaternion:
 \begin{eqnarray*}
 q_w &=& \frac{1}{2} \sqrt{1 + \sum\limits_{i=1}^3 m_{ii}} \\ q_x &=& \frac{(m_{32} - m_{23})}{4q_w} \\ q_y &=& \frac{m_{13} - m_{31})}{4q_w} \\ q_z &=& \frac{(m_{21} - m_{12})}{4q_w}
 \end{eqnarray*}
 
-\textbf{\textsl{Vor- und Nachteile}} \\
+\subsubsection{Vor- und Nachteile}
 Vorteile:
 \begin{itemize}
 \item Rotation direkt um gewünschte Drehachse
@@ -136,7 +168,7 @@ Nachteil:
 \item nur Rotation berechenbar $\Rightarrow$ Kombination mit Matrizen nötig $\Rightarrow$ Rechenaufwand für Umwandlungen
 \end{itemize}
 
-\subsubsection*{Realistischeres Kameramodell}
+\section{Erweitertes Kameramodell}
 
 Lochkameramodell vereinfacht die realen Verhältnisse stark. Deshalb werden in der Praxis Erweiterungen des Lochkameramodells verwendet. Zunächst einige Definitionen:
 \begin{description}
@@ -177,7 +209,7 @@ Koordinatentransformation vom Kamerakoordinatensystem in das Weltkoordinatensyst
 \item $3 \times 4$ Gesamt-Projektionsmatrix $P$ (intrinsisch und extrinsisch) auf homogenen Koordinaten: $$\myvecthree{u \cdot w}{v \cdot w}{w} = P \cdot \myvecqfour{X}{Y}{Z}{1} \qquad P = (K \, R \, | \, K \, t)$$
 \end{itemize}
 
-\subsubsection*{Kamerakalibrierung\index{Kamerakalibrierung}}
+\section{Kamerakalibrierung\index{Kamerakalibrierung}}
 
 Die Kalibrierung einer Kamera bedeutet die Bestimmung ihrer Parameter bezüglich eines gewählten Kameramodells. Die Bestimmung der intrinsischen Parameter ist unabhängig vom Aufbau; solange Zoom und Fokus der Kamera gleich bleiben, verändern sich diese Parameter nicht. Die Bestimmung der extrinsischen Parameter ist abhängig von der Wahl des Weltkoordinatensystems und ändert sich je nach Aufbau. \\
 Ist die Kamera kalibriert, dann liegt die Abbildungsfunktion $f$ vor, die einen Punkt vom Weltkoordinatensystem eindeutig in das Bildkoordinatensystem abbildet: $$f \, : \, R^3 \to R^2$$
@@ -201,7 +233,7 @@ Möglichkeiten:
 \item Verwendung eines geeigneten 3D-Kalibrierobjekts.
 \end{itemize}
 
-\subsubsection*{Direkte Lineare Transformation}
+\subsection{Direkte Lineare Transformation}
 
 Ein Standard-Verfahren für die Berechnung der Projektionsmatrix $P$ ist die Direkte Lineare Transformation (DLT)
 $$\myvecthree{u \cdot w}{v \cdot w}{w} = P \cdot \myvecqfour{X}{Y}{Z}{1} \qquad P = (K \, R \, | \, K \, t) = \left( \begin{array}{cccc} p_1 & p_2 & p_3 & p_4 \\ p_5 & p_6 & p_7 & p_8 \\ p_9 & p_{10} & p_{11} & p_{12} \end{array} \right)$$
@@ -217,11 +249,9 @@ p_5X + p_6Y + p_7Z + p_8 &=& vp_9X + vp_{10}Y + vp_{11}Z + v
 Formuliert als überbestimmtes LGS $Ax = b$ mit $n \geq 6$ Punktkorrespondenzen, das beispielsweise mit Hilfe der Normalengleichung gelöst werden kann:
 $$A = \left( \begin{array}{ccccccccccc} X_1 & Y_1 & Z_1 & 1 & 0 & 0 & 0 & 0 & -u_1X_1 & -u_1Y_1 & -u_1Z_1 \\ 0 & 0 & 0 & 0 & X_1 & Y_1 & Z_1 & 1 & -v_1X_1 & -v_1Y_1 & -v_1Z_1 \\ \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\ X_n & Y_n & Z_n & 1 & 0 & 0 & 0 & 0 & -u_nX_n & -u_nY_n & -u_nZ_n \\ 0 & 0 & 0 & 0 & X_n & Y_n & Z_n & 1 & -v_nX_n & -v_nY_n & -v_nZ_n \end{array} \right) \quad x = \myvecthree{p_1}{\vdots}{p_{11}} \quad b = \left( \begin{array}{c} u_1 \\ v_1 \\ \vdots \\ u_n \\ v_n \end{array} \right)$$
 
-\subsection{3D Bildverarbeitung}
+\section{Stereokonstruktion}
 
-\subsubsection*{Stereokonstruktion}
-
-gegeben:
+Gegeben:
 \begin{itemize}
 \item zwei Kameras (durch ihre Zentren $C$ und $C'$) mit Projektionsmatrizen $P$ und $P'$
 \item zwei Abbilder $x$ und $x'$ des Punktes $X$
@@ -237,7 +267,7 @@ g \, : \, x &=& a + r \cdot u \\ g' \, : \, x &=& b + s \cdot v
 \end{itemize}
 3D-Tracking von Kopf und Händen auf der Basis von Hautfarbe, Region-Growing und Stereokalibrierung.
 
-\subsubsection*{Epipolargeometrie\index{Epipolargeometrie}}
+\subsection{Epipolargeometrie\index{Epipolargeometrie}}
 
 \mypic{8}{kameramodell}
 
@@ -253,7 +283,7 @@ Alle Punkte $X$, die auf $x$ in Kamera 1 abgebildet werden, werden auf einen Pun
 \item höhere Effizienz
 \end{itemize}
 
-\subsubsection*{Fundamentalmatrix\index{Fundamentalmatrix}}
+\subsection{Fundamentalmatrix\index{Fundamentalmatrix}}
 
 Mathematische Beschreibung der Epipolargeometrie erfolgt durch die Fundamentalmatrix. Eigenschaften der Fundamentalmatrix $F$:
 \begin{itemize}
