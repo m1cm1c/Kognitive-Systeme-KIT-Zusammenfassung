@@ -2,6 +2,48 @@
 
 \chapter{Klassifikation}
 
+\begin{itemize}
+	\item Einordnen in die Welt
+	\begin{itemize}
+		\item Gesellschaftlich definierte Konventionen: Buchstaben, menschliche Artifakte, Kredite
+		\item Biologisch definierte Kategorien: Katze, Hund
+	\end{itemize}
+	\item Komplex
+	\begin{itemize}
+		\item Was definiert einen Stuhl? Eine Katze?
+		\item Beziehungen zu Komplex, Regeln -> Lernen
+		\item Nie 100\% richtig -> Wahrscheinlichkeit
+	\end{itemize}
+\end{itemize}
+
+\begin{itemize}
+	\item Eine einfache Form der Klassifikation ist Template Matching
+	\item Ziel: Ein Muster zu erkennen das einem abgespeicherten Beispiel ähnlich ist.
+	\item Maß der Übereinstimmung zwischen Muster und Schablone zentriert an (m,n) muss maximiert werden
+	$M_{f,g}(m,n)=\sum_i\sum_j f(i,j)g(i-m,j-n)$
+\end{itemize}
+
+Pattern Recognition Overview
+\begin{itemize}
+	\item Static Patterns, no dependence on Time or Sequential Order
+	\item Important Notions
+	\begin{itemize}
+		\item Supervised - Unsupervised
+		\item Parametric - Non-Parametric
+		\item Linear - Non-linear
+	\end{itemize}
+	\item Classical Methods
+	\begin{itemize}
+		\item Bayes Classifier
+		\item k-nearest neighbor
+	\end{itemize}
+	\item Connectionist Methods
+	\begin{itemize}
+		\item Perceptron
+		\item Multilayer Perceptrons
+	\end{itemize}
+\end{itemize}
+
 \section{Supervised -- Unsupervised Training}
 
 \begin{description}
@@ -54,6 +96,25 @@ g_i(x) &=& P(\omega_i | x) \\ &=& \frac{p(x | \omega_i) P(\omega_i)}{\sum\limits
 g_i(x) &=& \log(p(x | \omega_i)) + \log(P(\omega_i))
 \end{eqnarray*}
 
+\section{Classifier Design in Practice}
+\begin{itemize}
+	\item Need a priori probability $P(\omega_i)$ (not too bad)
+	\item Need class conditional PDF $p(x/\omega_i)$
+	\item Problems:
+	\begin{itemize}
+		\item limited training data
+		\item limited computation
+		\item class-labelling potentially costly and errorful
+		\item classes may noat be known
+		\item good features not known
+	\end{itemize}
+	\item Parametric Solution
+	\begin{itemize}
+		\item Assume that $p(x/\omega_i)$ has a particular prametric form
+		\item Most common representative: multivariate normal density
+	\end{itemize}
+\end{itemize}
+
 \section{Gauss Klassifizierer\index{Gauss Klassifizierer}}
 
 Eindimensionale Normaldichte: $$p(x) = \frac{1}{\sqrt{2\pi} \sigma} e^{- \frac{1}{2} \left( \frac{\myvector{x} - \myvector{\mu}}{\sigma} \right)^2} \sim N(\myvector{\mu},\sigma^2)$$
@@ -63,7 +124,7 @@ Für jede Klasse $i$ muss folgendes aus den Trainingsdaten berechnet werden:
 \begin{itemize}
 \item Kovarianz-Matrix $\Sigma_i$ \item Mittelwertsvektor $\myvector{\mu_i}$
 \end{itemize}
-\textbf{Bestimmung der Parameter}
+\textbf{Schätzung der Parameter}
 \begin{itemize}
 \item MLE, Maximum Likelihood Estimation
 \item Für den mehrdimensionalen Fall:
@@ -72,12 +133,12 @@ $$\myvector{\mu} = \frac{1}{N} \sum\limits_{k=1}^N \myvector{x_k}$$ $$\Sigma = \
 
 \section{Probleme beim Klassifikationsentwurf}
 
-Eigenschaften:
+Merkmale:
 \begin{itemize}
-\item Welche und wie viele Eigenschaften sollten gewählt werden?
-\item Beliebige Eigenschaften?
+\item Welche und wie viele Merkmale sollten gewählt werden?
+\item Beliebige Merkmale?
 \item Je mehr desto besser?
-\item Wenn zusätzliche Eigenschaften nicht nützlich sind, sollen sie dann automatisch ignoriert werden?
+\item Wenn zusätzliche Merkmale nicht nützlich sind, sollen sie dann automatisch ignoriert werden?
 \end{itemize}
 \textbf{Der Unsegen der Dimensionalität}
 \begin{itemize}
@@ -86,6 +147,12 @@ Eigenschaften:
 \item Lösung: Eigenschaften sorgfältig wählen; Dimension verringern; Principle Component Analysis
 \end{itemize}
 
+\section{Principal Component Analysis (PCA)}
+\begin{itemize}
+	\item Assumption: Single dimensions are correlated
+	\item Aim: Reduce number of dimensions with minimum loss of information
+	\item Remove dimensions with low variance
+\end{itemize}
 
 \section{Risiko}
 
@@ -113,7 +180,25 @@ R(\alpha_2 | \myvector{x}) &=& \lambda_{21} P(\omega | \myvector{x}) + \lambda_{
 \end{itemize}
 
 
-\subsubsection*{Parzen Fenster}
+\section{Minimum Error Rate Classification}
+\begin{itemize}
+	\item Decision rule to minimize error rate
+	\item Define zero-one loss function
+	\item $\lambda(\alpha_i|\omega_j)=\left\{
+	\begin{array}{c}
+		0 : i=j \\
+		1 : i\neq j
+	\end{array}\right\} i,j=1...c
+	$
+	\item $R(\alpha_i|\vec{x})=\sum^{c}_{j=1}\lambda(\alpha_i|\omega_j)p(\omega_j|\vec{x})$
+	\item $=\sum_{j\neq i}p(\omega_j|\vec{x})=1-p(\omega_i|\vec{x})$
+	\item To minimize risk and the average probability of error, select i that maximizes posterior $p(\omega_i|\vec{x})$
+	\item Decide $\omega_i$ if $p(\omega_i|\vec{x})>p(\omega_j|\vec{x})$ for all $j\neq i$
+	\item Normal distribution does not model this situation well
+	\item other densities may be mathematically intractable -> non-parametric techniques
+\end{itemize}
+
+\section{Parzen Fenster}
 
 Es werden keine Annahmen über die Verteilung gemacht, stattdessen wird $p(x)$ direkt aus den Daten geschätzt.
 \begin{itemize}
@@ -128,7 +213,7 @@ Probleme:
 \end{itemize}
 Setze $$V_n = \frac{1}{\sqrt{n}}$$
 
-\subsubsection*{$k$-nächster Nachbar}
+\section{$k$-nächster Nachbar}
 
 Volumen als Funktion der Daten. Verwende die $k$ nächsten Nachbarn für die Abschätzung. Setze $$k = \sqrt{n}$$ Um Sample $x$ zu klassifizieren:
 \begin{itemize}
@@ -143,7 +228,54 @@ Probleme: Für eine endliche Anzahl von Samples $n$ sollte $k$ möglichst
 \end{itemize}
 Trainingsdatenbanken müssen groß sein.
 
+\section{Entscheidungsfunktion $g(x)$}
+
+\begin{eqnarray*}
+g(\myvector{x}) > 0 &\Rightarrow& \textrm{Klasse A} \\ g(\myvector{x}) < 0 &\Rightarrow& \textrm{nicht Klasse A} \\ g(\myvector{x}) = 0 &\Rightarrow& \textrm{keine Entscheidung}
+\end{eqnarray*}
+$$g(\myvector{x}) = \sum\limits_{i=1}^n w_1x_1 + w_0 = \myvector{w}^T \myvector{x} + w_0$$
+$\myvector{x} = (x_1,\dots,x_n)^T$ : Eigenschaftsvektor, $\myvector{w} = (w_1,\dots,w_n)^T$ : Gewichtungsvektor, $w_0$ : Schwellenwert
+
+
+\section{Lineare Diskriminantenfunktionen}
+
+\begin{itemize}
+\item Keine Annahme über die Verteilung (Nicht-parametrisch)
+\item Lineare Entscheidungsflächen
+\item Start durch überwachtes Training (Klassen der Trainingsdaten gegeben)
+\item Diskriminantenfunktion: $$g(x) = w_0 + \sum\limits_{i=1}^n w_ix_i = \sum\limits_{i=0}^n w_ix_i, \quad x_0 = 1$$
+\item $g(x)$ ergibt die Distanz von der Entscheidungsfläche
+\item Zwei Kategorien Fall:
+\begin{eqnarray*}
+g_1(x) > 0 &\Rightarrow& \textrm{Klasse 1} \\ g_1(x) < 0 &\Rightarrow& \textrm{Klasse 2}
+\end{eqnarray*}
+\end{itemize}
+
+Hyperebe $H$: $g(\myvector{x}) = \sum\limits_{i=1}^n w_1x_1 + w_0 = \myvector{w}^T \myvector{x} + w_0 = 0$
+$$\Rightarrow \myvector{x} = q \frac{\myvector{w}}{|| \myvector{w} ||} + r \frac{\myvector{w}}{|| \myvector{w} ||} + \myvector{x}_p$$
+Vektor $q \frac{\myvector{w}}{|| \myvector{w} ||}$ entspricht: $g \left(q \frac{\myvector{w}}{|| \myvector{w} ||} \right) = 0 = q ||\myvector{w}|| + w_0$ $$\Rightarrow q = - \frac{w_0}{|| \myvector{w} ||}$$
+Und mit $g(\myvector{x}) = \myvector{w}^T q \frac{\myvector{w}}{|| \myvector{w} ||} + \myvector{w}^T r \frac{\myvector{w}}{|| \myvector{w} ||} + \myvector{w} \myvector{x}_p + w_0 = -w_0 + r ||\myvector{w}|| + w_0$ erhalten wir $$r = \frac{g(\myvector{x})}{|| \myvector{w} ||}$$
+
+
+\section{Fisher-lineare Diskriminante}
+
+\begin{itemize}
+\item Dimensionsreduktion
+\item Projeziert eine Menge von mehrdimensionalen Punkten auf eine Line $y = \myvector{w} \myvector{x}$
+\item Die Fisher Diskriminaten ist eine Funktion, die folgendes Kriterium maximiert $$g(x) = \frac{| \tilde{m}_1 - \tilde{m_2}|}{\tilde{s}_1 + \tilde{s}_2}$$
+wobei $\tilde{m}_i = \frac{1}{n} \sum\limits_{y \in Y_i} y$ : Mittel für projezierte Muster, $\tilde{s}_i^2 = \sum\limits_{y \in Y_i} (y - \tilde{m}_i)^2$ : Streuung für projezierte Muster
+\item Fisher's lineare Diskriminante:
+\begin{eqnarray*}
+\myvector{w} &=& s_w^{-1} (\myvector{m}_1 - \myvector{m}_2) \\ s_w &=& s_1 + s_2 \\ s_i &=& \sum\limits_{x \in X_i} (\myvector{x} - \myvector{m}_i)(\myvector{x} - \myvector{m}_i)^T
+\end{eqnarray*}
+\end{itemize}
+
 \section{Fragen zum Kapitel}
+\begin{enumerate}
+% Selbst ausgedacht
+	\item Erklären Sie den Unterschied zwischen Supervised - Unsupervised
+	\item Erklären Sie den Unterschied zwischen Parametrisch - Nicht-parametrisch
+\end{enumerate}
 
 
 
