@@ -68,7 +68,7 @@ Zwei grundlegend unterschiedliche Rotationstypen:
 Konventionen zur Erstellung von Rotationsmatrizen:
 \begin{itemize}
 \item Standard-Beispiel für Euler-Winkel: \\ Zuerst um die $x$-Achse, dann um die mitgedrehte $y$-Achse, dann um die (zweimal) mitgedrehte $z$-Achse $$R_{X'Y'Z'}(\alpha , \beta , \gamma) = R_X(\alpha) R_Y(\beta) R_Z(\gamma)$$
-\item Standard-Beispiel für raumfeste Achsen: $$R_{XYZ} = R_Z(\alpha) R_Y(\beta) R_X(\gamma)$$
+\item Standard-Beispiel für raumfeste Achsen: \\ Zuerst um die raumfeste $z$-Achse, dann um die raumfeste $y$-Achse, dann um die raumfeste $x$-Achse. $$R_{ZYX}(\gamma, \beta, \alpha)= R_Z(\alpha) R_Y(\beta) R_X(\gamma)$$
 \end{itemize}
 
 \subsection{Homogene 3D-Transformation}
@@ -83,7 +83,7 @@ $$\myvecqfour{x}{y}{z}{1} = \left( \begin{array}{ccc|c} &&& \\ & R && t \\ &&& \
 \item hoch redundant
 \item rechenaufwendig
 \item Interpolation schwierig
-\item numerisch unrobust (Singularitäten, Rundungsfehler)
+\item Euler-Winkel: Singularitäten
 \end{itemize}
 
 \subsection{Quaternionen\index{Quaternionen}}
@@ -149,10 +149,10 @@ $q_w$ ist der Realteil, $\quaternion_v = (q_x,q_y,q_z)$ der Imaginärteil des Qu
 \end{itemize}
 
 \subsubsection{Umrechnung}
-Quaternion $\to$ Rotationsmatrix: $$\quaternion = (q_x,q_y,q_z,q_w) \Rightarrow M_q = \myvecnine{1-2(q_y^2 + q_z^2)}{2(q_xq_y - q_wq_z)}{2(q_xq_z + q_wq_y}{2(q_xq_y + q_wq_z}{1-2(q_x^2 + q_z^2)}{2(q_yq_z - q_wq_x)}{2(q_xq_z - q_wq_y}{2(q_yq_z + q_wq_x}{1-2(q_x^2 + q_y^2)}$$
+Quaternion $\to$ Rotationsmatrix: $$\quaternion = (q_x,q_y,q_z,q_w) \Rightarrow M_q = \myvecnine{1-2(q_y^2 + q_z^2)}{2(q_xq_y - q_wq_z)}{2(q_xq_z + q_wq_y)}{2(q_xq_y + q_wq_z)}{1-2(q_x^2 + q_z^2)}{2(q_yq_z - q_wq_x)}{2(q_xq_z - q_wq_y)}{2(q_yq_z + q_wq_x)}{1-2(q_x^2 + q_y^2)}$$
 Rotationsmatrix $\to$ Quaternion:
 \begin{eqnarray*}
-q_w &=& \frac{1}{2} \sqrt{1 + \sum\limits_{i=1}^3 m_{ii}} \\ q_x &=& \frac{(m_{32} - m_{23})}{4q_w} \\ q_y &=& \frac{m_{13} - m_{31})}{4q_w} \\ q_z &=& \frac{(m_{21} - m_{12})}{4q_w}
+q_w &=& \frac{1}{2} \sqrt{1 + \sum\limits_{i=1}^3 m_{ii}} \\ q_x &=& \frac{(m_{32} - m_{23})}{4q_w} \\ q_y &=& \frac{(m_{13} - m_{31})}{4q_w} \\ q_z &=& \frac{(m_{21} - m_{12})}{4q_w}
 \end{eqnarray*}
 
 \subsubsection{Vor- und Nachteile}
@@ -206,7 +206,7 @@ Extrinsische Kamerakalibrierung:
 \item Ist definiert durch eine Koordinatentransformation bestehend aus Rotation und Translation.
 \item Koordinatentransformation vom Weltkoordinatensystem in das Kamerakoordinatensystem: $$x_c = Rx_w + t$$
 Koordinatentransformation vom Kamerakoordinatensystem in das Weltkoordinatensystem: $$x_w = R^T x_c - R^T t$$
-\item $3 \times 4$ Gesamt-Projektionsmatrix $P$ (intrinsisch und extrinsisch) auf homogenen Koordinaten: $$\myvecthree{u \cdot w}{v \cdot w}{w} = P \cdot \myvecqfour{X}{Y}{Z}{1} \qquad P = (K \, R \, | \, K \, t)$$
+\item $3 \times 4$ Gesamt-Projektionsmatrix\index{Projektionsmatrix} $P$ (intrinsisch und extrinsisch) auf homogenen Koordinaten: $$\myvecthree{u \cdot w}{v \cdot w}{w} = P \cdot \myvecqfour{X}{Y}{Z}{1} \qquad P = (K \, R \, | \, K \, t)$$
 \end{itemize}
 
 \section{Kamerakalibrierung\index{Kamerakalibrierung}}
@@ -265,7 +265,7 @@ g \, : \, x &=& a + r \cdot u \\ g' \, : \, x &=& b + s \cdot v
 \end{eqnarray*}
 \item Berechnung des optimalen "{}Schnittpunktes"{} $S$ durch Lösung des überbestimmten LGS $Ax = c$ mit: $$A = \left( \begin{array}{cc} u_1 & -v_1 \\ u_2 & -v_2 \\ u_3 & -v_3 \end{array} \right) \quad , \quad x = \myvectwo{r'}{s'} \quad , \quad c = b-a \qquad s = \frac{a + r' \cdot u + b + s' \cdot v}{2}$$
 \end{itemize}
-3D-Tracking von Kopf und Händen auf der Basis von Hautfarbe, Region-Growing und Stereokalibrierung.
+
 
 \subsection{Epipolargeometrie\index{Epipolargeometrie}}
 
@@ -306,13 +306,13 @@ Für $n \geq 7$ Korrespondenzen $x$, $x'$:
 $$\underbrace{\left( \begin{array}{ccccccccc} x_1'x_1 & x_1'y_1 & x_1' & y_1'x_1 & y_1'y_1 & y_1' & x_1 & y_1 & 1 \\ \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\ x_n'x_n & x_n'y_n & x_n' & y_n'x_n & y_n'y_n & y_n' & x_n & y_n & 1 \end{array} \right)}_{A} \underbrace{\myvecqfour{f_{11}}{f_{12}}{\vdots}{f_{33}}}_{f} = 0$$
 $Af=0$ lösen z.B. mit Singulärwertzerlegung (SVD) \\
 \textbf{\textsl{Berechnung über Essentialmatrix:}} \\
-Essentialmatrix lässt sich durch die extrinsischen Parameter berechnen: \\
+Essentialmatrix\index{Essentialmatrix} lässt sich durch die extrinsischen Parameter berechnen: \\
 gegeben:
 \begin{itemize}
 \item Kamera 1 mit $(I \, | \, 0)$ als Transformation (Identität)
 \item Kamera 2 mit $(R \, | \, t)$ als Transformation
 \end{itemize}
-Essentialmatrix $E$ lässt sich berechnen zu: $$E = [t]_xR = \myvecnineright{0}{-t_3}{t_2}{t_3}{0}{-t_1}{-t_2}{t_1}{0}$$ Für die Epipole gilt: $$e = KR^Tt \quad \textrm{und} \quad e' = K't$$
+Essentialmatrix $E$ lässt sich berechnen zu: $$E = [t]_xR = \myvecnineright{0}{-t_3}{t_2}{t_3}{0}{-t_1}{-t_2}{t_1}{0}$$ Für die Epipole gilt: $$e = -KR^Tt \quad \textrm{und} \quad e' = K't$$
 Hat man die Essentialmatrix (z.B.über die extrinsischen Parameter) berechnet und die intrinsischen Parameter, d.h. Kalibriermatrizen $K$, $K'$, so lässt sich die Fundamentalmatrix berechnen zu: $$F = K'^{-T}EK^{-1}$$
 Hat man umgekehrt die Fundamentalmatrix bestimmt (z.B. über Bildpunkt-Korrespondenzen) und die intrinsischen Parameter, d.h. die Kalibriermatrizen $K$, $K'$, so lässt sich die Essentialmatrix berechnen zu: $$E = K'^TFK$$
 
@@ -341,7 +341,45 @@ Nach Lösung des Korrespondenzproblems können
 
 
 
+\section{Fragen zum Kapitel}
+\subsection{Geometrische 3D-Transformationen}
+\begin{enumerate}
+% Selbst ausgedacht:
+\item Welche zwei Vorgehensweisen haben sich für die geometrische 3D-Transformation durchgesetzt?
+% Antwort: Homogene Geometrie und Quaternionen
+\item Nennen Sie drei Anforderungen an geometrische 3D-Transformationen:
+% Antwort: Geschlossene Ausdrücke, Invertierbarkeit, Interpolation
+\item Wie lautet die Rotationsmatrix für eine Rotation um die $x$-Achse? % Wie SS13 Klausur Aufgabe 2.2a)
+\item Wie lautet die Rotationsmatrix für eine Rotation um die $y$-Achse? % WIe WS12 Klausur Aufgabe 5
+\item Wie lautet die Rotationsmatrix für eine Rotation um die $z$-Achse?
+\item Der Vektor $a$ soll um $180°$ um die $x$-Achse gedreht werden. Stellen Sie das entsprechende Quaternion auf. 
+\item Wie lautet die Formel für die Umrechnung von Quaternion zu Rotationsmatrix?
+\item Wie lautet die Formel für die Umrechnung von Rotationsmatrix zu Quaternion?
+% Antwort: q=(0,(1,0,0)
+\item Wie lautet die Formel zur numerischen Berechnung der SLERP zwischen $q$ und $r$?
+\item Berechnen Sie SLERP(q,r,0) und SLERP(q,r,1).
+% Antwort: SLERP(q,r,0)=q und SLERP(q,r,1)=1
+	\item Gegeben sei das Quaternion $q_1=(s,(x,y,z))=(2,(4,-3,0))$. Berechnen Sie das multiplikativ inverse Quaternion $q^{-1}_{1}$. % Übungsblatt 6 von 2012
+	% Lösung $q^{-1}_{1}=(\frac{2}{29},(-\frac{4}{29},\frac{3}{29},0))$
+	\item Rotieren Sie den Punkt $\vec{x}=(0,0,3)$ mit dem Quaternion $q_2=(\frac{\sqrt{2}}{2},(\frac{\sqrt{2}}{2},0,0))$. % Übungsblatt 6 von 2012
+	% Lösung $\vec{x}'=(0,-3,0)$
+	\item Wie lautet die Formel zur analytischen Berechnung der SLERP zwischen $q$ und $r$, die in der Vorlesung vorgestellt wurde? % Klausur WS12 - Aufgabe 4 b)
+\end{enumerate}
 
+
+\subsection{Erweitertes Kameramodell}
+\begin{enumerate}
+% Selbst ausgedacht
+	\item Wenn man das in der Vorlesung behandelte Erweiterte Kameramodell mit dem Lochkameramodell vergleicht, welche vier Vereinfachungen werden beim Lochkameramodell gemacht?
+\end{enumerate}
+
+\subsection{Fähigkeitencheck für die Klausur}
+\begin{itemize}
+	\item Berechnung von Rotationsmatrix und inverser Rotationsmatrix % Wie bei Übungsblatt 5
+	\item Umgang mit Stereokameramodell % Wie bei Übungsblatt 5
+	\item Umgang mit Epipolargeometrie % Wie bei Übungsblatt 5
+	\item Umgang mit Quaternionen % Wie bei Übungsblatt 6
+\end{itemize}
 
 
 
