@@ -1,7 +1,7 @@
 % !TeX root = summary.tex
 
 \chapter{Wissen und Planung}
-
+\section{Wissen}
 \subsection{Einführung}
 
 \subsubsection*{Was ist Wissen?}
@@ -53,25 +53,20 @@ Erkläre(DB, "{}Ident1 BESITZT Ident2."{}) \\ $\to$ OK \\ Befrage(DB, "{}Was BES
 
 \subsection{Logik allgemein}
 
-\begin{center}
-Logik \quad : \quad (Symbolmenge, Modellmenge, Syntax, Semantik, Folgerungsop. $\models$)
-\end{center}
-
-\subsubsection*{Symbol-, Modellmenge}
+Eine allgemeine Logik besteht aus einer Symbolmenge, einer Belegungsmenge, einer Syntax, einer Semantik, einem Folgerungsoperator $\models$ und den elementaren Aussagen wahr und falsch.
 
 \begin{itemize}
 \item Elementarwerte für Aussagen: wahr, falsch
-\item Symbolmenge $S$ enthält alle Symbole, über die Aussagen gemacht werden können.
-\item Modell: Menge $\{(s_i,w_i)\}$ von Symbolen \\ $s_i \in S$ mit zugeordneten Werten, $w_i \in Def(s_i)$
-\item Modellmenge: Menge aller möglichen Modelle: $$\forall i \forall w \in Def(s_i) \exists M \, : \, (s_i,w_i) \in M = (s_i,w)$$
+\item Symbolmenge $S$: enthält alle Symbole, über die Aussagen gemacht werden können.
+\item Belegung/Modell: Zuweisung eines Wertes jedem Symbol d.h. eine Menge von Paaren $(s_i,w_i)$ von Symbolen \\ $s_i \in S$ mit zugeordneten Werten, $w_i \in Def(s_i)$
+\item Belegungsmenge $M$: Menge aller gültigen Belegungen
 \end{itemize}
+
 \textbf{\textsl{Beispiel: Aussagenlogik}}
 \begin{eqnarray*}
 S &=& \{a,b\} \\ M &=& \{ \{ (a,wahr),(b,wahr) \} , \\ && \,\,\, \{ (a,wahr),(b,falsch)\} , \\ && \,\,\, \{ (a,falsch),(b,wahr) \} , \\ && \,\,\, \{ (a,falsch) , (b,falsch) \} \}
 \end{eqnarray*}
 Schreibweise: lateinische Buchstaben für Symbole, griechische Buchstaben für Sätze
-
-\subsubsection*{Syntax}
 
 \begin{description}
 \item[Syntax\index{Syntax}:] Legt fest, welche Sätze wohlgeformt sind.
@@ -85,10 +80,9 @@ $()a \vee$ & $bc$ & nicht wohlgeformt \\ \hline
 \end{tabular}
 \end{center}
 
-\subsubsection*{Semantik}
 
 \begin{description}
-\item[Semantik\index{Semantik}:] Bestimmt den Wahrheitswert eines Satzes in Bezug auf ein Modell.
+\item[Semantik\index{Semantik}:] Beschreibt wie einem gegebenen Satz der Logik ein Wahrheitswert zugeordnet wird. Das kann immer dann geschehen, wenn eine Belegung gewählt wurde, d.h. unter jeder Belegung hat ein logischer Satz einen durch die Semantik eindeutig definierten Wahrheitswert, ist also entweder wahr oder falsch.
 \end{description}
 \begin{eqnarray*}
 \textrm{Satz } \alpha &=& (a \wedge b) \Rightarrow c \\ \textrm{Modell } M &=& \{ (a,wahr) , (b,wahr) , (c,wahr) \} \\ &\Rightarrow& \alpha / M \,\, wahr \, , \, M \textrm{ erfüllt } \alpha \\
@@ -101,12 +95,12 @@ $$\alpha \models \beta \, : \, \textrm{"{}} \beta \textrm{ folgt aus } \alpha \t
 $\alpha \models \beta$ genau dann, wenn für alle Modelle, in denen $\alpha$ wahr ist, $\beta$ ebenfalls wahr ist.
 $$\alpha \, : \, x+y=4 \qquad \beta_1 \, : \, y = 4-x \qquad \beta_2 \, : \, \frac{x}{y} = 1 \quad \Rightarrow \quad \alpha \models \beta_1 \qquad \alpha \not\models \beta_2$$
 
-Zurück zur Wissensdatenbank $WB$: \\
+\subsubsection*{Wissensbasis}
 Kann als $\wedge$-verknüpfte Sequenz von Sätzen aufgefasst werden:
 $$WB \, : \, \left\{ \begin{array}{r @{\, : \,} r @{\, = \,} l} \alpha_1 & x+y & 4 \\ \alpha_2 & x/y & 1 \end{array} \right\}$$
 $\Rightarrow$ $WB = \alpha_1 \wedge \alpha_2$ $wahr$ $\forall M \, : \, x=2, \, y=2$ \\
 $\Rightarrow$ $M$ erfüllt $WB$ $\forall M \, : \, x=2, \, y=2$ \\
-$$WB \models \beta \quad \textrm{ gdw } \quad \left( \bigwedge\limits_{\alpha_i \in WB} \alpha_i \right) \Rightarrow \beta = wahr$$
+$$WB \models \beta \quad \textrm{ genau dann wenn } \quad \left( \bigwedge\limits_{\alpha_i \in WB} \alpha_i \right) \Rightarrow \beta = wahr$$
 
 \subsubsection*{Modellprüfung}
 
@@ -145,7 +139,7 @@ Ein Deduktions-Algorithmus
 \item kann korrekt und / oder vollständig sein
 \end{itemize}
 
-\subsection{Aussagenlogik}
+\section{Aussagenlogik}
 
 \begin{itemize}
 \item Aussagenlogik als Beispiel einer sehr einfachen Logik
@@ -154,7 +148,7 @@ Ein Deduktions-Algorithmus
 \item eignet sich sehr "{}natürlich"{} zur Illustration bestimmter Konzepte
 \end{itemize}
 
-\subsubsection*{Syntax}
+\subsection{Syntax}
 
 \begin{eqnarray*}
 Satz &\to& Atom \, | \, Komplex \\ Atom &\to& True \, | \, False \, | \, Symbol \\ Symbol &\to& P \, | \, Q \, | \, R \, \dots \\
@@ -175,7 +169,7 @@ Wahrheitsgehalt im Modell $M$:
 (Alternative: Wahrheitstabelle)
 \end{enumerate}
 
-\subsubsection*{Muster}
+\subsection{Muster}
 
 Allgemeingültige Deduktionsregeln aus der klassischen Literatur:
 \begin{itemize}
@@ -200,7 +194,7 @@ Voraussetzung: Sätze müssen in konjunktiver Form vorliegen.
 \item[Konjunktive Form (KF):] Jede aussagenlogische Formel kann als Konjunktion von Klauseln ausgedrückt werden. Dann liegt sie in konjunktiver Form vor: $$(l_{1,1} \vee \dots \vee l_{1,k_1}) \wedge \dots \wedge (l_{n,1} \vee \dots \vee l_{n,k_n})$$
 \end{description}
 
-\subsubsection*{Resolutionsalgorithmus}
+\subsubsection{Resolutionsalgorithmus}
 
 Zeige $WB \models \alpha$ durch Widerlegung von $(WB \wedge \neg \alpha)$
 \begin{center}
@@ -227,7 +221,7 @@ Der Resolutionsalgorithmus ist vollständig aber auch sehr afwendig -- $O(n^2)$.
 \item Davis-Putnam-Logemann-Loveland (DPLL)
 \end{itemize}
 
-\subsection{Effiziente Logik-Algorithmen}
+\subsection{Horn-Klausel}
 
 \begin{description}
 \item[Horn-Klausel\index{Horn-Klausel}:] Disjunktion von Literalen, von denen höchstens eins positiv ist: $$(\neg a \vee \neg b \vee c)$$ lasst sich schreiben als: $$\underbrace{(a \wedge b)}_{Koerper} \Rightarrow \underbrace{c}_{Kopf}$$
@@ -264,6 +258,7 @@ Rückwärtsverkettung:
 \item stoppe bei bekannten Fakten (Ground Truth, Axiome)
 \item Ergebnis: Wahrheitsgehalt der Anfrage
 \end{itemize}
+\subsection{DPLL}
 \begin{description}
 \item[Davis-Putnam-Logemann-Loveland\index{Davis-Putnam-Logemann-Loveland} (DPLL):] Rekursiver Modellprüfungs-Algorithmus mit folgenden Verbesserungen:
 \begin{itemize}
@@ -301,7 +296,9 @@ DPLL zur Überprüfung von Erfüllbarkeit:
 \end{tabular}
 \end{center}
 
-\subsection{Semantisches Planen}
+\subsection{Prädikatenlogik}
+
+\section{Planung}
 
 \subsubsection*{Repräsentation von Plänen}
 
@@ -312,7 +309,7 @@ Wie kann man Probleme so formulieren, dass
 \end{itemize}
 $\to$ Einschränkungsregeln für formelle Spezifikation von Zuständen, Zielen, Aktionen. Beispiele solcher Regelsysteme: STRIPS, ADL
 
-\subsubsection*{STRIPS\index{STRIPS}}
+\subsection{STRIPS\index{STRIPS}}
 
 \begin{itemize}
 \item \textbf{ST}anford \textbf{R}esearch \textbf{I}nstitute \textbf{P}roblem \textbf{S}olver
@@ -390,7 +387,7 @@ Einschränkunen von STRIPS:
 \end{itemize}
 $\Rightarrow$ STRIPS-Aussagen oft lang und unübersichtlich
 
-\subsubsection*{ADL\index{ADL}}
+\subsection{ADL\index{ADL}}
 
 \begin{itemize}
 \item \textbf{A}ction \textbf{D}escription \textbf{L}anguage: Weiterentwicklung von STRIPS
@@ -806,7 +803,61 @@ vom Startknoten ausgehend:
 \end{itemize}
 
 
+\section{Fragen zum Kapitel}
+\subsection{Wissen}
+\begin{enumerate}
+% Selbstausgedachte Fragen:
+	\item Aus was besteht eine Logik?
+	% Antowort: Symbolmenge, Belegungsmenge, Syntax, Semantik, Folgerungsoperator und elementaren Aussagen wahr und falsch
+	\item Was ist eine:
+	\begin{enumerate}
+		\item Symbolmenge
+		\item Belegungsmenge
+		\item Syntax
+		\item Semantik
+		\item Folgerungsoperator
+	\end{enumerate}
 
+  \item Was ist eine Wissensbasis?
+	\item Was ist Deduktion?
+	\item Was ist ein Literal?
+	\item Beschreiben Sie die Resolutionsregel
+	\item Was ist eine Klausel?
+	% Antwort: Eine Klausel ist die Menge der in einer Disjunktion enthaltenen Literale
+	\item Wann ist ein Deduktionsalgorithmus korrekt?
+	\item Wann ist ein Deduktionsalgorithmus vollständig?
+	
+	% Ist eine typische Frage in der Klausur
+	\item Gegeben ist die folgende Klauselnmenge $WB=\left\{\left\{Q,\neg V,W\right\},\left\{\neg W,X\right\},\left\{\neg Q,W\right\},\left\{\neg X,Y\right\},\left\{V,\neg Y\right\},\left\{\neg W,\neg Y\right\}\right\}$. Zeigen Sie mit dem Resolutionsalgorithmus das $V\Leftrightarrow Y$ ableitbar ist.
+	
+	\item Der Resolutionsalgorithmus hat welches Problem?
+	% Antwort: Erfüllbarkeitsproblem der Aussagenlogik ist NP-vollständig (d.h. vermutlich exponentieller Worst-Case-Aufwand)
+	
+	\item In welcher Zeit lässt sich mit den Horn-Formeln die Ableitbarkeit beantworten?
+	% Antwort: Quadratische Zeit
+	
+	\item Wie lauten die drei Horn-Klauseln?
+	% Antwort: 1. Definition (nur negierte Literale und ein positives Literal) 2. Integrationseinschränkung (nur negierte Literale) 3. Fakt/Axiom (ein positives Literal)
+	\item Wozu dienen Integritätseinschränkungen?
+	% Antwort: Fehler in der Wissensbasis aufzeigen
+	
+	% SS12 Klausur - Aufgabe 3
+	\item Nennen Sie den wesentlichen Nachteil von Horn-Formel im Vergleich zu prädikatenlogischen Formeln allgemein!
+	% Antwort: Horn-Formel sind nur eine Teilmenge der prädikatenlogischen Formeln. D.h. es gibt Boolesche Funktionen, die man nicht durch Hornformeln darstellen kann.
+	
+	% WS11 Klausur - Aufgabe 3
+	\item Gegeben ist folgende Wissensbasis $K=(P \vee \neg B \vee \neg A) \wedge (\neg A \vee \neg P \vee Q) \wedge (\neg C \vee R \vee \neg Q) \wedge A \wedge B$
+	
+	\begin{enumerate}
+		\item Erstellen Sie den Und-/Oder-Graphen
+		\item Überprüfen Sie mittels Rückwärtsverkettung, ob sich Aussage R aus der Wissensbasis folgern lässt
+		% Antwort: R ist nicht aus WB folgerbar
+		\item Was könnte eine Frage für eine Vorwärtsverkettung sein?
+	\end{enumerate}
+	
+	% WS14 Klausur - Aufgabe 3
+	\item Prüfen Sie mithilfe des DPLL-Algorithmus, ob die prädikatenlogische Formel: $A \wedge (\neg A \vee \neg D \vee \neg E) \wedge (\neg A \vee D \vee E) \wedge (\neg D \vee E \vee F) \wedge (D \vee \neg F)$ erfüllbar ist. Geben Sie in jedem Schritt an, warum Sie eine Variable mit einem bestimmten Wert belegen.
+\end{enumerate}
 
 
 
