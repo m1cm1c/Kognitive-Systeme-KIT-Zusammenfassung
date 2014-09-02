@@ -460,6 +460,46 @@ Das Umweltmodell eines kognitiven Systems bildet die reale Umwelt auf eine inner
 \end{itemize}
 
 
+\subsubsection{Objektmodellierung}
+
+\begin{itemize}
+\item Darstellung der Objekte der realen Umwelt (Türen, Wände, Hindernisse)
+\item 3-dim. Darstellung der Umgebung aus Sensorwahrnehmungen
+\item Projektion auf $x$-$y$-Ebene für Navigation bodengebundener Roboter ausreichend
+\end{itemize}
+verschiedene Darstellungen:
+\begin{itemize}
+\item Kantenmodelle: \\
+Ermittlung von markanten Punkten. Verbinden durch geeignete Kanten auf Oberfläche des Objekts
+\item Oberflächenmodelle
+\begin{itemize}
+\item Nachbildung der Objektoberflächen
+\item Darstellung ebener Flächenelemente mit Polygonen
+\item gekrümmte Flächenelemente:
+\begin{itemize}
+\item mathematische Grundflächen (Zylinder, Kegel, Torusflächen)
+\item Bezier-Flächen
+% Nicht in Vorlesungsfolien 
+%(Erweiterung des Ansatzes der Bezierkurven): \\
+%gegeben ist ein Gitter von Führungspunkten $P_{ij}$ mit $0 \leq i \leq N$ und $0 \leq j \leq M$. Damit ist die Fläche beschrieben durch $$F(u,v) = \sum\limits_{i=0}^N \sum\limits_{j=0}^M P_{ij} \cdot B_{i,N}(u) \cdot B_{j,M}(v)$$ mit
+%\begin{eqnarray*}
+%B_{i,N}(u) &=& (1-u) B_{i,N-1}(u) + uB_{i+1,N-1}(u) \quad , \quad B_{i,0} = 1 \\
+%B_{j,M}(v) &=& (1-v) B_{j,M-1}(v) + uB_{j+1,M-1}(v) \quad , \quad B_{j,0} = 1
+%\end{eqnarray*}
+%Die $B_{i,N}$ bzw. $B_{j,M}$ heißen auch Bernsteinpolynome.
+\item näherungsweise durch Freiformflächen (Patches)
+\end{itemize}
+\end{itemize}
+\item Volumenmodelle:
+\begin{itemize}
+\item Unterscheidung von Raumpunkten hinsichtlich ihrer Lage zum Objekt (innen-/außenliegend)
+\item Repräsentationsmöglichkeiten: Begrenzungsflächenmethode, Grundkörperdarstellung, Zellenzerlegung (Octtree), Volumenapproximation, einhüllende Quader, Geradensegmente
+\end{itemize}
+\end{itemize}
+
+
+
+
 \begin{description}
 \item[Geometrisches Modell:] Anwendungen:
 \begin{itemize}
@@ -571,40 +611,7 @@ Quadtree-/Octtree-Aufteilung:
 \item konvexe Polygone (Polyeder)
 \end{itemize}
 
-\subsubsection*{Objekte}
 
-\begin{itemize}
-\item Darstellung der Objekte der realen Umwelt (Türen, Wände, Hindernisse)
-\item 3-dim. Darstellung der Umgebung aus Sensorwahrnehmungen
-\item Projektion auf $x$-$y$-Ebene für Navigation bodengebundener Roboter ausreichend
-\end{itemize}
-verschiedene Darstellungen:
-\begin{itemize}
-\item Kantenmodelle: \\
-Ermittlung von markanten Punkten. Verbinden durch geeignete Kanten auf Oberfläche des Objekts
-\item Oberflächenmodelle
-\begin{itemize}
-\item Nachbildung der Objektoberflächen
-\item Darstellung ebener Flächenelemente mit Polygonen
-\item gekrümmte Flächenelemente:
-\begin{itemize}
-\item mathematische Grundflächen (Zylinder, Kegel, Torusflächen)
-\item Bezier-Flächen (Erweiterung des Ansatzes der Bezierkurven): \\
-gegeben ist ein Gitter von Führungspunkten $P_{ij}$ mit $0 \leq i \leq N$ und $0 \leq j \leq M$. Damit ist die Fläche beschrieben durch $$F(u,v) = \sum\limits_{i=0}^N \sum\limits_{j=0}^M P_{ij} \cdot B_{i,N}(u) \cdot B_{j,M}(v)$$ mit
-\begin{eqnarray*}
-B_{i,N}(u) &=& (1-u) B_{i,N-1}(u) + uB_{i+1,N-1}(u) \quad , \quad B_{i,0} = 1 \\
-B_{j,M}(v) &=& (1-v) B_{j,M-1}(v) + uB_{j+1,M-1}(v) \quad , \quad B_{j,0} = 1
-\end{eqnarray*}
-Die $B_{i,N}$ bzw. $B_{j,M}$ heißen auch Bernsteinpolynome.
-\item näherungsweise durch Freiformflächen (Patches)
-\end{itemize}
-\end{itemize}
-\item Volumenmodelle:
-\begin{itemize}
-\item Unterscheidung von Raumpunkten hinsichtlich ihrer Lage zum Objekt (innen-/außenliegend)
-\item Repräsentationsmöglichkeiten: Begrenzungsflächenmethode, Grundkörperdarstellung, Zellenzerlegung (Octtree), Volumenapproximation, einhüllende Quader, Geradensegmente
-\end{itemize}
-\end{itemize}
 
 \subsubsection*{Modelle}
 
@@ -801,63 +808,6 @@ vom Startknoten ausgehend:
 \item A*-Algorithmus\index{A*-Algorithmus}: \\ mit $g(N_k)$ Kosten zum Erreichen von $N_k$
 \item beweisbar optimal $$f(N_k) = g(N_k) + h(N_k)$$
 \end{itemize}
-
-
-\section{Fragen zum Kapitel}
-\subsection{Wissen}
-\begin{enumerate}
-% Selbstausgedachte Fragen:
-	\item Aus was besteht eine Logik?
-	% Antowort: Symbolmenge, Belegungsmenge, Syntax, Semantik, Folgerungsoperator und elementaren Aussagen wahr und falsch
-	\item Was ist eine:
-	\begin{enumerate}
-		\item Symbolmenge
-		\item Belegungsmenge
-		\item Syntax
-		\item Semantik
-		\item Folgerungsoperator
-	\end{enumerate}
-
-  \item Was ist eine Wissensbasis?
-	\item Was ist Deduktion?
-	\item Was ist ein Literal?
-	\item Beschreiben Sie die Resolutionsregel
-	\item Was ist eine Klausel?
-	% Antwort: Eine Klausel ist die Menge der in einer Disjunktion enthaltenen Literale
-	\item Wann ist ein Deduktionsalgorithmus korrekt?
-	\item Wann ist ein Deduktionsalgorithmus vollständig?
-	
-	% Ist eine typische Frage in der Klausur
-	\item Gegeben ist die folgende Klauselnmenge $WB=\left\{\left\{Q,\neg V,W\right\},\left\{\neg W,X\right\},\left\{\neg Q,W\right\},\left\{\neg X,Y\right\},\left\{V,\neg Y\right\},\left\{\neg W,\neg Y\right\}\right\}$. Zeigen Sie mit dem Resolutionsalgorithmus das $V\Leftrightarrow Y$ ableitbar ist.
-	
-	\item Der Resolutionsalgorithmus hat welches Problem?
-	% Antwort: Erfüllbarkeitsproblem der Aussagenlogik ist NP-vollständig (d.h. vermutlich exponentieller Worst-Case-Aufwand)
-	
-	\item In welcher Zeit lässt sich mit den Horn-Formeln die Ableitbarkeit beantworten?
-	% Antwort: Quadratische Zeit
-	
-	\item Wie lauten die drei Horn-Klauseln?
-	% Antwort: 1. Definition (nur negierte Literale und ein positives Literal) 2. Integrationseinschränkung (nur negierte Literale) 3. Fakt/Axiom (ein positives Literal)
-	\item Wozu dienen Integritätseinschränkungen?
-	% Antwort: Fehler in der Wissensbasis aufzeigen
-	
-	% SS12 Klausur - Aufgabe 3
-	\item Nennen Sie den wesentlichen Nachteil von Horn-Formel im Vergleich zu prädikatenlogischen Formeln allgemein!
-	% Antwort: Horn-Formel sind nur eine Teilmenge der prädikatenlogischen Formeln. D.h. es gibt Boolesche Funktionen, die man nicht durch Hornformeln darstellen kann.
-	
-	% WS11 Klausur - Aufgabe 3
-	\item Gegeben ist folgende Wissensbasis $K=(P \vee \neg B \vee \neg A) \wedge (\neg A \vee \neg P \vee Q) \wedge (\neg C \vee R \vee \neg Q) \wedge A \wedge B$
-	
-	\begin{enumerate}
-		\item Erstellen Sie den Und-/Oder-Graphen
-		\item Überprüfen Sie mittels Rückwärtsverkettung, ob sich Aussage R aus der Wissensbasis folgern lässt
-		% Antwort: R ist nicht aus WB folgerbar
-		\item Was könnte eine Frage für eine Vorwärtsverkettung sein?
-	\end{enumerate}
-	
-	% WS14 Klausur - Aufgabe 3
-	\item Prüfen Sie mithilfe des DPLL-Algorithmus, ob die prädikatenlogische Formel: $A \wedge (\neg A \vee \neg D \vee \neg E) \wedge (\neg A \vee D \vee E) \wedge (\neg D \vee E \vee F) \wedge (D \vee \neg F)$ erfüllbar ist. Geben Sie in jedem Schritt an, warum Sie eine Variable mit einem bestimmten Wert belegen.
-\end{enumerate}
 
 
 

@@ -200,7 +200,7 @@ Brennweite:
 \item Die Parameter $f_x$, $f_y$ sind dann das Produkt aus der tatsächlichen Brennweite mit Einheit [mm] und dem jeweiligen Umrechnungsfaktor mit Einheit [Pixel/mm].
 \item Die Einheit für die Parameter $f_x$, $f_y$ ist somit [Pixel].
 \end{itemize}
-Die Abbildung vom Kamerakoordinatensystem in das Bildkoordinatensystem, ausschließlich mit den intrinsischen Parametern, ist dann definiert durch: $$\myvectwo{u}{v} = \myvectwo{c_x}{c_y} + \frac{1}{Z} \cdot \myvectwo{f_x \cdot X}{f_y \cdot Y}$$ oder als Matrixmultiplikation mit Kalibriermatrix $K$ auf homogenen Koordinaten: $$\myvecthree{u \cdot w}{v \cdot w}{w} = K \cdot \myvecthree{X}{Y}{Z} \qquad K = \myvecnine{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}$$
+Die Abbildung vom Kamerakoordinatensystem in das Bildkoordinatensystem, ausschließlich mit den intrinsischen Parametern, ist dann definiert durch: $$\myvectwo{u}{v} = \myvectwo{c_x}{c_y} + \frac{1}{Z} \cdot \myvectwo{f_x \cdot X}{f_y \cdot Y}$$ oder als Matrixmultiplikation mit Kalibriermatrix \index{Kalibriermatrix} $K$ auf homogenen Koordinaten: $$\myvecthree{u \cdot w}{v \cdot w}{w} = K \cdot \myvecthree{X}{Y}{Z} \qquad K = \myvecnine{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}$$
 Extrinsische Kamerakalibrierung:
 \begin{itemize}
 \item Ist definiert durch eine Koordinatentransformation bestehend aus Rotation und Translation.
@@ -340,46 +340,6 @@ Nach Lösung des Korrespondenzproblems können
 \end{itemize}
 
 
-
-\section{Fragen zum Kapitel}
-\subsection{Geometrische 3D-Transformationen}
-\begin{enumerate}
-% Selbst ausgedacht:
-\item Welche zwei Vorgehensweisen haben sich für die geometrische 3D-Transformation durchgesetzt?
-% Antwort: Homogene Geometrie und Quaternionen
-\item Nennen Sie drei Anforderungen an geometrische 3D-Transformationen:
-% Antwort: Geschlossene Ausdrücke, Invertierbarkeit, Interpolation
-\item Wie lautet die Rotationsmatrix für eine Rotation um die $x$-Achse? % Wie SS13 Klausur Aufgabe 2.2a)
-\item Wie lautet die Rotationsmatrix für eine Rotation um die $y$-Achse? % WIe WS12 Klausur Aufgabe 5
-\item Wie lautet die Rotationsmatrix für eine Rotation um die $z$-Achse?
-\item Der Vektor $a$ soll um $180°$ um die $x$-Achse gedreht werden. Stellen Sie das entsprechende Quaternion auf. 
-\item Wie lautet die Formel für die Umrechnung von Quaternion zu Rotationsmatrix?
-\item Wie lautet die Formel für die Umrechnung von Rotationsmatrix zu Quaternion?
-% Antwort: q=(0,(1,0,0)
-\item Wie lautet die Formel zur numerischen Berechnung der SLERP zwischen $q$ und $r$?
-\item Berechnen Sie SLERP(q,r,0) und SLERP(q,r,1).
-% Antwort: SLERP(q,r,0)=q und SLERP(q,r,1)=1
-	\item Gegeben sei das Quaternion $q_1=(s,(x,y,z))=(2,(4,-3,0))$. Berechnen Sie das multiplikativ inverse Quaternion $q^{-1}_{1}$. % Übungsblatt 6 von 2012
-	% Lösung $q^{-1}_{1}=(\frac{2}{29},(-\frac{4}{29},\frac{3}{29},0))$
-	\item Rotieren Sie den Punkt $\vec{x}=(0,0,3)$ mit dem Quaternion $q_2=(\frac{\sqrt{2}}{2},(\frac{\sqrt{2}}{2},0,0))$. % Übungsblatt 6 von 2012
-	% Lösung $\vec{x}'=(0,-3,0)$
-	\item Wie lautet die Formel zur analytischen Berechnung der SLERP zwischen $q$ und $r$, die in der Vorlesung vorgestellt wurde? % Klausur WS12 - Aufgabe 4 b)
-\end{enumerate}
-
-
-\subsection{Erweitertes Kameramodell}
-\begin{enumerate}
-% Selbst ausgedacht
-	\item Wenn man das in der Vorlesung behandelte Erweiterte Kameramodell mit dem Lochkameramodell vergleicht, welche vier Vereinfachungen werden beim Lochkameramodell gemacht?
-\end{enumerate}
-
-\subsection{Fähigkeitencheck für die Klausur}
-\begin{itemize}
-	\item Berechnung von Rotationsmatrix und inverser Rotationsmatrix % Wie bei Übungsblatt 5
-	\item Umgang mit Stereokameramodell % Wie bei Übungsblatt 5
-	\item Umgang mit Epipolargeometrie % Wie bei Übungsblatt 5
-	\item Umgang mit Quaternionen % Wie bei Übungsblatt 6
-\end{itemize}
 
 
 

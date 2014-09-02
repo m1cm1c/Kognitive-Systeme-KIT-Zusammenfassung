@@ -2,58 +2,6 @@
 
 \section{Maschinelles Lernen}
 
-\subsection{Unsupervised Learning}
-
-\begin{itemize}
-\item Datensammlung und Bezeichnung kostenaufwendig und zeitverschwenderisch.
-\item Die Charaktermerkmale der Muster können sich ändern im Verlauf der Zeit.
-\item Vielleicht hat man keine Einsicht in die Struktur der Daten.
-\end{itemize}
-$\Rightarrow$ Die Klassen sind \underline{nicht} bekannt.
-
-\subsection{Mischdichten}
-
-\begin{itemize}
-\item Beispiele kommen von $c$ Klassen
-\item A priori Wahrscheinlichkeit $P(\omega_j)$
-\item Annahme: Die Formen der Klassenbedingten PDF (probability density function -- Wahrscheinlichkeitsdichtefunktion) $P(X | \omega_j , \theta_j)$ sind bekannt
-\item Unbekannter Parametervektor $\theta_1, \dots, \theta_c$
-\end{itemize}
-Problem: Haarige Mathematik \\ Vereinfachung / Approximation \\ Betrachte nur Mittel $\to$ Isodaten
-\begin{itemize}
-\item Wähle initiale $\mu_1, \dots, \mu_c$
-\item Klassifiziere $n$ Muster zu dem Mittel, das am nähesten liegt.
-\item Berechne die Mittel neu aus den Mustern der Klasse
-\item Mittel hat sich geändert? Gehe zu Schritt 2, sonst: stopp
-\end{itemize}
-Isodaten, Probleme:
-\begin{itemize}
-\item Die Wahl der initialen Mittel $\mu$.
-\item Wissen über die Anzahl der Klassen.
-\item Annahme über die Verteilung.
-\item Was bedeutet "{}nah"{}?
-\end{itemize}
-
-\subsection{Clustering}
-
-\begin{itemize}
-\item Ähnlichkeit
-\item Kriteriumsfunktion
-\item Muster in der selben Klasse sollten die Kriteriumsfunktion noch extremer machen, dies erfasst die Cluserqualität.
-\item Beispiel: Summe des Fehlerkriteriums: $$J = \sum\limits_{i=1}^c \sum\limits_{\max} || x - m_i ||^2$$
-\end{itemize}
-
-\subsection{Hierarchisches Clustering}
-
-\begin{itemize}
-\item $c$ muss nicht bestimmt werden
-\item Mittel müssen nicht erraten werden
-\item[(1)] Initialisiere $c := n$
-\item[(2)] Finde die nähesten Paare von eindeutigen Clustern $X_i$ und $X_j$
-\item[(3)] Vereinige sie und dekrementiere $c$
-\item[(4)] Wenn $c < C_{stop}$: stoppen, sonst: gehe zu Schritt (2)
-\end{itemize}
-
 \section{Neuronale Netze}
 
 \subsection{Wieso neuronale Netze?}
@@ -67,6 +15,25 @@ Isodaten, Probleme:
 \item Nichtlineare Klassifizierer / Abbilder ($\to$ gute Performance)
 \item Lernfähig / anpassbar
 \end{itemize}
+
+\subsection{Parametrisch -- Nicht-parametrisch}
+
+Parametrisch:
+\begin{itemize}
+\item grundlegende Aufteilungswahrscheinlichkeit annehmen
+\item Parameter der Aufteilung abschätzen
+\item Beispiel: "{}Gauss Klassifikation"{}
+\end{itemize}
+Nicht-parametrisch:
+\begin{itemize}
+\item keine Aufteilung annehmen
+\item Fehlerwahrscheinlichkeit oder Fehlerkriterium direkt aus den Trainingsdaten berechnen
+\item Beispiele: Parzen Fenster, $k$-nächster Nachbar, Perzeptron
+\end{itemize}
+
+\subsection{Das Perzeptron}
+
+\mypic{10}{perzeptron}
 
 \subsection{Entscheidungsfunktion $g(x)$}
 
@@ -96,9 +63,7 @@ wobei $\tilde{m}_i = \frac{1}{n} \sum\limits_{y \in Y_i} y$ : Mittel für projez
 \end{eqnarray*}
 \end{itemize}
 
-\subsection{Das Perzeptron}
 
-\mypic{10}{perzeptron}
 
 \subsubsection*{Lineare Diskriminantenfunktionen}
 
@@ -180,7 +145,57 @@ Fähigkeit, das aus den Trainingsdaten Erlernte auf neue Daten (Testdaten) anzuw
 
 
 
+\subsection{Unsupervised Learning}
 
+\begin{itemize}
+\item Datensammlung und Bezeichnung kostenaufwendig und zeitverschwenderisch.
+\item Die Charaktermerkmale der Muster können sich ändern im Verlauf der Zeit.
+\item Vielleicht hat man keine Einsicht in die Struktur der Daten.
+\end{itemize}
+$\Rightarrow$ Die Klassen sind \underline{nicht} bekannt.
+
+\subsection{Mischdichten}
+
+\begin{itemize}
+\item Beispiele kommen von $c$ Klassen
+\item A priori Wahrscheinlichkeit $P(\omega_j)$
+\item Annahme: Die Formen der Klassenbedingten PDF (probability density function -- Wahrscheinlichkeitsdichtefunktion) $P(X | \omega_j , \theta_j)$ sind bekannt
+\item Unbekannter Parametervektor $\theta_1, \dots, \theta_c$
+\end{itemize}
+Problem: Haarige Mathematik \\ Vereinfachung / Approximation \\ Betrachte nur Mittel $\to$ Isodaten
+\begin{itemize}
+\item Wähle initiale $\mu_1, \dots, \mu_c$
+\item Klassifiziere $n$ Muster zu dem Mittel, das am nähesten liegt.
+\item Berechne die Mittel neu aus den Mustern der Klasse
+\item Mittel hat sich geändert? Gehe zu Schritt 2, sonst: stopp
+\end{itemize}
+Isodaten, Probleme:
+\begin{itemize}
+\item Die Wahl der initialen Mittel $\mu$.
+\item Wissen über die Anzahl der Klassen.
+\item Annahme über die Verteilung.
+\item Was bedeutet "{}nah"{}?
+\end{itemize}
+
+\subsection{Clustering}
+
+\begin{itemize}
+\item Ähnlichkeit
+\item Kriteriumsfunktion
+\item Muster in der selben Klasse sollten die Kriteriumsfunktion noch extremer machen, dies erfasst die Cluserqualität.
+\item Beispiel: Summe des Fehlerkriteriums: $$J = \sum\limits_{i=1}^c \sum\limits_{\max} || x - m_i ||^2$$
+\end{itemize}
+
+\subsection{Hierarchisches Clustering}
+
+\begin{itemize}
+\item $c$ muss nicht bestimmt werden
+\item Mittel müssen nicht erraten werden
+\item[(1)] Initialisiere $c := n$
+\item[(2)] Finde die nähesten Paare von eindeutigen Clustern $X_i$ und $X_j$
+\item[(3)] Vereinige sie und dekrementiere $c$
+\item[(4)] Wenn $c < C_{stop}$: stoppen, sonst: gehe zu Schritt (2)
+\end{itemize}
 
 
 

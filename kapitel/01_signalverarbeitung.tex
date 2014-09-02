@@ -84,16 +84,16 @@ Die Faltung lässt sich wiefolgt ermitteln:
 \end{itemize}
 \end{description}
 
-\subsection{Fouriertransformation\index{Fouriertransformation}}
+\section{Fouriertransformation\index{Fouriertransformation}}
 
-\subsubsection*{Idee der Fouriertransformation}
+\subsection{Idee der Fouriertransformation}
 \begin{itemize}
 \item Zerlegung eines Signals in eine Summe von komplexen Sinus- und Cosinusfunktionen.
 \item Unterschiedliche Frequenzen.
 \item Darstellung: Amplituden und Phasen von Frequenz
 \end{itemize}
 
-\subsubsection*{Fouriertransformation}
+\subsection{Fouriertransformation}
 \begin{itemize}
 \item Fouriertransfromation: $$F(\omega) = \int\limits_{- \infty}^{\infty} f(t) e^{-i \omega t} dt$$
 \item Inverse Fouriertransformation: $$f(t) = \frac{1}{2 \pi} \int\limits_{- \infty}^{\infty} F(\omega) e^{+i \omega t} d \omega$$
@@ -101,21 +101,21 @@ Die Faltung lässt sich wiefolgt ermitteln:
 \item Phase des Spektrums: $$\phi(F(\omega)) = \textrm{arctan}\frac{\Im(F(\omega))}{\Re(F(\omega))}$$
 \end{itemize}
 
-\subsubsection*{Eigenschaften}
+\subsection{Eigenschaften}
 \begin{itemize}
 \item Linearität: $$F(c_1f_1 + c_2f_2) = c_1F(f_1) + c_2F(f_2)$$
 \item Differentiation: $$F(f^{(n)}) = (i \omega)^n F(f)$$
 \item Verschiebung: $$\begin{array}{cl} F(f(t-T)) = e^{-i \omega T} F(f) & \quad \textrm{(Zeit)} \\ F(e^{-i \omega_0 t} f(t)) = F(\omega - \omega_0) & \quad \textrm{(Frequenz)} \end{array}$$
 \end{itemize}
 
-\subsubsection*{Zusammenhänge}
+\subsection{Zusammenhänge}
 \begin{center}
 \begin{tabular}{rcl}
 Signal & $\Rightarrow$ & Transformierte \\ Transformierte & $\Leftarrow$ & Signal \\[0,1cm] diskret & $\Leftrightarrow$ & periodisch \\ reell & $\Leftrightarrow$ & gerade \\ imaginär & $\Leftrightarrow$ & ungerade
 \end{tabular}
 \end{center}
 
-\subsubsection*{Typische Fouriertransformationen}
+\subsection{Typische Fouriertransformationen}
 \begin{itemize}
 \item Sinusfunktion: $$f(x) = a \sin(2 \pi \alpha x) \quad \Leftrightarrow \quad F(\omega) = \frac{a}{2}i \delta(\omega + \alpha) - \frac{a}{2}i \delta(\omega - \alpha)$$
 \item Cosinusfunktion: $$f(x) = a \cos(2 \pi \alpha x) \quad \Leftrightarrow \quad F(\omega) = \frac{a}{2} \delta(\omega + \alpha) + \frac{a}{2} \delta(\omega - \alpha)$$
@@ -125,7 +125,7 @@ Signal & $\Rightarrow$ & Transformierte \\ Transformierte & $\Leftarrow$ & Signa
 \item Impulszug: $$f(x) = \sum\limits_{\nu = -\infty}^{\infty} \delta(x - \nu T) \quad \Leftrightarrow \quad F(\omega) = \frac{1}{T} \sum\limits_{\nu = -\infty}^{\infty} \delta(\omega - \frac{\nu}{T})$$
 \end{itemize}
 
-\subsubsection*{Anmerkungen}
+\subsection{Anmerkungen}
 \begin{itemize}
 \item Periodisch unendlich ausgedehntes Signal wird im Fourierbereich als endliche Bandbreite dargestellt.
 \item Endliches Signal kann zu unendlichem Spektrum führen. Approximation nötig!
@@ -152,9 +152,9 @@ Fensterung erfolgt
 \end{itemize}
 Weiterer Effekt der Fensterung ist der Leck-Effekt. Ein Ausschneiden eines Stückes aus einem Signal entspricht im zeitbereich einer Multiplikation mit einer Rechteck-Funktion. Im Frequenzbereich entspricht dies einer Faltung des originalen Spektrums mit der sinc-Funktion. Die Ideale Fensterung wäre keine Fensterung. Dies entspricht im frequenzbereich einer Faltung mit einem Dirac. Eine sinc-Funktion weicht also sehr stark von einem Dirac ab. Eine Verringerung des Leck-Effekts lässt sich nur erreichen wenn das Fenster am Rand sehr viele Ableitungen hat die gegen 0 gehen. Ein solches Fenster ist das Hanning-Fenster.
 
-\subsection{Fourierreihen\index{Fourierreihen}}
+\section{Fourierreihen\index{Fourierreihen}}
 
-\subsubsection*{Fourierreihenzerlegung\index{Fourierreihenzerlegung}}
+\subsection{Fourierreihenzerlegung\index{Fourierreihenzerlegung}}
 \begin{itemize}
 \item Periodisches Signal
 \item Signal: $$c_k = \frac{1}{2L} \int\limits_{-L}^{+L} f(x) e^{-i \pi \frac{k}{L} x} dx \quad \textrm{wobei} \quad f(x) = \sum\limits_{k=- \infty}^{+ \infty} c_k e^{i \pi \frac{k}{L} x}$$
@@ -162,7 +162,7 @@ Weiterer Effekt der Fensterung ist der Leck-Effekt. Ein Ausschneiden eines Stüc
 \item Parameter: Amplitude, Phase, Frequenz (Periode)
 \end{itemize}
 
-\subsubsection*{Fourierreihe für Rechteckfunktion}
+\subsection{Fourierreihe für Rechteckfunktion}
 $$f(x) = \frac{1}{2} a_0 + \sum\limits_{n=1}^{\infty} \left( a_n \cos( \frac{2 \pi}{T} nx) + b_n \sin (\frac{2 \pi}{T} nx) \right)$$
 Beispiel für Fourierreihenentwicklung: \\
 Für $f(x) = \textrm{sign}(\sin(x))$ gilt:
@@ -172,12 +172,12 @@ b_n &=& \frac{1}{\pi} \int\limits_{- \pi}^{+ \pi} f(x) \cdot \sin(nx) dx = \frac
 \end{eqnarray*}
 und somit $$f(x) = \frac{4}{\pi} \left( \sin(x) + \frac{\sin(3x)}{3} + \frac{\sin(5x)}{5} + \cdots \right)$$
 
-\subsection{Aliasing\index{Aliasing}}
+\section{Aliasing\index{Aliasing}}
 In der Signalverarbeitung treten Alias-Effekte beim Digitalisieren analoger Signale auf. \\
 Damit das Ursprungssignal korrekt wiederhergestellt werden kann, dürfen im abgetasteten Signal nur Frequenzanteile vorkommen, die weniger als halb so groß wie die Abtastfrequenz sind. Wird dieses Abtasttheorem verletzt, werden Frequenzanteile, die größer sind als die halbe Abtastfrequenz als niedrigere Frequenzen interpretiert. Die hohen Frequenzen geben sich sozusagen als jemand anderes aus, daher die Bezeichnung Alias. Die halbe Abtastfrequenz wird als Nyquist-Frequenz bezeichnet. \\
 Falls es nicht zu vermeiden ist, dass hohe Frequenzen im Eingangssignal vorhanden sind, wird das Eingangssignal zur Unterdrückung von Alias-Effekten durch einen Tiefpass gefiltert (Anti-Aliasing-Filter), wobei die aktive Filterwirkung dieses Abschneidens der hohen Frequenzen eindeutiger mit Höhensperre, Höhenfilter, High Cut und Treble Cut beschrieben wird.
 
-\subsubsection*{Abtast/Sampling Theorem}
+\subsection{Abtast/Sampling Theorem}
 $$\Delta x \leq \frac{1}{2 \omega}$$
 \begin{itemize}
 \item Die Samplingfrequenz muss mindestens zweimal so gross sein als die höchste im Signal vorkommende Frequenz $\omega$ (\textsl{Cutoff-frequency}).
@@ -185,7 +185,7 @@ $$\Delta x \leq \frac{1}{2 \omega}$$
 \item Ist das Abtasttheorem eingehalten, kann ein Signal durch inverse Fouriertransformation vollständig rekonstruiert werden.
 \end{itemize}
 
-\subsubsection*{Abtasten in der Praxis}
+\subsection{Abtasten in der Praxis}
 \begin{itemize}
 \item Abtasten nur in endlichem Intervall möglich.
 \item Sprektrum lokal (in kleinem Intervall interessant)
@@ -197,14 +197,14 @@ $$\Delta x \leq \frac{1}{2 \omega}$$
 \item Ausnahme: Signal ist periodisch und bandbegrenzt
 \end{itemize}
 
-\subsubsection*{Behebung von Aliasing}
+\subsection{Behebung von Aliasing}
 Möglichkeiten zur Behebung von Aliasing:
 \begin{itemize}
 \item Samplefrequenz erhöhen. Nachteil: erhöhtes Datenaufkommen
 \item Bandbegrenzen des Originalsignals durch Tiefpassfilter (Anti-Aliasing Filter). Nachteil: Informationsverlust
 \end{itemize}
 
-\subsection{Korrelation\index{Korrelation}}
+\section{Korrelation\index{Korrelation}}
 \begin{itemize}
 \item Eindimensionale Kreuzkorrelation: $$R_{f,g}(m) = \sum\limits_{i} f(i) g(i - m)$$
 \item Zweidimensionale Kreuzkorrelation: $$R_{f,g}(m) = \sum\limits_i \sum\limits_j f(i,j) g(i-m,j-n)$$
@@ -214,46 +214,10 @@ A(m) &=& \sum\limits_i f(i) f(i-m) \\ A(m,n) &=& \sum\limits_i \sum\limits_j f(i
 \end{eqnarray*}
 \end{itemize}
 
-\subsection{Schablonenanpassung\index{Schablonenanpassung} (\textsl{Template Matching})}
+\section{Schablonenanpassung\index{Schablonenanpassung} (\textsl{Template Matching})}
 \begin{itemize}
 \item Eine einfache Form der Klassifikation.
 \item Ziel: Ein Muster zu erkennen das einem abgespeicherten Beispiel ähnlich ist.
 \item Maß der Übereinstimmung ist der Absolutbetrag zwischen Muster und Schablone (zentriert an $(m,n)$): $$M_{f,g}(m,n) = \sum\limits_i \sum\limits_j | f(i,j) g(i-m,j-n)|$$
 \item Abstand $E(m,n)$ ist definiert als Quadrat der Kreuzkorrelation: $$E_{f,g} (m,n) = \left( \sum\limits_i \sum\limits_j f(i,j) g(i-m,j-n) \right)^2$$
 \end{itemize}
-
-
-\subsection{Fähigkeitencheck für die Klausur}
-\begin{itemize}
-	\item Bestimmung der Faltung grafisch
-	\item Bestimmung der Faltung rechnerisch
-	\item Digitalisierung von Signalen, Abtastung, Tritt Aliasing auf?
-	\item Filtern mit Filter (Fourietransformation)
-	\item Berechnung von Samplingrate, Grenzfrequenz, Frequenzauflösung, Zeitauflösung für DFT
-\end{itemize}
-
-\section{Fragen zum Kapitel}
-\begin{enumerate}
-  % SS12 Klausur: Aufgabe 4
-	\item Wenn im Frequenzbereich eine Faltung durchgeführt wird, welche Operation tritt dann im Zeitbereich auf?
-	% Antwort: Multiplikation
-  % SS12 Klausur: Aufgabe 4
-	\item Welche Eigenschaft muss ein Signal haben, damit eine Fourierreihenzerlegung für das Signal durchgeführt werden kann?
-	% Antwort: Das Signal muss kontinuierlich und periodisch sein.
-
-	% SS12 Klausur: Aufgabe 4
-	\item In der Spracherkennung wird häufig das Spektrum eines kurzen Intervalls berechnet. Leider wird dadurch eine Annahme verletzt und es tritt ein Effekt auf. Was ist die Annahme und welcher Effekt tritt auf?
-	% Antwort: Es wird angenommen das sich das Signal aus dem Intervall periodisch fortsetzt. Im Spektrum tretten Frequenzen auf die im Signal nicht auftreten. Dies wird als der Leck-Effekt bezeichnet.
-	% SS12 Klausur: Aufgabe 5
-	\item Was besagt das Abtasttheorem?
-	% Antwort: Habe ein kontinuierliches Signal mit $f_{max}$ die größte auftretende Frequenz, so muss die Abtastfrequenz mindestens das doppelte von $f_{max}$ sein um das Signal zu rekonstruieren.
-	\item Welches Problem entsteht wenn es nicht beachtet wird?
-	% Antwort: Aliasing. Das Spektrum ist verfälscht und das Signal kann nicht rekonstruiert werden.
-	\item Mit welchen zwei Methoden kann diesem Problem entgegengewirkt werden? Welche Nachteile haben diese Methoden?
-	% Antwort: 1. Erhöhung Abtastfrequenz (Nachteil: Erhöhtes Daten aufkommen). 2. Tiffpassfilterung des Signals (Nachteil: Verlust von Information). 
-	\item Skizzieren Sie den Unterschied zwischen einer Rechteck-Fensterfunktion und einer Fensterfunktion die den Leck-Effekt vermindert.
-	% WS12 Klausur: Aufgabe 5
-	%\item Was ist ein Spektrum? Was ist ein Spektogramm?
-\end{enumerate}
-
-\textit{}
