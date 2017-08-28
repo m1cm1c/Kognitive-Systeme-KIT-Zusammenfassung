@@ -11,21 +11,14 @@
 \section{Bildgenerierung}
 
 \begin{itemize}
-\item Heute werden oftmals Digitalkameras verwendet (meist CCD, aber auch CMOS)
-\item Anschluss erfolgt über: Firewire (IEEE1394), USB, Camera Link, \dots
-\item Kameras liefern direkt digitalisierte Bilddaten
+\item Digitalkameras (meist CCD, aber auch CMOS)
+\item Echt (Raum/Zeit kont) -(CCD-Kamera)-> Analog PAL/NTSC (Raum disk, Zeit kont) -(Frame-Grabber)-> Bild (Raum/Zeit disk)
 \begin{itemize}
-\item Format je nach Kamera und Modus unterschiedlich
-\item Bei S/W-Kameras meist 8bit Graustufen
-\item Bei Farbkameras entweder als bayer-Pattern oder meist bereits konvertiert als RGB24, YUV422, etc.
+\item Format unterschiedlich, (S/W 8bit Graustufen, Farb -> bayer-Pattern, RGB24, YUV422
 \end{itemize}
 \item Kameras unterscheiden sich durch:
 \begin{itemize}
-\item Bildqualität (Qualität CCD-Chip, aber auch grundlegend: Auswahl Linse/Objektiv)
-\item Graustufen- oder Farbkamera
-\item Auflösung
-\item Bei Farbkameras: Welche Farbkodierungen sind verfügbar? (8bit, 16bit, 24bit)
-\item Wichtig je nach Anwendung: Welche maximale Framerate ist bei welchem Bildformat noch verfügbar? (z.B. 15/30/60/120/200 Hz)
+\item Bildqualität, Farben, Auflösung, Farbkodierung (bits), max Framerate
 \end{itemize}
 \end{itemize}
 
@@ -36,30 +29,16 @@
 Img \, : \, [0 \dots n-1] \times [0 \dots m-1] &\to& [0 \dots q] \\ (u,v) &\mapsto& Img(u,v)
 \end{eqnarray*}
 Üblich: $q = 255$; $n = 640$, $m=480$ (VGA) oder $n = 768$, $m=576$ (PAL) \\[0,1cm]
+\begin{itemize}
+\item zeilenweise linear, Grau -> 1 Byte/Pixel, RGB -> 3 Byte/Pixel
+\end{itemize}
+
 \subsection{Farbbild}
 \begin{itemize}
-\item Viele verschiedene Farbmodelle für unterschiedliche Anwendungen
-\item Klassifikation nach erreichbarem Farbraum
-\item
+\item versch. Farbmodelle, Klassifikation nach erreichbarem Farbraum
 \begin{itemize}
-\item S/W, Grauwertstufen
-\item RGB-Modell: speziell für Monitore (Phosphor-Kristalle), sehr üblich $$Img(u,v) \in \mathbb{R}^3 = (r,g,b)^T$$
-\item HSI (Hue, Saturation, Intensity): speziell für Farbsegmentierung
-\item CIE: physikalisch (Wellenlänge)
-\item CMYK- Modell: Farbdrucker (subtraktive Farbmischung)
-\item YIQ: Fernsehmodell
+\item S/W, RGB (->Monitore), HSI (-> Farbsegmentierung), CIE (Wellenlänge), CMYK
 \end{itemize}
-\end{itemize}
-
-\subsubsection{RGB-Modell}\index{RGB-Modell}
-
-\begin{eqnarray*}
-Img \, : \, [0 \dots n-1] \times [0 \dots m-1] &\to& [0 \dots R] \times [0 \dots G] \times [0 \dots B] \\ (u,v) &\mapsto& Img(u,v) = (r,g,b)
-\end{eqnarray*}
-\begin{itemize}
-\item additive Farbmischung
-\item drei Farbwerte: Rot, Grün, Blau \\ oft: $256 \times 256 \times 256$ Nuancen \\ ($R=G=B=255$, 8Bit, "{}RGB24"{}) = 16,8 Mio. Farben
-\item oft verwendet von Kamera-Treibern
 \end{itemize}
 
 \subsubsection{HSI-/HSV-Modell\index{HSI-/HSV-Modell}}
@@ -76,36 +55,22 @@ S &=& 1 - \frac{3}{R+G+B} \min (R,G,B) \\
 I &=& \frac{1}{3} (R + G + B)
 \end{eqnarray*}
 
-\subsubsection{Hinterlegung}
-
-\begin{itemize}
-\item Hinterlegung eines 8bit Graustufen-Bildes im Speicher
-\begin{itemize}
-\item Pixel werden zeilenweise, von oben links nach unten rechts, linear abgelegt (Achtung: z.B. bei Bitmaps von unten links nach oben rechts)
-\item Graustufen-Kodierung: ein Byte pro pixel; 0 schwarz, 255 weiß, dazwischen Graustufen
-\end{itemize}
-\item Hinterlegung eines RGB24 Farbbildes im Speicher
-\begin{itemize}
-\item Pixel werden zeilenweise, wie beim Graustufen-Bild, abgelegt
-\item Farbkodierung: drei Bytes pro Pixel; für jeden Kanal gilt: 0 minimale, 255 maximale Intensität, dazwischen Nuancen
-\end{itemize}
-\end{itemize}
-
 \subsubsection{Grauwert-Transformation}
 
-Transformation von RGB24 nach 8bit Graustufen:
 \begin{itemize}
-\item Eine Möglichkeit: $g = (R+G+B)/3$, aber: menschliches Auge ist am empfindlichsten gegenüber der Farbe Grün.
-\item Üblicherweise wird deshalb verwendet: $$g = 0,299 \cdot R + 0,587 \cdot G + 0,114 \cdot B$$
+\item $g = (R+G+B)/3$, aber: grün am empfindlichsten -> $$g = 0,299 \cdot R + 0,587 \cdot G + 0,114 \cdot B$$
 \end{itemize}
 
 \subsubsection*{Bayer-Pattern\index{Bayer-Pattern}}
 
-Sehr hochwertige Kameras, wie z.B. zum Filmen verwendet, besitzen drei Chips pro Pixel. Die meisten Farbkameras haben einen Chip pro pixel, der gegenüber der Farbe Rot, Grün oder Blau empfindlich ist. Bei "{}Ein-Chip-Kameras"{} wird meist das Bayer-Pattern verwendet:
+\begin{itemize}
+\item Hochwertig -> 3 Chips / Pixel, Niederwertig -> 1 Chip/Pixel (R, G, \underline{oder} B)
 \begin{itemize}
 \item Um nach RGB24 zu konvertieren, muss interpoliert werden.
-\item Die Empfindlichkeit einer Ein-Chip-Kamera ist um den Faktor 3 niedriger als die einer reinen Graustufen-Kamera.
+\item Empfindlichkeit um Faktor 3 niedriger
 \end{itemize}
+\end{itemize}
+
 
 \subsubsection*{Lochkameramodell\index{Lochkameramodell}}
 
@@ -150,17 +115,14 @@ Einziger Unterschied Mattscheibenmodell $\Leftrightarrow$ Lochkameramodell:
 \subsubsection*{Konzepte}
 
 \begin{itemize}
-\item Homogene Punktoperationen
-\item Histogrammauswertung
-\item Filterung
-\item Geometrische Operatoren
+\item Homogene Punktoperationen, Histogrammauswertung, Filterung, Geometrische Operatoren
 \end{itemize}
 $\to$ Unterdrückung von Störungen, "{}Verschönern"{} von Bildern, Verformen von Bildern
 
 \subsubsection*{Homogene Punktoperatoren\index{Homogene Punktoperatoren}}
 
 Anwendung: $$Img'(u,v) = f(Img(u,v))$$
-Unabhängig von der Position bzw. den Nachbarn des Pixels. Implementierung der Funktion $f$ oftmals als Look-Up-Table (Hardware).
+Unabhängig von der Position bzw. den Nachbarn des Pixels. Implementierung $f$ oftmals als Look-Up-Table (Hardware).
 
 \subsection{Affine Punktoperatoren\index{Affine Punktoperatoren}}
 
@@ -169,12 +131,9 @@ f \, : \, [0 \dots q] &\to& [0 \dots q] \\ x &\mapsto& ax+b
 \end{eqnarray*}
 Parameter $a$ und $b$ legen die Funktion fest. Anwendungen:
 \begin{itemize}
-\item Kontrasterhöhung: $b=0$, $a > 0$ 
-\item Kontrastverminderung: $b=0$, $a < 0$
-\item Helligkeitserhöhung: $b > 0$, $a = 1$ 
-\item Helligkeitsverminderung: $b < 0$, $a = 1$
+\item Kontrasterhöhung (-verminderung): $b=0$, $a > 0 (a < 0)$
+\item Helligkeitserhöhung (-verminderung): $b > 0 (b < 0)$, $a = 1$ 
 \item Invertierung: $b = q$, $a = -1$
-\item Kombinationen: z.B. $b=-50$, $a=2$
 \end{itemize}
 
 \subsection{Nicht-Affine Punktoperationen\index{Nicht-Affine Punktoperationen}}
@@ -182,69 +141,41 @@ Parameter $a$ und $b$ legen die Funktion fest. Anwendungen:
 Beliebige Abbildungsfunktion $$f \, : \, [0 \dots q] \to [0 \dots q]$$
 Anwendung:
 \begin{itemize}
-\item Ausgleich von Sensor-Nichtlinearitäten
-\item Gewichtung
-\item Binarisierung
+\item Ausgleich von Sensor-Nichtlinearitäten, Gewichtung, Binarisierung
 \end{itemize}
 
 \subsection{Automatische Kontrastanpassung}
 
-\subsubsection{Spreizung\index{Spreizung}}
+\subsubsection{Spreizung (affin) \index{Spreizung}}
 \begin{itemize}
-\item Berechne min und max Intensität
-\item Bilde das Intervall [min,max] linear auf [0,255] ab
-\item Ist eine affine Punktoperation!
-\item Nachteil: Nicht roboust und nur unter optimalen Bedingungen anwendbar
-\item Abbildungsvorschrift: \[Img'(u,v) = q*\frac{Img(u,v)-min}{max-min}\]
-\item Als affine Punktoperation: \[Img'(u,v) =  \frac{q}{max-min}*Img(u,v)-\frac{q*min}{max-min}\]
+\item [min,max] Intensität linear auf [0,255] abbilden
+\item nicht robust, nur unter optimalen Bedingungen
 \end{itemize}
+\[Img'(u,v) =  \frac{q}{max-min}*Img(u,v)-\frac{q*min}{max-min}\]
 
-\subsubsection{Histogramme\index{Histogramme}}
+\subsubsection{Histogramme (affin) \index{Histogramme}}
 
-Histogrammfunktion: gibt die Häufigkeit eines Selektionsmerkmals an. Normalerweise: Grauwert
-$$H_{Img}(x) = \# (u,v) \, : \, Img(u,v) = x \, , \, x \in [0 \dots q]$$
+Histogrammfunktion: Häufigkeit eines Selektionsmerkmals (Grauwert)
 
 Histogrammdehnung\index{Histogrammdehung}:
 \begin{itemize}
-\item Verbesserung der Spreizung
-\item Anstatt $min$ und $max$ werden Quantile verwendet
-\item Die Histogrammdehnung ist eine affine Punktoperation
+\item Verbesserung der Spreizung, Quantile verwendet
 \item Akkumuliertes Histogramm berechnen: \[H_a(x):=\sum\limits_{k=0}^x H(k)\]
 \item \(H_q(p_{min})\) und \(H_q(p_{max})\) (z.B. \(p_{min} = 0.1\) und \(p_{max} = 0.9\)) bestimmen mit: \[H_q(p) := \inf\{ x \in \{ 0, \dots ,q\}:H_a(x) \geq p \cdot H_a(q) \}\]
 \item Falls \(H_q(p_{min}) = H_q(p_{max})\): Bild ist homogen
 \item Sonst:
 \[ a:=\frac{q}{H_q(p_{max}) - H_q(p_{min})} \]
 \[ b:=-\frac{q*H_q(p_{min})}{H_q(p_{max}) - H_q(p_{min})} \]
-\[ Img' \gets \text{AffinePunktoperation}(Img,a,b) \]
 \end{itemize}
 
-Histogrammausgleich\index{Histogrammausgleich}:
+Histogrammausgleich (nicht affin)\index{Histogrammausgleich}:
 \begin{itemize}
-	\item Der Histogrammausgleich erhöht den Kontrast in Bereichen in denen ein Grauwert oft vertreten ist. Dies macht diese Bereiche besser für das Auge sichtbarer
-	\item Histogrammausgleich ist eine homogene Punktoperation, aber keine affine Punktoperation
-	\item Nachteil: Kann in der Praxis auch zu einer Verminderung des Kontrast führen (siehe Übung)
+	\item Kontrasterhöhung in Bereichen, in denen ein Grauwert oft vertreten ist. Dies macht diese Bereiche besser für das Auge sichtbarer
+	\item kann in Praxis auch zu Kontrastverminderung führen
 \end{itemize}
-\begin{itemize}
-\item Histogrammausgleich: bessere Anpassung an das Sehvermögen des Menschen; kein Informationsgewinn \\
-$H_n(0)$ \verb|:=| $H_{Img}(0)$ \\
-\verb|for| $x$ \verb|:=| $1$ \verb|to| $q$ \verb|do| \\
-\verb|  |$H_n(x)$ \verb|:=| $H_n(x-1) + H_{Img}(x)$ \\
+\verb|for| $x$ \verb|:=| $0$ \verb|to| $q$ \verb|do| \\
+\verb|  |$H_n(x)$ \verb|:=| round($\frac{q \cdot H_a(x)}{H_a(q)}$) \\
 \verb|endfor|
-\item Automatische Kontrast- und Helligkeitsapassung durch Histogrammanalyse \\
-$H_n(0)$ \verb|:=| $H_{Img}(0)$ \\
-\verb|for| $x$ \verb|:=| $1$ \verb|to| $q$ \verb|do| \\
-\verb|  |$H_n(x)$ \verb|:=| $H_n(x) \cdot \frac{q}{width \cdot heigth}$ \\
-\verb|endfor|
-\item Bei bereits berechnetem Histogramm $H_{Img}(x)$ kann der Histogrammausgleich durch den folgenden Algorithmus berechnet werden: \\
-$H_n(0)$ \verb|:=| $H_{Img}(0)$ \\
-\verb|for| $y$ \verb|:=| $0$ \verb|to| $height - 1$ \verb|do| \\
-\verb|  for| $x$ \verb|:=| $0$ \verb|to| $width-1$ \verb|do| \\
-\verb|    | $Img'(u,v)$ \verb|:=| $H_n(Img(u,v))$ \\
-\verb|  endfor| \\
-\verb|endfor|
-\end{itemize}
-
-
 
 \subsection{Bildanalyse durch Frequenzanalyse}
 

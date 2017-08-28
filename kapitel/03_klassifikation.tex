@@ -44,6 +44,14 @@ Pattern Recognition Overview
 	\end{itemize}
 \end{itemize}
 
+\section{Schablonenanpassung\index{Schablonenanpassung} (\textsl{Template Matching})}
+\begin{itemize}
+\item Eine einfache Form der Klassifikation.
+\item Ziel: Ein Muster zu erkennen das einem abgespeicherten Beispiel ähnlich ist.
+\item Maß der Übereinstimmung ist der Absolutbetrag zwischen Muster und Schablone (zentriert an $(m,n)$): $$M_{f,g}(m,n) = \sum\limits_i \sum\limits_j | f(i,j) g(i-m,j-n)|$$
+\item Abstand $E(m,n)$ ist definiert als Quadrat der Kreuzkorrelation: $$E_{f,g} (m,n) = \left( \sum\limits_i \sum\limits_j f(i,j) g(i-m,j-n) \right)^2$$
+\end{itemize}
+
 \section{Supervised -- Unsupervised Training}
 
 \begin{description}
