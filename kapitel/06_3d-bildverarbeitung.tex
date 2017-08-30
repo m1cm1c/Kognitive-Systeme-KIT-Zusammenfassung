@@ -6,18 +6,12 @@
 
 \section{Geometrische 3D-Transformationen}
 
-Grundlage von Sensorik und Aktorik: Beschreibung von Objektposen (Position, Rotation)
-\begin{itemize}
-\item Pose des messenden Systems im Raum
-\item Pose mehrerer Sensoren zueinander
-\item Pose sensorisch erfasster Objekte relativ zum Sensor
-\item Pose von Aktoren (Greifer, Lötlampen etc.) im Raum und relativ zum manipulierten Objekt
-\item Gelenkwinkelstellungen im Roboterarm
-\end{itemize}
+Grundlage von Sensorik und Aktorik: Beschreibung von Objektposen (Position, Rotation, Relation zueinander)
+
 Anforderungen:
 \begin{itemize}
 \item geschlossene Ausdrücke
-\item Invertierbarkeit
+\item Invertierbarkeit der Transformation zwischen Konfigurationsräumen
 \item Interpolation
 \end{itemize}
 Zwei Systeme haben sich durchgesetzt:
@@ -32,16 +26,8 @@ Translation eines 3D-Vektors: $$\myvecthree{x_0}{y_0}{z_0} + \myvecthree{x}{y}{z
 
 \subsection{Rotation}\index{Rotation}
 
-\begin{itemize}
-\item o.B.d.A. auf Einheitsvektor zurückführbar (Basistransformation)
-\item Konvention: Rechtskoordinatensystem
-\item Rotation von $(x_0,y_0,z_0)$ um Winkel $\beta$ mit Ergebnis $(x,y,z_0)$
-\end{itemize}
-Aus Additionstheorem:
-\begin{eqnarray*}
-x &=& \cos(\alpha + \beta) = \cos(\alpha) \cos(\beta) - \sin(\alpha) \sin(\beta) \\ y &=& \cos(\alpha + \beta) = \sin(\beta) \cos(\alpha) + \cos(\beta) \sin(\alpha)
-\end{eqnarray*}
-und mit $(x_0,y_0) = (\cos(\alpha), \sin(\alpha))$:
+Konvention: Rechtskoordinatensystem \\
+Rotation von $(x_0,y_0,z_0)$ um Winkel $\beta$:
 $$\left( \begin{array}{c} x \\ y \end{array} \right) = \left( \begin{array}{rr} \cos(\beta) & -\sin(\beta) \\ \sin(\beta) & \cos(\beta) \end{array} \right) \left( \begin{array}{c} x_0 \\ y_0 \end{array} \right)$$
 $z_0$ invariant, da Rotation um $z$!
 
@@ -55,10 +41,8 @@ Rotation um $z$: $$R_z(\theta) = \myvecnine{\cos(\theta)}{- \sin(\theta)}{0}{\si
 \textbf{\textsl{Eigenschaften von Rotationsmatrizen:}}
 \begin{itemize}
 \item regulär, invertierbar, Determinante $=1$
-\item jede beliebige Rotation im Raum kann durch drei Variablen beschrieben werden (Eulers Theorem)
+\item jede beliebige Rotation im Raum kann durch drei Variablen beschrieben werden (Eulers Theorem) [Angabe von $\alpha$, $\beta$, $\gamma$]
 \item Einzelrotationen können als eine Matrix dargestelt werden: $$R_r(\gamma) R_q(\beta) R_p(\alpha) \myvecthree{x}{y}{z} \quad \textrm{mit} \quad p,q,r \in \{x,y,z\} = R_{pqr}(\alpha, \beta, \gamma) \myvecthree{x}{y}{z}$$
-\item damit reicht Angabe von $\alpha$, $\beta$, $\gamma$ zur Beschreibung der Rotation
-\item das macht natürlich nur Sinn, wenn eine Konvention für die Zuordnung $p$, $q$, $r$ zu den Achsen $x$, $y$, $z$ definiert wurde
 \end{itemize}
 Zwei grundlegend unterschiedliche Rotationstypen:
 \begin{itemize}
@@ -74,21 +58,18 @@ Konventionen zur Erstellung von Rotationsmatrizen:
 \subsection{Homogene 3D-Transformation}
 
 Transformation definiert durch Rotation $R$ und Translation $t$:
-$$\myvecthree{x}{y}{z} = R \myvecthree{x_0}{y_0}{z_0} + t = \myvecnine{r_{11}}{r_{12}}{r_{13}}{r_{21}}{r_{22}}{r_{23}}{r_{31}}{r_{32}}{r_{33}} \myvecthree{x_0}{y_0}{z_0} + \myvecthree{t_x}{t_y}{t_z}$$
 Darstellung mit Hilfe homogener Koordinaten und einer geschlossenen Transformationsmatrix:
 $$\myvecqfour{x}{y}{z}{1} = \left( \begin{array}{ccc|c} &&& \\ & R && t \\ &&& \\ \hline 0 & 0 & 0 & 1 \end{array} \right) \myvecqfour{x_0}{y_0}{z_0}{1} = \left( \begin{array}{ccc|c} r_{11} & r_{12} & r_{13} & t_x \\ r_{21} & r_{22} & r_{23} & t_y \\ r_{31} & r_{32} & r_{33} & t_z \\ \hline 0 & 0 & 0 & 1 \end{array} \right) \myvecqfour{x_0}{y_0}{z_0}{1} = A \myvecqfour{x_0}{y_0}{z_0}{1}$$
 
 \textbf{\textsl{Probleme mit Rotationsmatrizen:}}
 \begin{itemize}
-\item hoch redundant
-\item rechenaufwendig
-\item Interpolation schwierig
-\item Euler-Winkel: Singularitäten
+\item hoch redundant, rechenaufwendig, Interpolation schwer
+\item Euler-Winkel : Singularität
 \end{itemize}
 
 \subsection{Quaternionen\index{Quaternionen}}
 
-Erweiterung der komplexen zahlen ins vierdimensionale. Definition: \\[0,1cm]
+Erweiterung der komplexen Zahlen ins vierdimensionale. Definition: \\[0,1cm]
 Ein Quaternion $\textbf{q}$ ist eine Zahl
 \begin{eqnarray*}
 \quaternion &=& (q_x,q_y,q_z,q_w)(i,j,k,1)^T \\ &=& (\quaternion_v,q_w)(i,j,k,1)^T \\ &=& iq_x + jq_y + kq_z + q_w
@@ -158,9 +139,7 @@ q_w &=& \frac{1}{2} \sqrt{1 + \sum\limits_{i=1}^3 m_{ii}} \\ q_x &=& \frac{(m_{3
 \subsubsection{Vor- und Nachteile}
 Vorteile:
 \begin{itemize}
-\item Rotation direkt um gewünschte Drehachse
-\item Interpolation möglich
-\item weniger Rechenaufwand
+\item Rotation direkt um gewünschte Drehachse, Interpolation möglich, weniger Rechenaufwand
 \item keine Redundanz $\Rightarrow$ numerisch stabiler, weniger Gefahr für Singularitäten
 \end{itemize}
 Nachteil:
@@ -170,7 +149,6 @@ Nachteil:
 
 \section{Erweitertes Kameramodell}
 
-Lochkameramodell vereinfacht die realen Verhältnisse stark. Deshalb werden in der Praxis Erweiterungen des Lochkameramodells verwendet. Zunächst einige Definitionen:
 \begin{description}
 \item[Optische Achse:] Gerade durch das Projektionszentrum, senkrecht zur Bildebene
 \item[Bildhauptpunkt $C(c_x \, , \, c_y)$:] Schnittpunkt der optischen Achse mit der Bildebene
@@ -188,49 +166,51 @@ Begriffe:
 \end{description}
 Vereinfachungen des Lochkameramodells:
 \begin{itemize}
-\item Ursprung des Bildkoordinatensystems ist identisch mit dem Bildhauptpunkt
-\item Pixel werden als quadratisch angenommen
-\item keinerlei Modellierung der Linsenverzerrung
-\item es existiert kein Weltkoordinatensystem bzw. es ist identisch mit dem Kamerakoordinatensystem, d.h. es werden keine extrinsischen Kameraparameter modelliert
+\item Ursprung des Bildkoordinatensystems = Bildhauptpunkt
+\item Pixel = quadratisch
+\item keinerlei Linsenverzerrung
+\item Weltkoordinatensystem = Kamerakoordinatensystem, d.h. keine extrinsischen Kameraparameter 
 \end{itemize}
-Brennweite:
+Brennweite $f$:
 \begin{itemize}
 \item In der Praxis wird die Umrechnung von [mm] nach [Pixel] in den/die Parameter für Brennweite mit aufgenommen.
-\item Da Pixel nicht mehr als quadratisch sondern als rechteckig angenommen werden, gibt es deshalb für jede Richtung einen Parameter, also: $f_x$, $f_y$.
-\item Die Parameter $f_x$, $f_y$ sind dann das Produkt aus der tatsächlichen Brennweite mit Einheit [mm] und dem jeweiligen Umrechnungsfaktor mit Einheit [Pixel/mm].
-\item Die Einheit für die Parameter $f_x$, $f_y$ ist somit [Pixel].
+\item Pixel rechteckig $\to$ $f_x$, $f_y$ (in Pixel).
+\item Die Parameter $f_x$, $f_y$ = tatsächlichen Brennweite ([mm]) $\cdot$ jew. Umrechnungsfaktor ([Pixel/mm])
 \end{itemize}
-Die Abbildung vom Kamerakoordinatensystem in das Bildkoordinatensystem, ausschließlich mit den intrinsischen Parametern, ist dann definiert durch: $$\myvectwo{u}{v} = \myvectwo{c_x}{c_y} + \frac{1}{Z} \cdot \myvectwo{f_x \cdot X}{f_y \cdot Y}$$ oder als Matrixmultiplikation mit Kalibriermatrix \index{Kalibriermatrix} $K$ auf homogenen Koordinaten: $$\myvecthree{u \cdot w}{v \cdot w}{w} = K \cdot \myvecthree{X}{Y}{Z} \qquad K = \myvecnine{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}$$
-Extrinsische Kamerakalibrierung:
+
+\textbf{Abbildung Kamerakoordinatensystem $\to$  Bildkoordinatensystem (intrinsischen Parametern)}:
+$$\myvectwo{u}{v} = \myvectwo{c_x}{c_y} + \frac{1}{Z} \cdot \myvectwo{f_x \cdot X}{f_y \cdot Y}$$ oder als Matrixmultiplikation mit Kalibriermatrix \index{Kalibriermatrix} $K$ auf homogenen Koordinaten: $$\myvecthree{u \cdot w}{v \cdot w}{w} = K \cdot \myvecthree{X}{Y}{Z} \qquad K = \myvecnine{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}$$
+
+\textbf{Extrinsische Kalibrierung}:
 \begin{itemize}
-\item Ist definiert durch eine Koordinatentransformation bestehend aus Rotation und Translation.
-\item Koordinatentransformation vom Weltkoordinatensystem in das Kamerakoordinatensystem: $$x_c = Rx_w + t$$
-Koordinatentransformation vom Kamerakoordinatensystem in das Weltkoordinatensystem: $$x_w = R^T x_c - R^T t$$
+\item Rotation und Translation.
+\item Weltkoordinatensystem $\to$ Kamerakoordinatensystem: $$x_c = Rx_w + t$$
+\item Kamerakoordinatensystem $\to$ Weltkoordinatensystem: $$x_w = R^T x_c - R^T t$$
 \item $3 \times 4$ Gesamt-Projektionsmatrix\index{Projektionsmatrix} $P$ (intrinsisch und extrinsisch) auf homogenen Koordinaten: $$\myvecthree{u \cdot w}{v \cdot w}{w} = P \cdot \myvecqfour{X}{Y}{Z}{1} \qquad P = (K \, R \, | \, K \, t)$$
 \end{itemize}
 
 \section{Kamerakalibrierung\index{Kamerakalibrierung}}
 
-Die Kalibrierung einer Kamera bedeutet die Bestimmung ihrer Parameter bezüglich eines gewählten Kameramodells. Die Bestimmung der intrinsischen Parameter ist unabhängig vom Aufbau; solange Zoom und Fokus der Kamera gleich bleiben, verändern sich diese Parameter nicht. Die Bestimmung der extrinsischen Parameter ist abhängig von der Wahl des Weltkoordinatensystems und ändert sich je nach Aufbau. \\
-Ist die Kamera kalibriert, dann liegt die Abbildungsfunktion $f$ vor, die einen Punkt vom Weltkoordinatensystem eindeutig in das Bildkoordinatensystem abbildet: $$f \, : \, R^3 \to R^2$$
-$f$ ist definiert durch die Projektionsmatrix $P$ und anschließender Transformation der homogenen Koordinaten durch Division durch $w$. Die Inverse Abbildung bildet einen Punkt im Bildkoordinatensystem auf eine Gerade im Weltkoordinatensystem ab, die durch das Projektionszentrum verläuft. \\[0,1cm]
+\textbf{Kalibrierung}: Bestimmung Parameter bzgl. Kameramodell. \\ 
+Intrinsischen Parameter nur abhängig von Zoom und Fokus.\\
+Extrinsischen Parameter ist abhängig von der Wahl des Weltkoordinatensystems und ändert sich je nach Aufbau. \\
+\textbf{kalibriert}: $f \, : \, R^3 \to R^2$; Welt $\to$ Bild.
+Projektionsmatrix $P$ und Division durch $w$ def. $f$. \\
+$f^{-1}$ : Bildpunkt $\to$ Weltgerade durch Projektionszentrum \\[0,1cm]
 Verfahren zur Kamerakalibrierung:
 \begin{itemize}
-\item Direkte Lineare Transformation (DLT)
-\item Erweiterungen der DLT, welche Linsenverzerrung modellieren
+\item Direkte Lineare Transformation (DLT) [ohne Linsenverzerrung]
 \end{itemize}
 gesucht: $3 \times 4$-Matrix, hat also 12 Unbekannte; Verfahren Testfeldkalibrierung:\index{Testfeldkalibrierung}
 \begin{itemize}
-\item Bestimmung einer Menge von Punktkorrespondenzen: 3D-Punkt in einem gewählten Weltkoordinatensystem und 2D-Punkt im Bildkoordinatensystem
-\item 3D-Punkte sind durch Verwendung eines geeigneten Kalibrierobjekts oder -musters a-priori bekannt
-\item 2D-Punkte werden durch Methoden der Bildverarbeitung berechnet
+\item LGS durch 6 Testpunkte (jeder liefert 2 Gleichungen), durch Bildverarbeitung von 3D zu 2D
+\item 3D Punkte a priori bekannt berechnet
 \end{itemize}
-benötigt: 6 bekannte Objektpunkte, da jede Punktkorrespondenz zwei Gleichungen liefert \\
 Bedingung: 3D-Punkte dürfen nicht koplanar liegen, d.h. sie müssen einen dreidimensionalen Raum aufspannen \\
 Möglichkeiten:
 \begin{itemize}
-\item Verwendung eines 2D-Musters, das in mindestens zwei verschiedenen Tiefen präsentiert wird.
-\item Verwendung eines geeigneten 3D-Kalibrierobjekts.
+\item 2D-Musters, mind. zwei verschiedenen Tiefen
+\item 3D-Kalibrierobjekt
 \end{itemize}
 
 \subsection{Direkte Lineare Transformation}
@@ -241,7 +221,7 @@ $$\myvecthree{u \cdot w}{v \cdot w}{w} = P \cdot \myvecqfour{X}{Y}{Z}{1} \qquad 
 \Rightarrow u &=& \frac{p_1X + p_2Y + p_3Z + p_4}{p_9X + p_{10}Y + p_{11}Z + p_{12}} \\
 v &=& \frac{p_5X + p_6Y + p_7Z + p_8}{p_9X + p_{10}Y + p_{11}Z + p_{12}}
 \end{eqnarray*}
-o.B.d.A. kann ein Parameter normiert werden. Üblicherweise wird $p_{12} = 1$ gewählt.
+$p_{12} = 1$ normiert
 \begin{eqnarray*}
 p_1X + p_2Y + p_3Z + p_4 &=& up_9X + up_{10}Y + up_{11}Z + u \\
 p_5X + p_6Y + p_7Z + p_8 &=& vp_9X + vp_{10}Y + vp_{11}Z + v
@@ -255,9 +235,8 @@ Gegeben:
 \begin{itemize}
 \item zwei Kameras (durch ihre Zentren $C$ und $C'$) mit Projektionsmatrizen $P$ und $P'$
 \item zwei Abbilder $x$ und $x'$ des Punktes $X$
-\item dann kann $X$ rekonstruiert werden
 \end{itemize}
-Triangulation zwischen linker und rechter Kamera möglich durch Kenntnis der Kameraparameter. Eine Möglichkeit zur Berechnung von 3D-Punkten aus Bildpunkt-Korrespndenzen $x$, $x'$:
+Triangulation zwischen linker und rechter Kamera durch Kenntnis der Kameraparameter:
 \begin{itemize}
 \item Aufstellen der beiden Geraden $g$, $g'$ der möglichen Punkte zu $x$, $x'$ im Weltkoordinatensystem mit Hilfe der Projektionsmatrizen $P$, $P'$:
 \begin{eqnarray*}
@@ -271,31 +250,30 @@ g \, : \, x &=& a + r \cdot u \\ g' \, : \, x &=& b + s \cdot v
 
 \mypic{8}{kameramodell}
 
-Zusammenhang zwischen zwei Kameras ist gegeben durch die Epipolargeometrie. Die Schnittpunkte $e$ und $e'$ der Geraden durch die Projektionszentren mit den Bildebenen nennt man Epipole\index{Epipol}.
 \begin{description}
+\item[Epipole:] Schnittpunkt $e$ und $e'$ der Geraden durch Projektionszentren mit Bildebene
 \item[Epipolarebene $\pi(X)$:] Ebene, die durch $C$, $C'$ und Szenenpunkt $X$ aufgespannt wird.
 \item[Epipolarlinie $l'(x)$:] Schnittgerade von $\pi(X)$ mit Bildebene.
 \end{description}
 Alle Punkte $X$, die auf $x$ in Kamera 1 abgebildet werden, werden auf einen Punkt der Linie $l'(x)$ in Kamera 2 abgebildet. Alle Epipolarlinien eines Kamerasystems schneiden sich in den Epipolen $e$ und $e'$. \\
 \textsl{Nutzen:} Einschränkung des Korrespondenzproblems von zwei Dimensionen auf eine Dimension, da nach entsprechenden Merkmalen nur noch entlang der Epipolarlinie gesucht werden muss:
 \begin{itemize}
-\item höhere Robustheit (weniger falsche Korrespondenzen)
-\item höhere Effizienz
+\item höhere Robustheit (weniger falsche Korrespondenzen) und Effizienz
 \end{itemize}
 
 \subsection{Fundamentalmatrix\index{Fundamentalmatrix}}
 
-Mathematische Beschreibung der Epipolargeometrie erfolgt durch die Fundamentalmatrix. Eigenschaften der Fundamentalmatrix $F$:
+Mathematische Beschreibung der Epipolargeometrie
+
 \begin{itemize}
-\item $3 \times 3$-Matrix
-\item Rang 2
-\item für alle Korrespondenzen $x$, $x'$ gilt: $$x'^TFx = 0$$ $x$ und $x'$ sind Bildpunkte in homogenen Koordinaten mit $w = 1$
+\item $3 \times 3$-Matrix, Rang = 2
+\item Korrespondenz $x$, $x'$ $\rightarrow$ $x'^TFx = 0$ \\ $x$ und $x'$ sind Bildpunkte in homogenen Koordinaten mit $w = 1$
 \end{itemize}
-Mit der Fundamentalmatrix lassen sich die Epipolarlinien berechnen: $$l = F^Tx' \qquad \textrm{und} \qquad l' = Fx$$ Für die Epipole gilt: $$Fe = 0 \qquad \textrm{und} \qquad F^Te' = 0$$ Hinweis: $l$ (bzw. $l'$) definieren eine 2D-Gerade wie folgt: \\ $lx = 0$ für alle Bildpunkte $x$ (in homogenen Koordinaten mit $w = 1$), die auf dieser Geraden liegen. \\
-Die Fundamentalmatrix lässt sich auf mehrere Arten berechnen:
+Epipolarlinien mittels Fundamentalmatrix: $$l = F^Tx' \qquad \textrm{und} \qquad l' = Fx$$ Epipole: $$Fe = 0 \qquad \textrm{und} \qquad F^Te' = 0$$ Hinweis: $l$ (bzw. $l'$) definieren eine 2D-Gerade: \\ $lx = 0$ für alle Bildpunkte $x$ (in homogenen Koordinaten mit $w = 1$), die auf dieser Geraden liegen. \\
+Die Fundamentalmatrix berechnen:
 \begin{itemize}
-\item über Bildpunkt-Korrespondenzen in der linken und rechten Kamera
-\item bei bekannter intrinsischer und extrinsischer Kalibrierung der Kameras direkt über die Kalibriermatrizen $K$, $K'$ und der Essentialmatrix $E$, die durch die extrinsischen Parameter definiert ist
+\item Bildpunktkorrespondenz der Kameras
+\item intrinsische + extrinsische Kalibrierung bekannt ? $\to$  direkt über die Kalibriermatrizen $K$, $K'$ und der Essentialmatrix $E$, die durch die extrinsischen Parameter definiert ist
 \end{itemize}
 \textbf{\textsl{Berechnung über Bildpunkt-Korrespondenzen:}}
 $$x'^T Fx = 0 \quad , \quad x' = (x',y',z') \quad , \quad x = (x,y,z)$$
@@ -313,29 +291,26 @@ gegeben:
 \item Kamera 2 mit $(R \, | \, t)$ als Transformation
 \end{itemize}
 Essentialmatrix $E$ lässt sich berechnen zu: $$E = [t]_xR = \myvecnineright{0}{-t_3}{t_2}{t_3}{0}{-t_1}{-t_2}{t_1}{0}$$ Für die Epipole gilt: $$e = -KR^Tt \quad \textrm{und} \quad e' = K't$$
-Hat man die Essentialmatrix (z.B.über die extrinsischen Parameter) berechnet und die intrinsischen Parameter, d.h. Kalibriermatrizen $K$, $K'$, so lässt sich die Fundamentalmatrix berechnen zu: $$F = K'^{-T}EK^{-1}$$
-Hat man umgekehrt die Fundamentalmatrix bestimmt (z.B. über Bildpunkt-Korrespondenzen) und die intrinsischen Parameter, d.h. die Kalibriermatrizen $K$, $K'$, so lässt sich die Essentialmatrix berechnen zu: $$E = K'^TFK$$
+Kenntnis $E$ und $K$, $K'$: $$F = K'^{-T}EK^{-1}$$
+Kenntnis $F$ und $K$, $K'$: $$E = K'^TFK$$
 
 \subsubsection*{Stereo-Sehen}
 
-Weiter Eigenschaften der Fundamentalmatrix:
+$F$ hat folgende weitere Eigenschaften
 \begin{itemize}
-\item Mit ihr lassen sich die Eingabebilder rektifizieren.
+\item Rektifizierung von Eingabebildern möglich:
 \begin{itemize}
-\item Nach Rektifizierung verlaufen alle Epipolarlinien horizontal mit derselben $v$-Koordinate wie der Bildpunkt im anderen Kamerabild.
+\item alle Epipolarlinen laufen horizontal mit derselben $v$-Koordinate wie der Bildpunkt im anderen Kamerabild.
 \item Nach Korrespondenzen muss nur noch horizontal (in eine Richtung) gesucht werden.
+\item dann optimierte Korrespondenzalgos, aber Interpolation ($\to$ Qualitätsverlust), Verzerrung
 \end{itemize}
-\item Mit Hilfe der Essentialmatrix lassen sich die Projektionsmatrizen bis auf Skalierung genau rekonstruieren, mit Hilfe der Fundametalmatrix bis auf Skalierung und Projektion genau.
+\item Kenntnis $E$ $\to$ Rekonstruktion von $P$ bis auf Skalierung
+\item Kenntnis $F$ $\to$ Rekonstruktion von $P$ bis auf Skalierung und Projektion
 \end{itemize}
-Rektifizierte Bilder haben den Vorteil, dass sich optimierte Korrelations-Algorithmen für die Lösung des Korrespondenzproblems verwenden lassen. $\Rightarrow$ Laufzeit unabhängig von der Fenstergröße \\
-Nachteile:
-\begin{itemize}
-\item Interpolation notwendig für die Berechnung der rektifizierten Bilder $\Rightarrow$ Qualitätsverlust
-\item Bilder je nach Aufbau stark verzerrt
-\end{itemize}
+
 Nach Lösung des Korrespondenzproblems können
 \begin{itemize}
-\item Punktwolken berechnet werden durch Triangulation, wie zuvor erläutert
+\item Punktwolken berechnet werden durch Triangulation,
 \item Tiefenbilder erzeugt werden durch Eintrag der Disparitäten (Differenz der $u$-Koordinaten für gefundene Korrespondenzen in den rektifizierten Bildern) in ein Graustufenbild: \\ $\Rightarrow$ Je höher der Grauwert, desto näher befindet sich der entsprechende 3D-Punkt zur Kamera
 \end{itemize}
 

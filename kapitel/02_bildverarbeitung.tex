@@ -500,32 +500,30 @@ $$\textrm{Bildaufnahme} \quad \Rightarrow \quad \textrm{Filtern, Binarisieren} \
 \begin{itemize}
 \item Ziel: Erkennung gerader Linien im Bild
 \item Ansatz: Stelle Linie durch Normalenvektor (Länge, Winkel) in Polarkoordinaten dar (Sinus-Kosinus-Kurve)
-\item Kurven für kollineare Punkte schneiden sich in genau zwei Punkten $$r = x \cdot \cos(\theta) + y \cdot \sin(\theta)$$
-\item Transformation in den Hough-Raum: Additives Eintragen aller Sinus-Kosinus-Kurven für alle Pixel in ein Histogramm
-\item Finden der Maxima bzw. Cluster von "{}Treffern"{} im Hough-Raum
-\item Brute-Force-Ansatz; für ein $n \times n$-Bild liegt die Laufzeit in $O(n^3)$
+\item Kantenpixel (Bildraum) entspricht Sinusoid (Parameterraum) bzw. Punkt (Parameterraum) entspricht Gerade (Bildraum) $$r = x \cdot \cos(\theta) + y \cdot \sin(\theta)$$
+\item Transformation in den Hough-Raum: Additives Eintragen aller Sinus-Kurven für alle Kantenpixel in ein Histogramm
+\item Finden der Maxima bzw. Cluster von "{}Treffern"{} im Hough-Raum (Schnittpunkte der Sinusoide)
 \end{itemize}
-Unterschied zur Regressionsanalyse: Die Bestimmung der Regressionsgerade ist das geeignetere Verfahren, wenn schon klar ist, welche Pixel eine Gerade bilden sollen; dann ist die Regressionsgerade die optimale Gerade im Sinne der Summe der Fehlerquadrate. Die Regressionsgerade kann jedoch keine Segmentierung vornehmen. Dahingegen lassen sich mit der Hough-Transformation in beliebigen Bildern geradlinige Strukturen berechnen; die punkte dazu müssen jedoch verhältnismäßig exakt auf einer Linie liegen.
+Erweiterung auf andere parametrische Formen \\
+$\to$ Kreis mittels $r^2 = x^2 + y^2$, bei unbekanntem $r$ im 3D Parameterraum $(x, y, r)$
+
+\textbf{Regression:}\index{Regressionsgerade}
+Least squares, $y = mx + c$ \\
+formulieren als LGS $Ax = b$ $(u_i 1) \cdot (m c)^T = (v_i)^T$, lösen der Normalengleichung $A^TAx=A^Tb$
 
 \subsection{Punktmerkmale}
 
-Kanten/Konturen/Farbe können nicht immer für die Segmentierung herangezogen werden. Texturierte Objekte lassen sich in der Regel nicht durch die bislang vorgestellten Verfahren segmentieren. Lösung: Verwendung von \textsl{lokalen} Punktmerkmalen (auch genannt: Textmerkmale):
+Verwendung von \textsl{lokalen} Punktmerkmalen (wenn Kanten, Kontur etc. nicht klassifizieren):
 \begin{itemize}
-\item Harris Corner Detector
-\item Shi-Tomasi Features
-\item SIFT-Features
-\item Maximally Stable Extremal Regions
+\item Harris Corner Detector, SIFT-Features, Maximally Stable Extremal Regions
 \end{itemize}
 Punktmerkmal: $(2n+1) \times (2n+1)$-Pixel-Block um Pixel $p$. Fast immer basierend auf Grauwertbildern. Gewünschte Eigenschaft: Wiedererkennbarkeit \\ $\Rightarrow$ hoher Gradient in mehrerer Richtungen \\[0,1cm]
 \textbf{Harris Corner Detector}\index{Harris Corner Detector}: \\
-Sind die Eigenwerte der Matrix $$A = \left( \begin{array}{cc} \left( \frac{\partial Img(x,y)}{\partial x} \right)^2 & \frac{\partial Img(x,y)}{\partial x} \frac{\partial Img(x,y)}{\partial y} \\ \frac{\partial Img(x,y)}{\partial x} \frac{\partial Img(x,y)}{\partial y} & \left( \frac{\partial Img(x,y)}{\partial y} \right)^2 \end{array} \right)$$ groß, dann verursacht eine kleine Bewegung in beliebiger Richtung eine große Grauwertänderung. \\ Finden von Ecken durch Suche nach lokalen Maxima in: $$R = det(A) - k \cdot trace(A)^2 \quad , \quad k \thickapprox 0,04$$
-Häufiges Problem:
+Eigenwerte der Matrix $$A = \left( \begin{array}{cc} \left( \frac{\partial Img(x,y)}{\partial x} \right)^2 & \frac{\partial Img(x,y)}{\partial x} \frac{\partial Img(x,y)}{\partial y} \\ \frac{\partial Img(x,y)}{\partial x} \frac{\partial Img(x,y)}{\partial y} & \left( \frac{\partial Img(x,y)}{\partial y} \right)^2 \end{array} \right)$$ groß $\to$ kleine Bewegung in beliebiger Richtung verursacht große Grauwertänderung. \\ Finden von Ecken durch Suche nach lokalen Maxima in: $$R = det(A) - k \cdot trace(A)^2 \quad , \quad k \thickapprox 0,04$$
+
+\textbf{Korrespondenzproblem}: Wiederfinden bzw. Zuordnung von Punktmerkmalen (für Objekterkennung mittels Punktmerkmalen, Stereo-Sehen
+
 \begin{itemize}
-\item Wiederfinden bzw. Zuordnung von Punktmerkmalen für:
-\begin{itemize}
-\item Objekterkennung auf der Basis von Punktmerkmalen
-\item Stereo-Sehen bzw. "{}Structure from Motion"{} (Korrespondenzproblem)
-\end{itemize}
 \item Lösung des Korrespondenzproblems erfolgt für Punktmerkmale durch Korrelationsverfahren:
 \begin{itemize}
 \item \textbf{Sum of Squared Differences}\index{Sum of Squared Differences} (SSD) wird minimal bei guter Übereinstimmung: $$\sum\limits_{i = -n}^n \sum\limits_{j = -n}^n (Img_0(x-i,y-j) - Img_1(x-i,y-j))^2$$
@@ -535,19 +533,16 @@ Häufiges Problem:
 wobei $$\overline{Img}(u,v,n) = \frac{1}{(2n+1)^2} \sum\limits_{i=-n}^n \sum\limits_{j=-n}^n Img(u+i,v+j)$$
 \end{itemize}
 \end{itemize}
-Für die Objekterkennung geschieht das Wiederfinden oftmals unter Verwendung:
+
+Für die Objekterkennung existieren eine Vielzahl von Repräsentationen von lokalen Merkmalen (beschreiben Detektor und Deskriptor):
 \begin{itemize}
-\item der Hauptkomponentenanalyse oder engl. \textsl{Principal Component Analysis} (PCA) und Nearest-Neighbor- bzw. $k$-Nearest-Neighbor-Klassifikator
-\item von Neuronalen Netzen
-\item oder Kombinationen (zuerst PCA zur Kompression, dann SVM (\textsl{Support Vector Machine}) zur Klassifikation)
-\end{itemize}
-Für die Objekterkennung existieren eine Vielzahl von Repräsentationen von lokalen Merkmalen:
-\begin{itemize}
-	\item SIFT (Scale Invariant Feature Transformation
+	\item SIFT (Scale Invariant Feature Transformation)
 	\item SURF (Speeded Up Robust Features)
 	\item MSER (Maximally Stable Extremal Regions)
 	\item Repräsentation eines Bildausschnittes über eine Vielzahl (100-200) synthetisch generierter Ansichten, Matching über PCA (Principal Component Analysis)
 \end{itemize}
+
+\textbf{Einfache Deskriptoren}: Synthetische (affin) kreierte, hoher Speicher-/Rechenaufwand $\to$ komprimieren mittels PCA, Reduktion der Dimensionen
 
 \section{Geometrische 2D-Transformationen}
 
@@ -557,21 +552,17 @@ Translation eines 2D-Vektors: $$\left( \begin{array}{c} x_0 \\ y_0 \end{array} \
 
 \subsection{Rotation}\index{Rotation}
 
-\begin{itemize}
-\item o.B.d.A. auf Einheitsvektor zurückführbar (Basistransformation)
-\item Konvention: Rechtskoordinatensystem
-\item Rotation von $(x_0,y_0)$ um Winkel $\beta$ mit Ergebnis $(x,y)$:
-\end{itemize}
-Aus Additionstheorem:
+Konvention: Rechtskoordinatensystem
 \begin{eqnarray*}
 x &=& \cos(\alpha + \beta) = \cos(\alpha) \cos(\beta) - \sin(\alpha) \sin(\beta) \\ y &=& \sin(\alpha + \beta) = \sin(\beta) \cos(\alpha) + \cos(\beta) \sin(\alpha)
 \end{eqnarray*}
-und mit $(x_0,y_0) = (\cos(\alpha), \sin(\alpha))$:
+und mit $(x_0,y_0) = (\cos(\alpha), \sin(\alpha))$: \\
+Rotation von $(x_0,y_0)$ um Winkel $\beta$:
 $$\left( \begin{array}{c} x \\ y \end{array} \right) = \left( \begin{array}{rr} \cos(\beta) & -\sin(\beta) \\ \sin(\beta) & \cos(\beta) \end{array} \right) \left( \begin{array}{c} x_0 \\ y_0 \end{array} \right)$$
 
 \subsubsection*{Homogene Koordinaten}
 
-Homogene Koordinaten $$h = (h_0,h_1, \dots, h_i, h_{i+1})$$ eines Punktes $p$ im $R^i$ mit $$p = (p_0,\dots,p_i)$$ sind Zahlen, für die gilt: $$p_k = \frac{h_k}{h_{i+1}} \quad \forall 0 \leq k \leq i$$
+Homogene Koordinaten $$h = (h_0,h_1, \dots, h_i, h_{i+1} \textit{Skalierungsfaktor})$$ eines Punktes $p$ im $R^i$ mit $$p = (p_0,\dots,p_i)$$ sind Zahlen, für die gilt: $$p_k = \frac{h_k}{h_{i+1}} \quad \forall 0 \leq k \leq i$$
 
 \subsubsection*{Homogene 2D-Transformationen}
 
@@ -579,50 +570,3 @@ Transformationen definiert durch Rotation $R$ und Translation $t$.
 $$\myvectwo{x}{y} = R \myvectwo{x_0}{y_0} + t = \myvecfour{r_{11}}{r_{12}}{r_{21}}{r_{22}} \myvectwo{x_0}{y_0} + \myvectwo{t_x}{t_y}$$
 Darstellung mit Hilfe homogener Koordinaten und einer geschlossenen Transformationsmatrix:
 $$\myvecthree{x}{y}{1} = \left( \begin{array}{cc|c} & R & t \\ \hline 0 & 0 & 1 \end{array} \right) \myvecthree{x_0}{y_0}{1} = \left( \begin{array}{cc|c} r_{11} & r_{12} & t_x \\ r_{21} & r_{22} & t_y \\ \hline 0 & 0 & 1 \end{array} \right) = A \myvecthree{x_0}{y_0}{1}$$
-
-\section{Partikel Filter und 2D-Tracking}
-\begin{itemize}
-\item Für Tracking-Applikationen wird oftmals das Kalmanfilter, das Partikel Filter oder Kombinationen aus beiden verwendet. Vorteile des Partikel Filters gegenüber dem Kalmanfilter:
-\begin{itemize}
-\item Es kann automatisch mehrere, parallel existierende Hypothesen halten $\Rightarrow$ geringere Gefahr in lokalen Minima zu verharren.
-\item Es kann beliebige Wahrscheinlichkeitsdichten modellieren und dadurch nichtlineare Bewegungen auf natürliche Weise verfolgen.
-\end{itemize}
-\item Nachteil: Rechenaufwand ist proportional zur Anzahl der notwendigen Partikel, welche (bei konstanter Auflösung) mit der Dimension des Konfigurationsraums exponentiell steigt. 
-\item Im Kern des Partikel Filters befinden sich ein Modell mit Konfigurationsraum $R^n$. 
-\item \textit{Eingabe:} Beobachtungen $z$; hier: Bilder einer Videosequenz
-\item \textit{Ausgabe:} Schätzung der Konfiguration $s \in R^n$, die den aktuellen Beobachtungen $z$ entspricht \item \textit{Zentrale Funktion:} Bewertungsfunktion $p(z|s)$, die die a-posteriori Wahrscheinlichkeit berechnet, dass $s$ die zu $z$ passende Konfiguration ist.
-\item Das Partikel Filter modelliert die Wahrscheinlichkeitsdichtefunktion oder engl. \textsl{probability density function (pdf)} durch eine feste Anzahl von $N$ Partikeln. 
-\item Die Wahrscheinlichkeitsdichtefunktion beschreibt die a-posteriori Wahrscheinlichkeiten für den Konfigurationsraum. 
-\item Jedes Partikel ist ein Paar $(s_i, \pi_i)$, wobei $s_i$ eine Konfiguration ist und $\pi_i$ die dazugehörige a-posteriori Wahrscheinlichkeit mit $\sum_{i=1}^n \pi_i = 1$. 
-\item Die aktuelle Schätzung des Partikel Filters erfolgt über das gewichtete Mittel über alle Partikel: $\overline{s} = \sum\limits_{i=1}^{N} \pi_i \cdot s_i$
-\end{itemize}
-\textbf{\textsl{Algorithmus}}
-
-\begin{enumerate}
-\item Initialisiere alle $N$ Partikel (z.B. mit Gleichverteilung)
-\item Verarbeite neue Beobachtungen (z.B. Vorverarbeitung neuer Bilder)
-\item Ziehe $N$ Partikel aus der letzten Generation, proportional zu ihrer Wahrscheinlichkeit $\pi_i$, und für jedes dieser Partikel:
-\begin{itemize}
-\item Berechne neue Konfiguration auf Basis der alten Konfiguration durch Addition normalverteilten Rauschens und evtl. durch Hinzunahme eines dynamischen Modells.
-\item Berechne für diese neue Konfiguration die neue a-posteriori Wahrscheinlichkeit mit Hilfe der Bewertungsfunktion $\myprob{z}{s}$
-\end{itemize}
-\item Berechne aktuelle Schätzung $\overline{s}$ über alle Partikel
-\item Fahre fort mit Schritt 2
-\end{enumerate}
-
-\textbf{\textsl{Einfaches Beispiel für eine Bewertungsfunktion}}
-
-\begin{itemize}
-\item Anwendung: \\ 2D-Tracking einer dichten, in etwa quadratischen Fläche von in etwa fester Größe in einem binarisierten Bild
-\item Modell: \\ Quadrat fester Größe mit Kantenlänge $k$ mit Konfigurationsraum $R^2$ (Koordinaten $u,v$ im Bild)
-\item Bewertungsfunktion: $$\myprob{z}{s} \propto e^{- \frac{1}{2 \sigma^2} \left( k^2 - \sum_{m \in M} g_m \right)}$$ wobei $M$ die Menge aller Pixel im binarisierten Bild $z$ (Beobachtungen) im durch $s$ (Konfiguration) definierten Quadrat beschreibt und $g_m$ deren Intensität aus $\{0,1\}$.
-\end{itemize}
-
-
-
-
-
-
-
-
-
