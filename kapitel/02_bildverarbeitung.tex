@@ -180,12 +180,10 @@ Histogrammausgleich (nicht affin)\index{Histogrammausgleich}:
 \subsection{Bildanalyse durch Frequenzanalyse}
 
 \begin{itemize}
-\item (Grauwert-) Bilder lassen sich signaltheoretisch als Summe verschiedenfrequenter Signale betrachten.
-\item Niedrige Frequenzen: Schwache Grauwertübergänge
-\item Hohe Frequenzen: Scharfe Grauwertübergänge
-\item Nützlich z.B. zum Finden gerader Linien
+\item (Grauwert-) Bilder = Summe verschiedenfrequenter Signale betrachten.
+\item Niedrige Frequenzen: Schwache Grauwertübergänge, Hohe Frequenzen: Scharfe Grauwertübergänge
 \end{itemize}
-$\to$ Fourier-Analyse!
+$\to$ Gerade Linien finden, Fourier-Analyse!
 
 \subsubsection*{2-Dim Fouriertransformation}
 
@@ -215,8 +213,7 @@ Anschaulich: Durchführung der 1D-DFT auf jeder Zeile und Speicherung der Daten 
 
 \begin{itemize}
 \item Die Variablen $u$ und $v$ heissen Frequenzvariablen
-\item $F(u,v)$ ist komplexe Funktion
-\item $F(u,v)$ ist darstellbar als 2 Bilder
+\item $F(u,v)$ komplex, darstellbar als 2 Bilder
 \begin{itemize}
 \item in Realteil und Imaginärteil $$F(u,v) = R(u,v) + I(u,v)$$
 \item oder Betrag (auch Spektrum genannt, oft logarithmisch dargestellt) und Phase $$F(u,v) = |F(u,v)| \cdot e^{i \varphi (u,v)}$$
@@ -227,56 +224,36 @@ Anschaulich: Durchführung der 1D-DFT auf jeder Zeile und Speicherung der Daten 
 \subsection{Bildbearbeitung}
 
 \begin{itemize}
-\item Durch Filter im Ortsbereich oder Transferfunktionen im Frequenzbereich.
-\item Ortsbereich:
-\begin{itemize}
-\item Manipulation von Grauwerten
-\item anschaulich
-\item häufig: Punktoperationen, Glättung
-\end{itemize}
-\item Frequenzbereich:
-\begin{itemize}
-\item Manipulation der Frequenzanteile
-\item keine unmittelbare bildliche Vorstellung
-\item häufig: starke Glättung, frequenzselektive Filter
-\end{itemize}
+\item Filter im Ortsbereich falten oder Transferfunktionen im Frequenzbereich multiplizieren, dann zu Ortsbereich mit inv. Fourier
+\item Ortsbereich: Manipulation Grauwerte, anschaulich, Punktops/Glättung
+\item Frequenzbereich: Manipulatilon Frequenzanteile, nicht anschaulich, starke Glättung, frequenzselektive Filter
 \end{itemize}
 
 \subsubsection*{Bildbearbeitung im Ortsbereich}
 
-Faltung zweier Funktionen 1D kontinuierlich: $$h(x) = f(x) * g(x) = \int\limits_{a = - \infty}^{\infty} f(a) g(x-a) da$$
-Faltung zweier Funktionen 1D zeitdiskret: $$h[x] = f[x] * g[x] = \sum\limits_{a = - \infty}^{\infty} f[a] g[x-a]$$
-Faltung zweier Funktionen 2D kontinuierlich: $$h(x,y) = f(x,y) * g(x,y) = \int\limits_{a = -\infty}^{\infty} \int\limits_{b = -\infty}^{\infty} f(a,b) g(x-a,y-b) dadb$$
-Faltung zweier Funktionen 2D zeitdiskret: $$h[x,y] = f[x,y] * g[x,y] = \sum\limits_{a = -\infty}^{\infty} \sum\limits_{b = -\infty}^{\infty} f[a, g[x-a,y-b]$$
+$f$ als Bildfunktion, $g$ als Filter !
+
+Faltung zweier Funktionen 1D (diskret entspr.): $$h(x) = f(x) * g(x) = \int\limits_{a = - \infty}^{\infty} f(a) g(x-a) da$$
+Faltung zweier Funktionen 2D (diskret entspr.): $$h(x,y) = f(x,y) * g(x,y) = \int\limits_{a = -\infty}^{\infty} \int\limits_{b = -\infty}^{\infty} f(a,b) g(x-a,y-b) dadb$$
 
 \subsubsection*{Faltung}
 
 \begin{itemize}
 \item Bildmatrizen werden in den relevanten Randbereichen mit Nullen gefüllt.
 \item Der neue Bildwert ist eine gewichtete Summe der Pixel die unter der gespiegelten Matrix liegen.
-\item Als Gewichte dienen die Matrizenwerte.
-\item Bildfilterung ist die Faltung einen Bildes mit einer Filtermatrix bzw. Maske.
 \item Die Transferfunktion $H(u,v)$ ist die Fouriertransformierte der Filterfunktion $h(x,y)$.
 \end{itemize}
-
-
-Beispiel Sobel-X Filters:
-\mypic{12}{filterbsp}
 
 \subsubsection*{Filteroperationen}
 
 \begin{itemize}
 \item Tiefpassfilter: Glättung, Rauschelimination
 \begin{itemize}
-	\item Mittelwertfilter
-	\item Gauß-Filter
+	\item Mittelwertfilter, Gauß-Filter
 \end{itemize}
 \item Hochpassfilter: Kantendetektion
 \begin{itemize}
-	\item Prewitt
-	\item Sobel
-	\item Roberts
-	\item Laplace
+	\item Prewitt, Sobel, Roberts, Laplace
 \end{itemize}
 \item Kombinierte Operationen: Laplacian of Gaussian
 \end{itemize}
@@ -285,7 +262,7 @@ Beispiel Sobel-X Filters:
 
 \subsubsection{Mittelwertfilter\index{Mittelwertfilter}}
 \begin{itemize}
-	\item Ziel: Rauschunterdrückung \\ Beispiel: Durchschnitt aus 8-Umgebung und Punkt. Größe beliebig wählbar.
+  \item Ziel: Rauschunterdrückung
   \item $$m'(x,y) = \sum\limits_{j=-1}^1 \sum\limits_{i=-1}^1 m(i,j) \cdot p(x-j,y-i)$$
 \end{itemize}
 
@@ -299,7 +276,7 @@ Beispiel Sobel-X Filters:
 		\item Frequenzbereich: $F(u,v)=e^{-\frac{u^2 + v^2}{2}\sigma^2}$
 	\end{itemize}
 	
-	\item Approximation von $f(x,y)$ durch einen 3x3-Filter für $\sigma=0.85$: $F_{Gauß}=\frac{1}{16} \left(
+	\item Approximation für $\sigma=0.85$: $F_{Gauß}=\frac{1}{16} \left(
 	\begin{array}{ccc}
 	1 & 2 & 1 \\
 	2 & 4 & 2 \\
@@ -307,9 +284,8 @@ Beispiel Sobel-X Filters:
 	\end{array} \right)
 	$
 	
-	\item Die Stärke der Glättung ist ausschließlich durch den Parameter $\sigma$ bestimmt (je größer $\sigma$ desto stärker die Glättung)
-	\item Die Größe nxn beeinflusst die Güte der Approximation des Filters
-	\item Im Ortsbereich kann als Faustregel für eine ausreichende Approximation $n=2\sigma \cdot 2 +1 $ verwendet werden
+	\item Je größer $\sigma$ desto stärker die Glättung, $n x n $ beeinflusst Güte
+	\item Im Ortsbereich kann als Faustregel für eine ausreichende Approximation $n=\lfloor 2\sigma \rfloor \cdot 2 +1 $ verwendet werden
 	\item Deshalb: Für eine starke Glättung lohnt sich die Anwendung im Frequenzbereich
 \end{itemize}
 
@@ -318,24 +294,18 @@ Beispiel Sobel-X Filters:
 \subsubsection{Prewitt\index{Prewitt-Filter}}
 
 \textbf{Prewitt-X Filter} $$P_x = \frac{\partial g(x,y)}{\partial x}$$ approximiert durch $$p_x = \left( \begin{array}{ccc} -1 & 0 & 1 \\ -1 & 0 & 1 \\ -1 & 0 & 1 \end{array} \right)$$
-Kantendetektion: vertikal gut, horizontal schlecht \\
-\textbf{Prewitt-Y Filter} $$P_y = \frac{\partial g(x,y)}{\partial y}$$ approximiert durch $$p_y = \left( \begin{array}{rrr} -1 & -1 & -1 \\ 0 & 0 & 0 \\ 1 & 1 & 1 \end{array} \right)$$
-Kantendetektion: vertikal schlecht, horizontal gut \\
+Kantendetektion: vertikal gut, horizontal schlecht (Gegenteil bei Y)\\
+Prewitt-Y $\to$ nach $\partial y$, um 90 Grad rechtsgedreht
 \textbf{Prewitt-Operator}
-\begin{itemize}
-\item Kombination der Prewitt-Filter zur Bestimmung des Grauwertgradientenbetrages $M$: $$M \thickapprox \sqrt{P_x^2 + P_y^2}$$
-\item Danach: Schwellwertfilterung
-\end{itemize}
 
 \subsubsection{Sobel\index{Sobel-Filter}}
 
 \textbf{Sobel-X Filter} $$S_x = \frac{\partial g(x,y)}{\partial x}$$ approximiert durch $$s_x = \left( \begin{array}{ccc} -1 & 0 & 1 \\ -2 & 0 & 2 \\ -1 & 0 & 1 \end{array} \right)$$
 Kantendetektion: vertikal gut, horizontal schlecht \\
-\textbf{Sobel-Y Filter} $$S_y = \frac{\partial g(x,y)}{\partial y}$$ approximiert durch $$s_y = \left( \begin{array}{rrr} -1 & -2 & -1 \\ 0 & 0 & 0 \\ 1 & 2 & 1 \end{array} \right)$$
-Kantendetektion: vertikal schlecht, horizontal gut \\
-\textbf{Sobel-Operator}
+Sobel-Y $\to$ wie Prewitt !
+
 \begin{itemize}
-\item Kombination der Sobel-Filter zur Bestimmung des Grauwertgradienten-Betrages $M$: $$M \thickapprox \sqrt{S_x^2 + S_y^2}$$
+\item Kombination zweier Prewitt / Sobel-Filter zur Bestimmung des Grauwertgradienten-Betrages $M$: $$M \thickapprox \sqrt{S_x^2 + S_y^2} / \sqrt{P_x^2 + P_y^2}$$
 \item Danach: Schwellwertfilterung
 \end{itemize}
 
@@ -347,29 +317,21 @@ Kantendetektion: diagonal gut
 \subsubsection*{Laplace\index{Laplace-Filter}}
 
 Laplace-Operator: $$\nabla^2 g(x,y) = \frac{\partial^2 g(x,y)}{\partial x^2} + \frac{\partial^2 g(x,y)}{\partial y^2}$$ wobei $$\nabla^2 \thickapprox \left( \begin{array}{rrr} 0 & 1 & 0 \\ 1 & -4 & 1 \\ 0 & 1 & 0 \end{array} \right)$$
-Kantendetektion: Nulldurchgänge markieren Kanten, Subpixelgenauigkeit erreichbar \\ Näherung des Laplace-Operators: $$\nabla^2 \thickapprox \left( \begin{array}{rrr} 1 & 4 & 1 \\ 4 & -20 & 4 \\ 1 & 4 & 1 \end{array} \right)$$
+Kantendetektion: Nulldurchgänge markieren Kanten, Subpixelgenauigkeit erreichbar \\
+Rauschempfindlich $\to$ LoG \\
+Näherung des Laplace-Operators: $$\nabla^2 \thickapprox \left( \begin{array}{rrr} 1 & 1 & 1 \\ 1 & -8 & 1 \\ 1 & 1 & 1 \end{array} \right)$$
 Kantendetektion: Stärkere Kanten, aber mehr Störkanten
 
 \subsubsection{Laplacian of Gauß (LoG)\index{Laplacian of Gauß-Filter}}
 
-Der Laplace-Operator ist gegen Rauschen sehr empfindlich. Wesentlich bessere Ergebnisse erhält man, wenn man das Bild zunächst mit einem Gauß-Filter glättet und danach den Laplace-Operator anwendet. $$LoG(g(x,y)) = \nabla^2 (G(x,y) * g(x,y))$$ Approximation (Faltung mit Matrix): $$\nabla^2 G(x,y) = \left( \begin{array}{rrrrr} 0 & 0 & -1 & 0 & 0 \\ 0 & -1 & -2 & -1 & 0 \\ -1 & -2 & 16 & -2 & -1 \\ 0 & -1 & -2 & -1 & 0 \\ 0 & 0 & -1 & 0 & 0 \end{array} \right)$$
+$$LoG(g(x,y)) = \nabla^2 (G(x,y) * g(x,y))$$ Approximation (Faltung mit Matrix): $$\nabla^2 G(x,y) = \left( \begin{array}{rrrrr} 0 & 0 & -1 & 0 & 0 \\ 0 & -1 & -2 & -1 & 0 \\ -1 & -2 & 16 & -2 & -1 \\ 0 & -1 & -2 & -1 & 0 \\ 0 & 0 & -1 & 0 & 0 \end{array} \right)$$
 Kantendetektion: Stärkere Kanten,weniger Rauschen
 
 \subsubsection{Canny-Kantendetektor\index{Canny-Kantendetektor}}
 \begin{itemize}
-	\item Ziel: Der optimale Kantendetektor
-	\begin{itemize}
-		\item Gute Detektion
-		\item Gute Lokalisierung
-		\item Minimale Antwort ("`dünne Linien"')
-	\end{itemize}
-	\item Canny-Kantendetektor liefert binäre Antwort
-	\begin{itemize}
-		\item 0: keine Kante
-		\item 255: Kante
-	\end{itemize}
+	\item optimal (?) $to$ Gute Detektion/Lokalisierung, Minimale Antwort
+	\item binäre Antwort ( 0 keine Kante, 255 Kante )
 	\item Subpixelgenauigkeit durch Erweiterung möglich
-	\item Algorithmus besteht aus mehreren Schritten
 \end{itemize}
 \begin{enumerate}
 \item Rauschunterdrückung: Gauß-Filter
@@ -410,8 +372,7 @@ Kantendetektion: Stärkere Kanten,weniger Rauschen
 
 Aufgaben der sensorischen Umwelterfassung:
 \begin{itemize}
-\item Wiedererkennung bekannter Sachverhalte: Objekte, Personen, Orte
-\item Erlernen neuer Sachverhalte
+\item Wiedererkennung/Erlernen bekannter/neuer Sachverhalte
 \item Erkennung der eigenen Bewegung
 \end{itemize}
 Verfahren zur Lösung dieser Aufgaben:
@@ -425,27 +386,31 @@ Verfahren zur Lösung dieser Aufgaben:
 
 Segmentierung ist die Aufteilung eines Bildes in aussagekräftige Bestandteile. Erlaubt:
 \begin{itemize}
-\item Aussagen über das Bild
-\item Reduktion der Datenmenge
-\item Verfolgung von Merkmalen über die Zeit / mehrere Sensoren
+\item Aussagen über das Bild, Reduktion der Datenmenge, Verfolgen von Merkmalen über Zeit/Sensoren
 \end{itemize}
 Beliebt sind: Kanten, Ecken, Textur, Farbe
 
 \subsubsection{Schwellwertfilterung\index{Schwellwertfilterung}}
 
-Schwellwertfilterung zur Konvertierung eines Grauwertbildes in ein binäres Bild. Ziel: Trennung interessanter Objekte vom Hintergrund. $$Img'(u,v) = \left\{ \begin{array}{cl} q & \textrm{ falls } Img(u,v) \geq T \\ 0 & \textrm{ sonst} \end{array} \right.$$
+Konvertierung eines Grauwertbildes in ein binäres Bild $\to$ Trennung interessanter Objekte vom Hintergrund. \\
+Welcher Schwellwert ?
+\begin{itemize}
+	\item Erfahrung
+	\item \textbf{Multilevel Otsu}
+	\begin{itemize}
+		\item Grauwertverteilung $\to$ opt. Schwellwerte zur Klassifizierung aller Bildpunkte
+		\item $k$ Schwellwerte -> $k+1$ Klassen
+		\item maximieren der Interklassenvarianz (zwischen Klassen im Histogram) $\sigma_b^2$, minimieren der Intraklassenvarianz $\sigma_w^2$
+		\item Diskriminanzkriterium $\lambda(t_1, ..., t_k) = \frac{\sigma_b^2(t_1, ..., t_k)}{\sigma_w^2(t_1, ..., t_k)} \to \frac{\sigma_b^2(t_1, ..., t_k)}{\sigma^2}$
+	\end{itemize}
+\end{itemize}
 
 \subsubsection{Farbe}
 
-Oft können Objekte über ihre Farbe segmentiert werden:
+Segmentierung anhand Farbe:
 \begin{itemize}
-\item menschliche Hautfarbe
-\item einheitlich gefärbte Objekte
-\end{itemize}
-Problem:
-\begin{itemize}
-\item wechselnde Lichtbedingungen
-\item Reflexionen, Schattenwürfe
+\item einheitlich gefärbte Objekte (z.B Haut)
+\item aber : Licht, Reflexion, Schatten
 \end{itemize}
 Verfahren:
 \begin{itemize}
@@ -454,24 +419,26 @@ Verfahren:
 \item Weglassen des $I$-Kanals ergibt 2D-Histogramm
 \item Training eines Klassifikators auf dem Histogramm
 \end{itemize}
-\item mit Hilfe der Mahalanobis-Distanz (z.B. in RGB): \\ gegeben: $x_i = (R,G,B)^T$ sind manuell positiv klassifizierte Pixel
+\item mit Hilfe der Mahalanobis-Distanz (z.B. in RGB): \\ gegeben: $x_i = (R_i,G_i,B_i)^T$ sind manuell positiv klassifizierte Pixel
 \begin{eqnarray*}
 C &=& \frac{1}{n-1} \sum\limits_{i=1}^n (x_i - \overline{x})(x_i - \overline{x})^T \qquad \textrm{Kovarianzmatrix} \\ p(x) &=& e^{- \frac{1}{2 \sigma^2} x^T C^{-1} x} \qquad \textrm{Berechnung der Farbwahrsch.}
 \end{eqnarray*}
 \item Klassifikation durch Verwendung von Neuronalen Netzen
-\item durch Intervallschranken im HSI-Farbraum:
-$$f(H,S,V) = H \geq H_{\min} \wedge H \leq H_{\max} \wedge S \geq S_{\min} \wedge S \leq S_{\max} \wedge V \geq V_{\min} \wedge V \leq V_{\max}$$
+\item durch Intervallschranken im HSI/HSV/... Farbraum ($H \in [H_{min}, H_{max}], ...$)
 \end{itemize}
 
 \subsection{Morphologische Operatoren\index{Morphologische Operatoren}}
 
 \begin{itemize}
-\item Wähle Struckturelement, z.B. Quadrat mit 3x3 Pixel
-\item Wandere mit Struckturelement über Bild und führe Operation durch
-\item \textbf{Dilatation}\index{Dilatation} ist ein Operation auf Binärbildern. Alle Bereiche, die farbig (1 und nicht 0, da Binär) sind, werden ausgedehnt. Immer wenn unter dem mittleren Pixel des Struckturelements ein farbiges Pixel ist, werden alle Pixel unter dem Struckturelement als farbig markiert.
-\item \textbf{Erosion}\index{Erosion} ist die Komplemetäroperation zu Dilatation. Nur falls alle Pixel unter dem Struckturelement farbig sind, wird das Element in der Mitte farbig gelassen und alle anderen auf 0 gesetzt. Falls nicht alle Pixel farbig sind, werden alle auf 0 gesetzt.
-\item Öffnen-Operation\index{Öffnen-Operation}: Zuerst Erosion und anschließend Dilatation anwenden.
-\item Schließen-Operation\index{Schließen-Operation}: Zuerst Dilatation und anschließend Erosion anwenden.
+\item Wähle Strukturelement/Maske ( Pixel mit X markiert wird jeweils verändert ) wird über Binärbild geschoben
+\item \textbf{Dilatation}\index{Dilatation}: Aufblasen des Objekts \\ 
+Alle Bereiche, die farbig sind, werden ausgedehnt. Mittleres Element über farbigem Pixel ? $\to$ alle unter Strukturelement zu farbigem Pixel.
+\item \textbf{Erosion}\index{Erosion}: Schrumpfen des Objekts \\
+Nicht alle Pixel unter Strukturelement farbig $\to$ alle Pixel auf 0
+\item Öffnen-Operation\index{Öffnen-Operation}: Extremitäten werden elminiert \\ 
+Zuerst Erosion und anschließend Dilatation anwenden.
+\item Schließen-Operation\index{Schließen-Operation}: Lücken aufgefüllt \\
+Zuerst Dilatation und anschließend Erosion anwenden.
 
 \end{itemize}
 
@@ -482,11 +449,10 @@ Einfacher Ansatz: Differenzbilder
 \begin{itemize}
 \item Subtraktion aufeinander folgender Bilder einer Video-Sequenz: $$Img_t'(u,v) = |Img_t(u,v) - Img_{t-1}(u,v)|$$
 \item Anschließend kann auf $Img_t'$ Schwellwertfilterung durchgeführt werden
-\item Regionen, in denen sich etwas bewegt, erscheinen weiß; ruhige Regionen erscheinen schwarz
-\item Bewegung in homogenen Regionen wird nicht erkannt (Kanten, Textur sind notwendig)
-\item Richtung der Bewegung wird nicht erkannt
+\item aktiv $\to$ weiß, passiv $\to$ schwarz
+\item Bewegung in homogenen Regionen / Richtung wird nicht erkannt (Kanten, Textur sind notwendig)
 \end{itemize}
-Differenzbilder werden auch für Hintergrundsubtraktion verwendet, dann wird $Img_{t-1}$ durch ein festes $Img_0$ ersetzt. Weitere Ansätze: Optical Flow und Erweiterungen
+Differenzbilder werden auch für Hintergrundsubtraktion verwendet, dann wird $Img_{t-1}$ durch ein festes $Img_0$ ersetzt.
 
 \subsubsection{Region Growing\index{Region Growing}}
 
@@ -501,37 +467,34 @@ gegeben: Graustufen-Bild, gesucht: zusammenhängende Regionen \\ Algorithmus in 
 
 Vom Menschen konstruierte Umgebungen:
 \begin{itemize}
-\item gut strukturiert
-\item viele gerade Linien (Wände, Türen, Schränke)
-\item einfache Segmentierung / 3D-Rekonstruktion
+\item gut strukturiert, gerade Linien $\to$ einfache Segmentierung
 \item viele Informationen in einem einzigen Merkmal
 \end{itemize}
-Vorgehensweise: $$\textrm{Bildaufnahme} \quad \Rightarrow \quad \textrm{Filtern, Binarisieren} \quad \Rightarrow \quad \textrm{Pixel } \to \textrm{ Kantensegmente}$$
+$$\textrm{Bildaufnahme} \quad \Rightarrow \quad \textrm{Filtern, Binarisieren} \quad \Rightarrow \quad \textrm{Pixel } \to \textrm{ Kantensegmente}$$
 
 \subsubsection*{Pixel $\to$ Kanten}
 
 \textbf{Iterative Endpoint Fit:}\index{Iterative Endpoint Fit} \\[0,1cm]
-gegeben: Punkte $P$, Linien $L = \{ \}$, Distanzschwelle $d$
-\begin{itemize}
-\item Fine $x_1$, $x_2$ aus $P$ mit $||x_1 - x_2|| = \max$; \\ verbinde sie durch Linie $l_0 = \{x_1,x_2\}$; $L=L \cup \{l_0\}$
-\item Entferne $x_1$, $x_2$ aus $P$
-\item Für alle $l \in L$:
-\begin{itemize}
-\item Finde $x \in P$ mit $||l-x|| = \max$
-\item Wenn $||l-x|| < d$:
-\begin{itemize}
-\item Ordne $x$ als Mitgliedpunkt $l$ zu
-\item Entferne $x$ aus $P$
-\end{itemize}
-\item Sonst
-\begin{itemize}
-\item Brich $l$ in $l_1 = \{ x_1 , x\}$ und $l_2 = \{x , x_2 \}$ auf
-\item Andere Mitgliedspunkte von $l$ wieder in $P$
-\end{itemize}
-\item $P$ leer $\Rightarrow$ Abbruch, sonst weiter
-\end{itemize}
-\item Lösche Linien mit weniger als $n$ Punkten
-\end{itemize}
+
+\begin{algorithmic}
+	\State Linie $l_0 = \{x_1,x_2\}$ mit $||x_1 - x_2|| = \max$; $L=L \cup \{l_0\}$
+	\State $P \gets P / {x_1, x_2}$
+	
+	\While {$P \neq empty$}
+	\ForAll {$l \in L$}
+		\State find $x \in P$ mit $||l-x|| = \max$
+		\If {$||l-x|| < d$}
+			\State Ordne $x$ als Mitgliedpunkt $l$ zu
+			\State Entferne $x$ aus $P$
+		\Else
+			\State Brich $l$ in $l_1 = \{ x_1 , x\}$ und $l_2 = \{x , x_2 \}$ auf
+			\State Andere Mitgliedspunkte von $l$ wieder in $P$	
+		\EndIf
+	\EndFor
+	\EndWhile
+	\State Lösche Linien mit weniger als $n$ Punkten
+\end{algorithmic}
+
 
 \textbf{Hough-Transformation:}\index{Hough-Transformation}
 \begin{itemize}
