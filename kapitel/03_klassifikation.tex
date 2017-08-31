@@ -75,7 +75,7 @@ g_i(x) &=& \log(p(x | \omega_i)) + \log(P(\omega_i))
 	\item Parametric Solution $\to$ assume $p(x/\omega_i)$ has a particular parametric form (commonly multivariante normal)
 \end{itemize}
 
-\section{Gauss Klassifizierer\index{Gauss Klassifizierer}}
+\section{Gauss Klassifizierer (Parametric)\index{Gauss Klassifizierer}}
 
 Eindimensionale Normaldichte: $$p(x) = \frac{1}{\sqrt{2\pi} \sigma} e^{- \frac{1}{2} \left( \frac{\myvector{x} - \myvector{\mu}}{\sigma} \right)^2} \sim N(\myvector{\mu},\sigma^2)$$
 Mehrdimensionale Dichte: $$p(x) = \frac{1}{(2\pi)^{d/2}|\Sigma|^{1/2}}e^{- \frac{1}{2} ( \myvector{x} - \myvector{\mu})^t \Sigma^{-1} (\myvector{x} - \myvector{\mu}) } \sim N(\myvector{\mu},\Sigma)$$
@@ -160,18 +160,12 @@ Probleme:
 \end{itemize}
 Setze $$V_n = \frac{1}{\sqrt{n}}$$
 
-\section{$k$-nächster Nachbar}
+\section{$k$-nächster Nachbar (Non Parametric)}
 
-Volumen als Funktion der Daten. Verwende die $k$ nächsten Nachbarn für die Abschätzung. Setze $$k = \sqrt{n}$$ Um Sample $x$ zu klassifizieren:
+Setze $$k = \sqrt{n}$$ Um Sample $x$ zu klassifizieren:
 \begin{itemize}
-\item finde $k$ nächste Nachbarn von $x$
-\item bestimme die am häufigsten vorkommende Klasse in diesen $k$ Samples
-\item ordne $x$ dieser Klasse zu
-\end{itemize}
-Probleme: Für eine endliche Anzahl von Samples $n$ sollte $k$ möglichst
-\begin{itemize}
-\item groß sein für eine gute Abschätzung
-\item klein sein, um zu garantieren, dass alle $k$ NAchbarn nah beieinander sind
+\item finde $k$ nächste Nachbarn von $x$, ordne $x$ am häufigsten vorkommende Klasse zu
+\item $k$ möglichst groß für gute Abschätzung, möglichst klein damit alle Nachbarn nah beieinander
 \end{itemize}
 Trainingsdatenbanken müssen groß sein.
 
@@ -184,37 +178,28 @@ $$g(\myvector{x}) = \sum\limits_{i=1}^n w_1x_1 + w_0 = \myvector{w}^T \myvector{
 $\myvector{x} = (x_1,\dots,x_n)^T$ : Eigenschaftsvektor, $\myvector{w} = (w_1,\dots,w_n)^T$ : Gewichtungsvektor, $w_0$ : Schwellenwert
 
 
-\section{Lineare Diskriminantenfunktionen}
+\section{Lineare Diskriminantenfunktionen (Non-Parametric, Supervised)}
 
 \begin{itemize}
-\item Keine Annahme über die Verteilung (Nicht-parametrisch)
-\item Lineare Entscheidungsflächen
-\item Start durch überwachtes Training (Klassen der Trainingsdaten gegeben)
-\item Diskriminantenfunktion: $$g(x) = w_0 + \sum\limits_{i=1}^n w_ix_i = \sum\limits_{i=0}^n w_ix_i, \quad x_0 = 1$$
-\item $g(x)$ ergibt die Distanz von der Entscheidungsfläche
-\item Zwei Kategorien Fall:
-\begin{eqnarray*}
-g_1(x) > 0 &\Rightarrow& \textrm{Klasse 1} \\ g_1(x) < 0 &\Rightarrow& \textrm{Klasse 2}
-\end{eqnarray*}
+\item Diskriminantenfunktion = Distanz von Entscheidungsfläche: $$g(x) = w_0 + \sum\limits_{i=1}^n w_ix_i = \sum\limits_{i=0}^n w_ix_i, \quad x_0 = 1$$
+\item 2 Kategorien $\to$ $>0 \rightarrow [1]$, $<0 \rightarrow [2]$
 \end{itemize}
-
-Hyperebe $H$: $g(\myvector{x}) = \sum\limits_{i=1}^n w_1x_1 + w_0 = \myvector{w}^T \myvector{x} + w_0 = 0$
-$$\Rightarrow \myvector{x} = q \frac{\myvector{w}}{|| \myvector{w} ||} + r \frac{\myvector{w}}{|| \myvector{w} ||} + \myvector{x}_p$$
-Vektor $q \frac{\myvector{w}}{|| \myvector{w} ||}$ entspricht: $g \left(q \frac{\myvector{w}}{|| \myvector{w} ||} \right) = 0 = q ||\myvector{w}|| + w_0$ $$\Rightarrow q = - \frac{w_0}{|| \myvector{w} ||}$$
-Und mit $g(\myvector{x}) = \myvector{w}^T q \frac{\myvector{w}}{|| \myvector{w} ||} + \myvector{w}^T r \frac{\myvector{w}}{|| \myvector{w} ||} + \myvector{w} \myvector{x}_p + w_0 = -w_0 + r ||\myvector{w}|| + w_0$ erhalten wir $$r = \frac{g(\myvector{x})}{|| \myvector{w} ||}$$
-
 
 \section{Fisher-lineare Diskriminante}
 
+\begin{description}
+	\item[Linear Separierbar] Jede Klasse kann durch Polygon umrundet werden
+\end{description}
 \begin{itemize}
-\item Dimensionsreduktion
-\item Projeziert eine Menge von mehrdimensionalen Punkten auf eine Line $y = \myvector{w} \myvector{x}$
+\item Dimensionsreduktion: mehrdimensionalen Punkten $\to$ Liniee $y = \myvector{w} \myvector{x}$
 \item Die Fisher Diskriminaten ist eine Funktion, die folgendes Kriterium maximiert $$g(x) = \frac{| \tilde{m}_1 - \tilde{m_2}|}{\tilde{s}_1 + \tilde{s}_2}$$
 wobei $\tilde{m}_i = \frac{1}{n} \sum\limits_{y \in Y_i} y$ : Mittel für projezierte Muster, $\tilde{s}_i^2 = \sum\limits_{y \in Y_i} (y - \tilde{m}_i)^2$ : Streuung für projezierte Muster
 \item Fisher's lineare Diskriminante:
 \begin{eqnarray*}
 \myvector{w} &=& s_w^{-1} (\myvector{m}_1 - \myvector{m}_2) \\ s_w &=& s_1 + s_2 \\ s_i &=& \sum\limits_{x \in X_i} (\myvector{x} - \myvector{m}_i)(\myvector{x} - \myvector{m}_i)^T
 \end{eqnarray*}
+
+
 \end{itemize}
 
 
