@@ -3,86 +3,46 @@
 \chapter{Klassifikation}
 
 \begin{itemize}
-	\item Einordnen in die Welt
-	\begin{itemize}
-		\item Gesellschaftlich definierte Konventionen: Buchstaben, menschliche Artifakte, Kredite
-		\item Biologisch definierte Kategorien: Katze, Hund
-	\end{itemize}
-	\item Komplex
-	\begin{itemize}
-		\item Was definiert einen Stuhl? Eine Katze?
-		\item Beziehungen zu Komplex, Regeln -> Lernen
-		\item Nie 100\% richtig -> Wahrscheinlichkeit
-	\end{itemize}
+	\item Einordnen in die Welt, gesellschaftliche Konventionen, biologische Kategorien
+	\item Komplex, was definiert ein Objekt und Beziehungen ? $\to$ nie 100\% $\to$ Wahrscheinlichkeit
 \end{itemize}
 
-\begin{itemize}
-	\item Eine einfache Form der Klassifikation ist Template Matching
-	\item Ziel: Ein Muster zu erkennen das einem abgespeicherten Beispiel ähnlich ist.
-	\item Maß der Übereinstimmung zwischen Muster und Schablone zentriert an (m,n) muss maximiert werden
-	$M_{f,g}(m,n)=\sum_i\sum_j f(i,j)g(i-m,j-n)$
-\end{itemize}
 
-Pattern Recognition Overview
+\textbf{Pattern Recognition Overview}
 \begin{itemize}
-	\item Static Patterns, no dependence on Time or Sequential Order
-	\item Important Notions
+	\item Static Patterns (no time / order dependence)
 	\begin{itemize}
 		\item Supervised - Unsupervised
 		\item Parametric - Non-Parametric
 		\item Linear - Non-linear
 	\end{itemize}
-	\item Classical Methods
-	\begin{itemize}
-		\item Bayes Classifier
-		\item k-nearest neighbor
-	\end{itemize}
-	\item Connectionist Methods
-	\begin{itemize}
-		\item Perceptron
-		\item Multilayer Perceptrons
-	\end{itemize}
+	\item \textbf{Classical Methods:} Bayes Classifier, k-nearest neigbhor
+	\item \textbf{Connectionist Methods:} (Multilayer) Perceptron
 \end{itemize}
+
+\begin{description}
+\item[Supervised Training] Klassen in Trainingsdaten (a priori) bekannt
+\item[Unsupervised Training] Klassen nicht bekannt, Struktur  muss automatisch herausgefunden werden ($\to$ Clustering, Deep Learning)
+\item[Parametric] Existenz einer Verteilungsfkt annehmen, Parameter abschätzen ($\to$ Gauss Klassifikation)
+\item[Non-Parametric] Keine Verteilungsfkt, Fehler direkt aus Trainingsdaten ($\to$ $k$-nearest neighbor, Perzeptron)
+\end{description}
 
 \section{Schablonenanpassung\index{Schablonenanpassung} (\textsl{Template Matching})}
 \begin{itemize}
-\item Eine einfache Form der Klassifikation.
-\item Ziel: Ein Muster zu erkennen das einem abgespeicherten Beispiel ähnlich ist.
-\item Maß der Übereinstimmung ist der Absolutbetrag zwischen Muster und Schablone (zentriert an $(m,n)$): $$M_{f,g}(m,n) = \sum\limits_i \sum\limits_j | f(i,j) g(i-m,j-n)|$$
-\item Abstand $E(m,n)$ ist definiert als Quadrat der Kreuzkorrelation: $$E_{f,g} (m,n) = \left( \sum\limits_i \sum\limits_j f(i,j) g(i-m,j-n) \right)^2$$
-\end{itemize}
-
-\section{Supervised -- Unsupervised Training}
-
-\begin{description}
-\item[Supervised Training] Die zu erkenndende Klasse ist für jede Auswahl in den Trainingsdaten bekannt. Benötigt a priori Wissen von nützlichen Eigenschaften und Kenntnis / Bezeichnung von jedem Trainingsmerkmal (Kosten!).
-\item[Unsupervised Training] Die Klasse ist nicht bekannt und die Struktur muss automatisch herausgefunden werden.
-\end{description}
-
-\section{Parametrisch -- Nicht-parametrisch}
-
-Parametrisch:
-\begin{itemize}
-\item grundlegende Aufteilungswahrscheinlichkeit annehmen
-\item Parameter der Aufteilung abschätzen
-\item Beispiel: "{}Gauss Klassifikation"{}
-\end{itemize}
-Nicht-parametrisch:
-\begin{itemize}
-\item keine Aufteilung annehmen
-\item Fehlerwahrscheinlichkeit oder Fehlerkriterium direkt aus den Trainingsdaten berechnen
-\item Beispiele: Parzen Fenster, $k$-nächster Nachbar, Perzeptron
+\item Ähnlichkeit zum abgespeicherten Beispiel erkennen
+\item Maß der Übereinstimmung ist der Absolutbetrag zwischen Muster und Schablone (zentriert an $(m,n)$): $$M_{f,g}(m,n) = \sum\limits_i \sum\limits_j f(i,j) g(i-m,j-n)$$
+\item Abstand $E(m,n)$ ist definiert als Quadrat der Kreuzkorrelation: $$E_{f,g} (m,n) = M_{f,g}^2(m,n)$$
+\item Normalisieren der Helligkeit $$M_{f,g}(m,n) = \frac{1}{(N - 1) \sigma_f \sigma_g} \sum_i \sum_j (f(i,j) - \textit{\=f})(g(i-m, j-n) - \textit{\=g})$$
 \end{itemize}
 
 
 \section{Bayes Entscheidungstheorie}
 
 Bayes Regel\index{Bayes Regel}: $$P(\omega_j | x) = \frac{p(x | \omega_j) P(\omega_j)}{p(x)} \quad \textrm{wobei} \quad p(x) = \sum\limits_{j} p(x | \omega_j) P(\omega_j)$$
-A priori Wahrscheinlichkeit: $$P(\omega_j)$$
-A posteriori Wahrscheinlichkeit: $$P(\omega_j | x)$$
+A priori / posteriori Wahrscheinlichkeit: $$P(\omega_j) / P(\omega_j | x)$$
 Klassenbedingte Wahrscheinlichkeitsdichte: $$p(x | \omega_j)$$
 
-\section{Zwei Klassen Fall}
+\subsection{Zwei Klassen Fall}
 
 $$P(error | x) = \left\{ \begin{array}{cl} P(\omega_1 | x) & \textrm{wenn wir uns für } \omega_2 \textrm{ entscheiden} \\ P(\omega_2 | x) & \textrm{sonst} \end{array} \right.$$
 Der Fehler ist minimiert, wenn wir uns entscheiden für:
@@ -95,7 +55,7 @@ Mehr Klassen:
 \item $\omega_i$ wenn $P(\omega_i | x) > P(\omega_j | x)$ für alle $i \not= j$
 \end{itemize}
 
-\section{Klassifizierende Diskriminanzfunktionen}
+\section{Klassifizierende Diskriminantenfunktionen}
 
 $$g_i(x) \quad , \quad i = 1, \dots, c$$
 Ordne $x$ der Klasse $\omega_i$ zu, wenn $g_i(x) > g_j(x)$ für alle $j \not= i$
@@ -106,21 +66,13 @@ g_i(x) &=& \log(p(x | \omega_i)) + \log(P(\omega_i))
 
 \section{Classifier Design in Practice}
 \begin{itemize}
-	\item Need a priori probability $P(\omega_i)$ (not too bad)
-	\item Need class conditional PDF $p(x/\omega_i)$
-	\item Problems:
+	\item Need a priori probability $P(\omega_i)$ (not too bad), class conditional PDF $p(x/\omega_i)$
 	\begin{itemize}
-		\item limited training data
-		\item limited computation
-		\item class-labelling potentially costly and errorful
-		\item classes may noat be known
+		\item limited training data / computation
+		\item class-labelling potentially costly and errorful or unknown
 		\item good features not known
 	\end{itemize}
-	\item Parametric Solution
-	\begin{itemize}
-		\item Assume that $p(x/\omega_i)$ has a particular prametric form
-		\item Most common representative: multivariate normal density
-	\end{itemize}
+	\item Parametric Solution $\to$ assume $p(x/\omega_i)$ has a particular parametric form (commonly multivariante normal)
 \end{itemize}
 
 \section{Gauss Klassifizierer\index{Gauss Klassifizierer}}
@@ -128,44 +80,37 @@ g_i(x) &=& \log(p(x | \omega_i)) + \log(P(\omega_i))
 Eindimensionale Normaldichte: $$p(x) = \frac{1}{\sqrt{2\pi} \sigma} e^{- \frac{1}{2} \left( \frac{\myvector{x} - \myvector{\mu}}{\sigma} \right)^2} \sim N(\myvector{\mu},\sigma^2)$$
 Mehrdimensionale Dichte: $$p(x) = \frac{1}{(2\pi)^{d/2}|\Sigma|^{1/2}}e^{- \frac{1}{2} ( \myvector{x} - \myvector{\mu})^t \Sigma^{-1} (\myvector{x} - \myvector{\mu}) } \sim N(\myvector{\mu},\Sigma)$$
 $$g_i(x) = - \frac{1}{2} (x - \mu_i)^t \sum_i^{-1} (x - \mu_i) - \frac{d}{2} \log(2\pi) - \frac{1}{2} \log|\Sigma_i| + \log P(\omega_i)$$
-Für jede Klasse $i$ muss folgendes aus den Trainingsdaten berechnet werden:
+Für jede Klasse $i$ berechne aus Trainigsdaten:
 \begin{itemize}
-\item Kovarianz-Matrix $\Sigma_i$ \item Mittelwertsvektor $\myvector{\mu_i}$
+\item Kovarianz-Matrix $\Sigma_i$, Mittelwertsvektor $\myvector{\mu_i}$
 \end{itemize}
 \textbf{Schätzung der Parameter}
 \begin{itemize}
-\item MLE, Maximum Likelihood Estimation
-\item Für den mehrdimensionalen Fall:
+\item MLE, Maximum Likelihood Estimation:
 $$\myvector{\mu} = \frac{1}{N} \sum\limits_{k=1}^N \myvector{x_k}$$ $$\Sigma = \frac{1}{N} \sum\limits_{k=1}^N (\myvector{x_k} - \myvector{\mu})(\myvector{x_k} - \myvector{\mu})^T$$
 \end{itemize}
 
 \section{Probleme beim Klassifikationsentwurf}
 
-Merkmale:
-\begin{itemize}
-\item Welche und wie viele Merkmale sollten gewählt werden?
-\item Beliebige Merkmale?
-\item Je mehr desto besser?
-\item Wenn zusätzliche Merkmale nicht nützlich sind, sollen sie dann automatisch ignoriert werden?
-\end{itemize}
-\textbf{Der Unsegen der Dimensionalität}
-\begin{itemize}
-\item Allgemein gilt: das Hinzufügen von Eigenschaften verschlechtert die Performance!
-\item Grund: Trainingsdaten vs. Anzahl der Parameter; beschränkte Trainingsdaten
-\item Lösung: Eigenschaften sorgfältig wählen; Dimension verringern; Principle Component Analysis
-\end{itemize}
+\begin{description}
+	\item[Merkmale] Welche, wie viele, sollen welche ignoriert werden?
+	\item[Fluch der Dimensionalität] Mehr Eigenschaften $\to$ schlechtere Performance (da beschränkte Trainingsdaten) $\to$ gute Wahl, Dimensionen verringern, PCA
+\end{description}
 
 \section{Principal Component Analysis (PCA)}
 \begin{itemize}
 	\item Assumption: Single dimensions are correlated
-	\item Aim: Reduce number of dimensions with minimum loss of information
-	\item Remove dimensions with low variance
+	\item Aim: reduce dimensions, minimum information loss
+	\begin{enumerate}
+		\item find axis along highest variance, rotate along this
+		\item remove dimension with low variance
+	\end{enumerate}
 \end{itemize}
 
-\section{Risiko}
+\subsection{Risiko}
 
 \begin{itemize}
-\item Es kann zu Entscheidungsverweigerungen kommen in mehrdeutigen Fälle ($\to$ Bandbreite)
+\item Entscheidungsverweigerungen in mehrdeutigen Fälle ($\to$ Bandbreite)
 \item Bewerte die Kosten für jede Entscheidung (etwas Kostenaufwendiger als anders) $$\Omega = \{ \omega_1, \dots, \omega_s \} \,\, s \textrm{ Zustände der Eigenschaften}$$ $$A = \{ \alpha_1, \dots, \alpha_a \} a \textrm{ mögliche Aktionen}$$
 \end{itemize}
 
@@ -190,34 +135,28 @@ R(\alpha_2 | \myvector{x}) &=& \lambda_{21} P(\omega | \myvector{x}) + \lambda_{
 
 \section{Minimum Error Rate Classification}
 \begin{itemize}
-	\item Decision rule to minimize error rate
-	\item Define zero-one loss function
-	\item $\lambda(\alpha_i|\omega_j)=\left\{
+	\item Define zero-one loss function $$\lambda(\alpha_i|\omega_j)=\left\{
 	\begin{array}{c}
 		0 : i=j \\
 		1 : i\neq j
 	\end{array}\right\} i,j=1...c
-	$
-	\item $R(\alpha_i|\vec{x})=\sum^{c}_{j=1}\lambda(\alpha_i|\omega_j)p(\omega_j|\vec{x})$
-	\item $=\sum_{j\neq i}p(\omega_j|\vec{x})=1-p(\omega_i|\vec{x})$
-	\item To minimize risk and the average probability of error, select i that maximizes posterior $p(\omega_i|\vec{x})$
-	\item Decide $\omega_i$ if $p(\omega_i|\vec{x})>p(\omega_j|\vec{x})$ for all $j\neq i$
-	\item Normal distribution does not model this situation well
-	\item other densities may be mathematically intractable -> non-parametric techniques
+	$$
+	\item $R(\alpha_i|\vec{x})=1-p(\omega_i|\vec{x})$
+	\item select i that maximizes posterior $p(\omega_i|\vec{x})$ $\to$ minimize risk/error
+	\item decide $\omega_i$ if $p(\omega_i|\vec{x})>p(\omega_j|\vec{x})$ for all $j\neq i$
+	\item non parametric better here !
 \end{itemize}
 
-\section{Parzen Fenster}
+\section{Parzen Fenster (Non Parametric)}
 
-Es werden keine Annahmen über die Verteilung gemacht, stattdessen wird $p(x)$ direkt aus den Daten geschätzt.
+$p(x)$ direkt aus den Daten geschätzt
 \begin{itemize}
-\item wähle ein Fenster mit dem Volumen $V$
-\item zähle die Anzahl Samples, die in das Fenster fallen
-\item $p(x) \thickapprox \frac{k/n}{V}$, $k = $ Anzahl, $n = $ Anzahl Samples
+\item wähle ein Fenster mit dem Volumen $V$, zähle Samples die hineinfallen\item $p(x) \thickapprox \frac{k/n}{V}$, $k = $ Anzahl, $n = $ Anzahl Samples
 \end{itemize}
 Probleme:
 \begin{itemize}
-\item Volumen zu groß \\ $\Rightarrow$ Auflösung geht verloren
-\item Volumen zu klein \\ $\Rightarrow$ unbeständig, schlechte Abschätzung
+\item Volumen zu groß $\Rightarrow$ Auflösung geht verloren
+\item Volumen zu klein $\Rightarrow$ unbeständig, schlechte Abschätzung
 \end{itemize}
 Setze $$V_n = \frac{1}{\sqrt{n}}$$
 
