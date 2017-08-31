@@ -2,24 +2,55 @@
 
 \chapter{Spracherkennung}
 
+\subsection{Menschliche Stimme}
+
+Lung $\rightarrow$ Larynx $\rightarrow$ Vocal tract $\rightarrow$ Radiation $\rightarrow$ Speech! \\
+excitation in Lung, Larynx \\
+articulation in Larynx, Vocal tract (Motor controls) \\
+Vocal tract $\rightarrow$ Transferfunction (Formant = Resonanzfrequenz dieser Funktion) \\
+consonants = temporarely constrict airflow
+
+\subsection{Menschmodell}
+
+\mypic{10}{speech2}
+
 \subsection{Spracherkennungssystem}
 
 \mypic{10}{speech1}
 
-%Erkennungsprozess:
+\begin{description}
+	\item[Vorverarbeitung] reduce data, noise, filter etc.\\ typically AA, ADC, Windowing, FFT, Power-Spectrum, ...
+	\item[Nonlinear Alignment] for varying speaking rates during same utterance
+	\item[Speech Alignment] is a relation, non bijective
+	\item[Time Warp] is a relation that aligns reference and windowed input (common time axis)
+	\item[Decoder] Find most likely word sequence through acoustic scores \underline{and} language model constraints :\\
+	States -(Acoustic Models)-> Phonems -(Dictionary)-> Words -(Language Models)-> Sentences
+\end{description}
 
-%\begin{center}
-%\includegraphics[width=10cm]{pics/erkennung.eps}
-%\end{center}
+\subsection*{Erfasste Erkennungsperformance}
+
+Wortfehlerrate\index{Wortfehlerrate} = Levenstein Distanz
+
+$$WER = \frac{\# Ins + \# Del + \# Sub}{N}$$
 
 \subsection{Erkennung}
 
 \begin{description}
 \item[gegeben:] akustische Daten $A = a_1,a_2,\dots,a_k$
-\item[Ziel:] Wortsequenz $W = w_1,w_2,\dots,w_n$ finden, so dass $\myprob{W}{A}$ miximiert wird.
+\item[Ziel:] Wortsequenz $W = w_1,w_2,\dots,w_n$ finden, so dass $\myprob{W}{A}$ maximiert wird.
 \end{description}
 
+$$W = \textit{argmax}_W P(W|A) = \frac{P(A|W) P(W)}{P(A)} = \textit{argmax}_W p(A|W) P(W)$$
+
 Wiederholung: \textbf{Bayes Regel}\index{Bayes Regel} $$\myprob{W}{A} = \frac{\myprob{A}{W} \cdot P(W)}{P(A)}$$ wobei $\myprob{A}{W}$ : akustisches Modell (HMM), $P(W)$ : Sprachmodell, $P(A)$ : Konstante für einen kompletten Satz
+
+Language models:
+\begin{itemize}
+	\item $P(W) = P(w_1 w_2 ...) = P(w_1) P(w_2|w_1) P(w_3|w_1w_2)...$
+	\item $P(W|history)$ not possible. On the fly to expensive, or reduce history to class of history $C(\textit{history})$ (Bigram etc)
+	\item deterministic: finite state grammars OR
+	\item stochastic: transition probabilities (HMM)
+\end{itemize}
 
 \subsection{Hidden Markov Modelle\index{Hidden Markov Modelle} (HMM)}
 
@@ -108,8 +139,7 @@ Speicher jedes Maximum für die Ablaufverfolgung am Ende.
 \item Trainiere Parameter vom Hidden Markov Modell
 \begin{itemize}
 \item $\lambda$ einstellen, um $\myprob{O}{\lambda}$ zu maximieren
-\item kein effizienter Algorithmus für das globale Optimum
-\item ein effizienter iterativer Algorithmus findet das lokale Optimum
+\item kein effizienter Algorithmus für das globale, aber iterativ zum lokalen Optimum
 \end{itemize}
 \item Viterbi-Training
 \begin{itemize}
@@ -119,7 +149,7 @@ Speicher jedes Maximum für die Ablaufverfolgung am Ende.
 \item Baum-Welch\index{Baum-Welch} (Forward-Backward)
 \begin{itemize}
 \item berechne Wahrscheinlichkeiten mittels aktuellem Modell
-\item Filtere $\lambda \to \lambda$ basierend auf den berechneten Weten
+\item Filtere $\lambda \to \lambda$ basierend auf den berechneten Werten
 \item benutze $\alpha$ und $\beta$ vom Forward-Backward
 \end{itemize}
 \end{itemize}
@@ -153,7 +183,7 @@ Es kann gezeigt werden, dass $\myprob{O}{\overline{\lambda}} > \myprob{O}{\lambd
 
 \subsection{Sprachmodelle}
 
-\subsubsection*{Bassierend auf die Grammatik}
+\subsubsection*{Basierend auf Grammatik}
 
 \begin{itemize}
 \item Bestimme Grammatik für mögliche Satzmuster
@@ -169,17 +199,23 @@ Es kann gezeigt werden, dass $\myprob{O}{\overline{\lambda}} > \myprob{O}{\lambd
 \item alles vor Wort $w_{i-n+1}$ wird in eine Äquivalenzklasse plaziert
 \item schliesslich ist die Wahrscheinlichkeit für das nächste Wort gegeben durch
 \begin{itemize}
-\item Trigram: $\myprob{w_i}{w_{i-1} \, , \, w_{i-2}}$
-\item Bigram: $\myprob{w_i}{w_{i-1}}$
+\item Trigram: $\myprob{w_i}{w_{i-1} \, , \, w_{i-2}}$ \\ große Historie nötig, mit zeitasynchroner Suche (nur beste Vorgänger testen), außerdem: Testdatencoverage kleiner als mit Bigram
+\item Bigram: $\myprob{w_i}{w_{i-1}}$ \\ einfach in HMM model einzupflegen
 \item Unigram: $P(w_i)$
 \end{itemize}
 \item Vorteile:
 \begin{itemize}
-\item trainierbar auf großen Textdatenbanken
-\item "{}milde"{} Vorhersage
+\item trainierbar auf großen Textdatenbanken, "{}milde"{} Vorhersage
 \item kann direkt kombiniert werden mit einem Akustikmodell
 \end{itemize}
 \item Problem: benötigt eine große Textdatenbank für jedes Gebiet
+\end{itemize}
+
+Interpolation/Smoothing von NGrammen
+\begin{itemize}
+	\item $P(W|\textit{history}) = \frac{|history w|}{|history|}$ normal mit Trainigsdaten
+	\item Wenn N Gramme nicht vorkommen ? Seltene ? $\to$ schätze seltene N Gramme mit sehr robusten N Grammen
+	\item $P(w_3 | w_1 w_2) = \lambda_1 \frac{|w_1 w_2 w_3|}{|w_1 w_2|} + \lambda_2 \frac{|w_1 w_2|}{|w_1|} + \lambda_3 \frac{|w_1|}{|w_1| + |w_2| + |w_3|}$
 \end{itemize}
 
 \subsubsection*{Objektive Bewertung der Qualität von Sprachmodellen}
@@ -193,11 +229,32 @@ $$Q(w_i \, | \, \Psi(w_1,\dots,w_{i-1})) = \frac{1}{V}$$ und $$2^{\hat{H}(W)} = 
 Also definieren wir die Perplexität\index{Perplexität} eines Sprachmodells folgendermaßen: $$PP(W) = 2^{\hat{H}(W)}$$
 und interpretieren sie als "{}Abzweigungsfaktor"{} der Sprache, wenn $\Psi$ gegeben ist.
 
-\subsubsection*{Erfasste Erkennungsperformance}
+\subsubsection{Natural Language Processing}
 
-Wortfehlerrate\index{Wortfehlerrate}
+\begin{description}
+	\item[Voice Agents] intelligent, kontext / emotionsbasierte Antworten
+	\item[Approach] Statistisch vs. Handdefinierte Grammatiken, $\to$ Statistik, Data is cheaper
+	\item[Alignment] in verschiedenen Sprachen, Anordnung und Korrelation der Wörter
+\end{description}
 
-$$WER = \frac{\# Ins + \# Del + \# Sub}{N}$$
+\begin{itemize}
+	\item Interlingua \\
+	Schwer, aber weniger Translator nötig, schnelle Addition von Sprachen, Kontextuell und kulturell korrekte Übersetzungen
+	\item Transfer based
+	\item Direct (example based or statistical)
+\end{itemize}
+
+\subsubsection{SMT Tasks}
+
+\begin{description}
+	\item[Why likelyhood?]: improve, smaller searchspace
+\end{description}
+\begin{itemize}
+	\item Modeling: statistical models for translation equivalence like word alignment models or phrase translation
+	\item Training
+	\item Decoding: find best translation according to current models
+\end{itemize}
+
 
 
 
