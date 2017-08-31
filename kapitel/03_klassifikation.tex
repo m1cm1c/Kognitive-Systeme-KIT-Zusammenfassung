@@ -169,15 +169,6 @@ Setze $$k = \sqrt{n}$$ Um Sample $x$ zu klassifizieren:
 \end{itemize}
 Trainingsdatenbanken müssen groß sein.
 
-\section{Entscheidungsfunktion $g(x)$}
-
-\begin{eqnarray*}
-g(\myvector{x}) > 0 &\Rightarrow& \textrm{Klasse A} \\ g(\myvector{x}) < 0 &\Rightarrow& \textrm{nicht Klasse A} \\ g(\myvector{x}) = 0 &\Rightarrow& \textrm{keine Entscheidung}
-\end{eqnarray*}
-$$g(\myvector{x}) = \sum\limits_{i=1}^n w_1x_1 + w_0 = \myvector{w}^T \myvector{x} + w_0$$
-$\myvector{x} = (x_1,\dots,x_n)^T$ : Eigenschaftsvektor, $\myvector{w} = (w_1,\dots,w_n)^T$ : Gewichtungsvektor, $w_0$ : Schwellenwert
-
-
 \section{Lineare Diskriminantenfunktionen (Non-Parametric, Supervised)}
 
 \begin{itemize}
