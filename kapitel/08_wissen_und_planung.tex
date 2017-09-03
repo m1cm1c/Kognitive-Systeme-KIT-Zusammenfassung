@@ -7,15 +7,11 @@
 \subsubsection*{Was ist Wissen?}
 Gespeicherte
 \begin{itemize}
-\item Beschreibungen, Modelle, Aktionsfolgen
-\item Vorschriften zur Reaktion auf Ereignisse
-\item Motorische, kognitive Fähigkeiten
+\item Beschreibungen, Modelle, Vorschriften, Motorische, kognitive Fähigkeiten
 \end{itemize}
 konkreter:
 \begin{itemize}
-\item Computerprogramme
-\item Regeln der Aussagenlogik
-\item Gewichte von Neuronalen Netzen, \dots
+\item Computerprogramme, Regeln der Aussagenlogik, Gewichte von Neuronalen Netzen, \dots
 \end{itemize}
 
 \subsection{Grundlagen}
@@ -23,10 +19,13 @@ konkreter:
 % Bild Folie 8
 \mypic{6}{wb1}
 
-Eine Wissensdatenbank\index{Wissensdatenbank} besteht aus Sätzen, die in einer Wissensrepräsentationssprache abgefasst sind. Jeder Satz stellt eine Annahme über die Welt dar:
+\begin{description}
+	\item[Wissensdatenbank\index{Wissensdatenbank}] Sätze (Annahmen), die in einer Wissensrepräsentationssprache abgefasst sind.
+\end{description}
+
 \begin{center}
 \begin{tabular}{ll}
-$\alpha$: & "{}\textbf{Ident1} IST-EIN Fahrrad."{} \\ $\beta$: & "{}\textbf{Ident2} IST-EIN Mensch."{} \\ $\gamma$: & "{}\textbf{Ident3} BESITZT Ident1."{} oder \\ $\alpha$: & "{}$r \in R^{20}$."{}
+$\alpha$: & "{}\textbf{Ident1} IST-EIN Fahrrad."{} \\  $\gamma$: & "{}\textbf{Ident3} BESITZT Ident1."{} oder \\ $\alpha$: & "{}$r \in R^{20}$."{}
 \end{tabular}
 \end{center}
 
@@ -37,12 +36,6 @@ $\alpha$: & "{}\textbf{Ident1} IST-EIN Fahrrad."{} \\ $\beta$: & "{}\textbf{Iden
 \item[Erkläre:] Füge der Datenbank Wissen hinzu.
 \item[Befrage:] Frage Wissen aus Datenbank ab.
 \end{description}
-\begin{center}
-\begin{tabular}{|c|}
-\hline
-Erkläre(DB, "{}Ident1 BESITZT Ident2."{}) \\ $\to$ OK \\ Befrage(DB, "{}Was BESITZT Ident2?"{}) \\ $\to$ Ident1 \\ \hline
-\end{tabular}
-\end{center}
 
 % Bild Folie 10
 \mypic{8}{wb3}
@@ -53,53 +46,16 @@ Erkläre(DB, "{}Ident1 BESITZT Ident2."{}) \\ $\to$ OK \\ Befrage(DB, "{}Was BES
 
 \subsection{Logik allgemein}
 
-Eine allgemeine Logik besteht aus einer Symbolmenge, einer Belegungsmenge, einer Syntax, einer Semantik, einem Folgerungsoperator $\models$ und den elementaren Aussagen wahr und falsch.
-
-\begin{itemize}
-\item Elementarwerte für Aussagen: wahr, falsch
-\item Symbolmenge $S$: enthält alle Symbole, über die Aussagen gemacht werden können.
-\item Belegung/Modell: Zuweisung eines Wertes jedem Symbol d.h. eine Menge von Paaren $(s_i,w_i)$ von Symbolen \\ $s_i \in S$ mit zugeordneten Werten, $w_i \in Def(s_i)$
-\item Belegungsmenge $M$: Menge aller gültigen Belegungen
-\end{itemize}
-
-\textbf{\textsl{Beispiel: Aussagenlogik}}
-\begin{eqnarray*}
-S &=& \{a,b\} \\ M &=& \{ \{ (a,wahr),(b,wahr) \} , \\ && \,\,\, \{ (a,wahr),(b,falsch)\} , \\ && \,\,\, \{ (a,falsch),(b,wahr) \} , \\ && \,\,\, \{ (a,falsch) , (b,falsch) \} \}
-\end{eqnarray*}
-Schreibweise: lateinische Buchstaben für Symbole, griechische Buchstaben für Sätze
-
 \begin{description}
-\item[Syntax\index{Syntax}:] Legt fest, welche Sätze wohlgeformt sind.
+	\item[allg. Logik] Elementarwerte, Symbolmenge, Belegungsmenge (alle gültigen Belegungen), Belegung/Modell, Syntax (legt fest, was wohlgeformt ist), Semantik (legt fest, welche Wahrheitswerte bei gegebener Belegung zugewiesen werden)
 \end{description}
-Nur wohlgeformte Sätze sind gültig!
-\begin{center}
-\begin{tabular}{|r @{$\, \Rightarrow \,$}l @{\quad} l|}
-\hline
-$(a \vee b)$ & $c$ & wohlgeformt \\
-$()a \vee$ & $bc$ & nicht wohlgeformt \\ \hline
-\end{tabular}
-\end{center}
-
-
-\begin{description}
-\item[Semantik\index{Semantik}:] Beschreibt wie einem gegebenen Satz der Logik ein Wahrheitswert zugeordnet wird. Das kann immer dann geschehen, wenn eine Belegung gewählt wurde, d.h. unter jeder Belegung hat ein logischer Satz einen durch die Semantik eindeutig definierten Wahrheitswert, ist also entweder wahr oder falsch.
-\end{description}
-\begin{eqnarray*}
-\textrm{Satz } \alpha &=& (a \wedge b) \Rightarrow c \\ \textrm{Modell } M &=& \{ (a,wahr) , (b,wahr) , (c,wahr) \} \\ &\Rightarrow& \alpha / M \,\, wahr \, , \, M \textrm{ erfüllt } \alpha \\
-\textrm{Modell } M &=& \{ (a,wahr) , (b,wahr) , (c,falsch) \} \\ &\Rightarrow& \alpha / M \,\, falsch
-\end{eqnarray*}
 
 \subsubsection*{Folgerung $\models$}
 
-$$\alpha \models \beta \, : \, \textrm{"{}} \beta \textrm{ folgt aus } \alpha \textrm{"{}}$$
-$\alpha \models \beta$ genau dann, wenn für alle Modelle, in denen $\alpha$ wahr ist, $\beta$ ebenfalls wahr ist.
-$$\alpha \, : \, x+y=4 \qquad \beta_1 \, : \, y = 4-x \qquad \beta_2 \, : \, \frac{x}{y} = 1 \quad \Rightarrow \quad \alpha \models \beta_1 \qquad \alpha \not\models \beta_2$$
+$$\alpha \models \beta \, : \, \textrm{"{}} \beta \textrm{ folgt aus } \alpha \textrm{ oder für alle Modelle, in denen } \alpha \textrm{ wahr ist, ist } \beta \textrm{ ebenfalls wahr}$$
 
 \subsubsection*{Wissensbasis}
 Kann als $\wedge$-verknüpfte Sequenz von Sätzen aufgefasst werden:
-$$WB \, : \, \left\{ \begin{array}{r @{\, : \,} r @{\, = \,} l} \alpha_1 & x+y & 4 \\ \alpha_2 & x/y & 1 \end{array} \right\}$$
-$\Rightarrow$ $WB = \alpha_1 \wedge \alpha_2$ $wahr$ $\forall M \, : \, x=2, \, y=2$ \\
-$\Rightarrow$ $M$ erfüllt $WB$ $\forall M \, : \, x=2, \, y=2$ \\
 $$WB \models \beta \quad \textrm{ genau dann wenn } \quad \left( \bigwedge\limits_{\alpha_i \in WB} \alpha_i \right) \Rightarrow \beta = wahr$$
 
 \subsubsection*{Modellprüfung}
@@ -123,30 +79,12 @@ Eigenschaften von Deduktionsalgorithmen:
 
 \subsubsection*{Zusammenfassung}
 
-Eine Logik:
-\begin{itemize}
-\item bestimmt den Wahrheitsgehalt von Sätzen in Bezug auf Modelle
-\item besteht aus Symbolmenge, Modellmenge, Syntax, Semantik, Folgerung
-\end{itemize}
-Eine Wissensbasis:
-\begin{itemize}
-\item besteht aus einer Menge von Sätzen
-\item passt zu einem Modell $M$ (oder auch nicht)
-\end{itemize}
-Ein Deduktions-Algorithmus
-\begin{itemize}
-\item leitet Sätze aus einer Wissensbasis ab
-\item kann korrekt und / oder vollständig sein
-\end{itemize}
+\begin{description}
+	\item[Logik] bestimmt Wahrheitsgehalt von Sätzen in Bezug auf Modelle
+	\item[Wissensbasis] Menge von Sätzen das zu einem Modell passt oder nicht
+\end{description}
 
 \section{Aussagenlogik}
-
-\begin{itemize}
-\item Aussagenlogik als Beispiel einer sehr einfachen Logik
-\item sehr alt (antikes Griechenland)
-\item bildet die Basis, von der die allgemeine Logik abgeleitet wurde
-\item eignet sich sehr "{}natürlich"{} zur Illustration bestimmter Konzepte
-\end{itemize}
 
 \subsection{Syntax}
 
@@ -158,30 +96,31 @@ Komplex &\to& \neg Satz \, | \, (Satz \wedge Satz) \, | \, (Satz \vee Satz) \, |
 \subsubsection*{Semantik}
 Wahrheitsgehalt im Modell $M$:
 \begin{enumerate}
-\item $True = wahr$, $False = falsch$ $\forall M$
-\item Wahrheitsgehalt von Symbolen wird in $M$ spezifiziert
+\item $True = wahr$, $False = falsch$ $\forall M$, wird für alle Symbole in $M$ spezifiziert
 \item Wahrheitsgehalt aller anderen Sätze rekursiv:
-\begin{enumerate}
-\item $\forall$ Sätze $\alpha$ $\forall$ Modelle $M$ : $\neg \alpha$ $falsch$ gdw $\alpha \in M$ $wahr$
-\item $\forall \alpha,\beta \, \forall M \, : \, \alpha \wedge \beta \,\, wahr$ gdw $\alpha \in M \,\, wahr$ und $\beta \in M \,\, wahr$
-\item etc.
-\end{enumerate}
-(Alternative: Wahrheitstabelle)
 \end{enumerate}
 
-\subsection{Muster}
+\subsection{Begriffe}
 
-Allgemeingültige Deduktionsregeln aus der klassischen Literatur:
-\begin{itemize}
-\item \textbf{Modus Ponens\index{Modus Ponens}:} \\ Wenn $\alpha \Rightarrow \beta$ und $\alpha$ gegeben sind, kann $\beta$ inferiert werden. $$\frac{\alpha \Rightarrow \beta \, , \, \alpha}{\beta}$$
-\item \textbf{Und-Elimination\index{Und-Elimination}:} $$\frac{\alpha \wedge \beta}{\alpha} \qquad \frac{\alpha \wedge \beta}{\beta}$$ Aus einer Konjunktion kann jedes der Elemente inferiert werden. \\ Korrektheitsbeweis aus Wahrheitstabelle!
-\end{itemize}
+\begin{description}
+	\item[Literal]
+	\item[Disjunktion]
+	\item[Konjunktion]
+	\item[KNF] und-verknüpfte Disjunktionen
+	\item[DNF] oder-verknüpfte Konjunktionen
+\end{description}
 
-\subsection{Resolution\index{Resolution}}
+\subsection{Deduktionsalgorithmen}
 
-Basis für Deduktionsalgorithmen \\
-\textbf{Einheits-Resolutionsregel} (aus Modus Ponens): \\ Seien $p_1,\dots,p_k$ und $q$ Literale mit $q = \neg p_i$. Dann gilt: $$\frac{p_1 \vee \dots \vee p_k \, , \, q}{p_1 \vee \dots \vee p_{i-1} \vee p_{i+1} \vee \dots \vee p_k}$$
-\textbf{Allgemeine Form} der Resolutionsregel: \\ $p_1,\dots,p_k$ und $q_1,\dots,q_n$ Literale mit $p_i = \neg q_j$. Dann gilt: $$\frac{p_1 \vee \dots \vee p_k \, , \, q_1 \vee \dots \vee q_n}{p_1 \vee \dots \vee p_{i-1} \vee p_{i+1} \vee \dots \vee p_k \vee q_1 \vee \dots \vee q_{j-1} \vee q_{j+1} \vee \dots \vee q_n}$$
+\subsubsection{Resolution}
+
+\begin{description}
+	\item[Modus Ponens] $$\frac{\alpha \Rightarrow \beta \, , \, \alpha}{\beta}$$
+	\item[Und-Elimination] $$\frac{\alpha \wedge \beta}{\alpha} \qquad \frac{\alpha \wedge \beta}{\beta}$$
+	\item[Einheits-Resolution] Seien $p_1,\dots,p_k$ und $q$ Literale mit $q = \neg p_i$. Dann gilt: $$\frac{p_1 \vee \dots \vee p_k \, , \, q}{p_1 \vee \dots \vee p_{i-1} \vee p_{i+1} \vee \dots \vee p_k}$$
+	\item[Allg. Resolutionsregel] Seien $p_1,\dots,p_k$ und $q_1,\dots,q_n$ Literale mit $p_i = \neg q_j$. Dann gilt: $$\frac{p_1 \vee \dots \vee p_k \, , \, q_1 \vee \dots \vee q_n}{p_1 \vee \dots \vee p_{i-1} \vee p_{i+1} \vee \dots \vee p_k \vee q_1 \vee \dots \vee q_{j-1} \vee q_{j+1} \vee \dots \vee q_n}$$
+\end{description}
+
 Jeder vollständige Suchalgorithmus, kombiniert mit der Resolutionsregel,
 \begin{itemize}
 \item kann jede Schlussfolgerung ableiten, die aus jeder Wissensbasis der Aussagenlogik folgt.
@@ -190,8 +129,7 @@ Jeder vollständige Suchalgorithmus, kombiniert mit der Resolutionsregel,
 \end{itemize}
 Voraussetzung: Sätze müssen in konjunktiver Form vorliegen.
 \begin{description}
-\item[Klausel\index{Klausel}:] Eine Disjunktion von Literalen $$(l_1 \vee \dots \vee l_n)$$
-\item[Konjunktive Form (KF):] Jede aussagenlogische Formel kann als Konjunktion von Klauseln ausgedrückt werden. Dann liegt sie in konjunktiver Form vor: $$(l_{1,1} \vee \dots \vee l_{1,k_1}) \wedge \dots \wedge (l_{n,1} \vee \dots \vee l_{n,k_n})$$
+\item[Klausel\index{Klausel}:] Eine Disjunktion von Literalen $$(l_1 \vee \dots \vee l_n)$$, geschrieben als Menge.
 \end{description}
 
 \subsubsection{Resolutionsalgorithmus}
@@ -214,12 +152,6 @@ $neu$ $:=$ $\{\}$ \\
 Beispiel:
 % Bild Folie 34 (Block)
 \mypic{10}{bsp_resolution}
-
-Der Resolutionsalgorithmus ist vollständig aber auch sehr afwendig -- $O(n^2)$. Realistische Vereinfachungen:
-\begin{itemize}
-\item Horn-Klauseln (Prolog), Vorwärts-/Rückwärts-Verkettung
-\item Davis-Putnam-Logemann-Loveland (DPLL)
-\end{itemize}
 
 \subsection{Horn-Klausel}
 
