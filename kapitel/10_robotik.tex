@@ -1,0 +1,183 @@
+% !TeX root = summary.tex
+
+\section{Robotik\index{Robotik}}
+
+\subsection{Kognitives System}
+
+Kognition = Interpretation + Planung \\
+% Bild Folie 26
+\mypic{8}{kognitives_system}
+
+Computersystem mit aktorischer Komponente: "{}Roboter"{}
+
+\subsubsection{Probleme der Robotik}
+
+\begin{itemize}
+\item Kinematik: Bewegung, wie, wohin, möglich ?
+\item Dynamik: welche Geschwindigkeit, Kraft, Momentum, geht etwas kaputt?
+\item Konfigurations-, Hindernis-, Freiraum, Kollisionsvermeidung, \dots
+\end{itemize}
+
+\subsection{Mechanische Komponenten}
+
+\subsubsection{Gelenktypen}
+
+\begin{itemize}
+\item Rotationsgelenk $R$: Drehachse in $90\degree$ zu den Achsen der angeschlossenen Glieder.
+\item Torsionsgelenk $T$: Drehachse parallel zu den Achsen der angeschlossenen Glieder.
+\item Revolvergelenk $V$: Eingangsglied parallel, Ausgangsglied rechtwinklig zur Drehachse.
+\item Lineargelenk $L$: gleitende Bewegung entlang der Achse.
+\end{itemize}
+
+$\rightarrow$ Typ dann z.B TTL (vom Torso zum spezifischeren Gelenk)
+
+\subsubsection{Arbeitsraum}
+
+Anfahrbare Punkte in 3D ($\to$ mind. 3 Freiheitsgrade nötig) [Alle Gelenkwinkel berücksichtigen $\equiv$ Grundform]
+
+\subsubsection{Radkonfigurationen}
+
+\begin{description}
+	\item[Differentialantrieb] zwei parallele Räder, einfach aber Radregelung in Echtzeit
+	\item[Synchro-Drive] 3 Rad in dem alle Räder gleiche Richtung lenken, einfach, geradeaus garantiert aber mechanisch komplex
+	\item[Dreirad] einfach, aber eingeschränkte Mechanik
+	\item[Mecanum] 3 Rollen auf Kreisbahn, uneingeschränkt bewegbar aber komplexe Mechanik/Ansteuerung
+\end{description}
+
+\subsection{Antriebe}
+
+\begin{itemize}
+	\item Fluidisch: Linearantrieb / Schaufelrad, durch Einführen von Öl
+	\item Muskelartig: Agonist/Antagonist, pneumatisch (mit Druckluft), billig und einfach aber unpräzise und laut ($\to$ Roboter mit kleiner Kraft) \underline{oder} hydraulisch (mit Öl, große Kräfte, ok Geschwindigkeit, laut, verunreinigend, langsamer (große Roboter)
+	\item Elektrisch: Schritt / Servomotoren, kompakt, regelbar aber langsam, wenig Kraft (präzise Roboter) \\
+\end{itemize}
+
+\subsection{Getriebe}
+
+Elektromotor: elektrisch -(Magnetfeld, Stromdurchflossener Leiter)-> mechanisch, Eisenkern, Polaritätswechsel mechanisch oder Wechselstrom
+
+\subsection{Sensoren}
+
+Messen physikalischer Größen, Elementarsensor, integrierter Sensor (= Elementar + Aufbereitung), intelligenter Sensor (++ Vorverarbeitung und Auswertung)
+
+\begin{itemize}
+	\item Intern vs Extern
+	\item Aktiv (Energiezuführend, Ultraschall, Infrarot) und Passiv (kamera, Mikrofon)
+\end{itemize}
+
+\section{Robotermodellierung}
+
+Lösen der Probleme der Robotik mittels
+
+% Bild Folie 31
+\mypic{3}{roboter_modell}
+
+\subsubsection*{Geometrische Modellierung}
+
+\begin{itemize}
+\item dient als Grundlage zur Berechnung der Bewegung, Abstandsmessung, Kollisionserkennung, Kräfte, Momente
+\item graphische Darstellung
+\end{itemize}
+
+Komplexitätsstufen des geometrischen Modells:
+\begin{enumerate}
+\item Bounding-Box-Modell\index{Bounding-Box-Modell}
+\begin{itemize}
+\item einhüllende Quader ($\to$ erste Kollisionserkennung)
+\end{itemize}
+\item Kantenmodell\index{Kantenmodell}
+\begin{itemize}
+\item Polygonzüge ($\to$ schnelle Visualisierung)
+\end{itemize}
+\item Volumenmodell\index{Volumenmodell}
+\begin{itemize}
+\item genaue Darstellung ($\to$ genaue Kollisionserkennung)
+\end{itemize}
+\end{enumerate}
+
+\subsubsection*{Kinematische Modellierung}
+
+\begin{description}
+\item[Kinematisches Modell] + geometrisches Modell -> Stellung (also Gelenkwerte : Stellung Zusammenhang, Erreichbarkeit)
+\item[Kinematische Kette] mehrere mit Gelenk verbundene Körper
+\end{description}
+
+Iterative Aufstellung des kinematischen Modells. Für jedes Element Objekt-Koordinatensystem
+
+\begin{center}
+\begin{tabular}{l@{\,\,\,}l}
+Roboterbasis & OKS$_{Basis}$ \\
+Armelement 1 & OKS$_{Arm1}$ \\
+\vdots & \vdots \\
+Armelement 6 & OKS$_{Arm6}$
+\end{tabular}
+\end{center}
+Hom. Transformation verknüpfen OKS.
+
+\subsubsection*{Denavit-Hartenberg-Transformation}
+
+Die Transformation vom OKS des $i$-ten Armelements auf das OKS des $(i-1)$-ten Armelements erfolgt nach der \textbf{Denavit-Hartenberg (DH)-Konvention}\index{Denavit-Hartenberg-Konvention}:
+\begin{enumerate}
+\item[(a)] die Koordinatensysteme liegen in den Bewegungsachsen
+\item[(b)] die $z_{i-1}$-Achse liegt entlang der Drehachse des $i$-ten Armelements
+\item[(c)] die $x_i$-Achse steht senkrecht zur $z_{i-1}$-Achse und zeigt von ihr weg
+\item[(d)] die $y_i$-Achse bildet rechtshändiges Koordinatensystem
+\end{enumerate}
+($i \in \{ Basis, 1 , \dots , n \}$) \\[0,1cm]
+
+In Matrizenschreibweise lautet die Denavit-Hartenberg-Transformation (Bewegung) von $i-1$ auf $i$:
+\begin{eqnarray*}
+A_{i-1,i} &=& R_{z_{i-1}}(\theta_i) \cdot T_{z_{i-1}}(s_i) \cdot T_{x_i}(a_i) \cdot R_{x_i}(\alpha_i) \\
+&=& \left[ \begin{array}{cccc} \cos(\theta_i) & - \sin(\theta_i) \cdot \cos(\alpha_i) & \sin(\theta_i) \cdot \sin(\alpha_i) & a_i \cdot \cos(\theta_i) \\ \sin(\theta_i) & \cos(\theta_i) \cdot \cos(\alpha_i) & - \cos(\theta_i) \cdot \sin(\alpha_i) & a_i \cdot \sin(\theta_i) \\ 0 & \sin(\alpha_i) & \cos(\alpha_i) & s_i \\ 0 & 0 & 0 & 1 \end{array} \right]
+\end{eqnarray*}
+$\theta_i$ und $s_i$ variabel, abhängig von Bewegung und spezieller Geometrie. \\ $\alpha_i$ und $a_i$ dagegen sind invariante Größen, nur einmal berechnen.
+
+\subsection{Fall: Planung von Greifoperationen}
+
+\begin{itemize}
+	\item Griff kategorisierbar: Anwendungsgebiet, Objektform, $\dots$
+\end{itemize}
+$\rightarrow$ Cutkosky-Hierarchie, 16 einzelne Griffarten, Hierarchiebaum (Kraft/Präzision als Root)
+
+\begin{description}
+	\item[Greifarten] Greifen/Loslassen, An/Abrücken ohne/mit Objekt, Verbinden, Transferbewegung
+	\item[Griffgenerierung] Analyse $\to$ interne/externe Nebendbed. $\to$ Synthese $\to$ Griff
+	\item[interne/externe Nebenbed] Kollisionsfreiheit, Zugänglichkeit / Kollisionsfreie An/Abrückbewegung, Griffmöglichkeit, Stabilität von allem
+\end{description}
+
+\subsubsection{Problem of Dimensionality}
+
+Menschliche Hand + Pose = 27 Dimensionen, + Stabilität etc. als analytisches Problem kaum lösbar $\rightarrow$ Simulation
+
+\subsubsection{Greifsimulation}
+
+Hand + Objektmodell laden, Griffkandidat generieren, Griff ausführen und anhand Gütekriterien für Stabilität auswerten
+
+\paragraph{Griffkandidatenerzeugung}
+
+\begin{description}
+	\item[Formprimitiven] Approximation durch Formprimitiven, nach bestimmten Regeln Griffkandidat generieren (nur manuelle Formprimitiven möglich
+	\item[Superquadriken] Zerlegung in Baum aus Superquadriken, auf denen Griffkandidat berechnen (automatisch möglich)
+	\item[Box Decomposition] Min Vol Bounding Boxes zur Objektdarstellung, Griffkandidaten auf einzelnen Boxen generieren (automatisch, auch auf unbekannten Objekten, sehr grob
+	\item[Medial-Axis-Transformation] Kugeln maximaler Größe reinschreiben, mittels Kugelmittelpunkte Griffkandidaten (sehr genau, Radien $\equiv$ lokale Dichte des Objekts)
+\end{description}
+
+\paragraph{Kraftschluss}
+
+Wie gut widersteht ein Griff externen Einwirkungen ? \\
+
+\begin{itemize}
+	\item Bestimme Kontaktpunkte und berechne Reibungskegel
+	\item Berechne Grasp Wrench Space GWS als konvexe Hülle
+	\item min(Ursprung GWS zu einer Facette GWS) ist Maß für Stabilität
+\end{itemize}
+
+\subsection{Interesting}
+
+\begin{description}
+	\item[Planungsmodell] Nodes $\equiv$ subgoals, Edges $\equiv$ Transition $\rightarrow$ Consistent representation of state
+	\item[Dynamic Interactive Learning] Lernsystem auf Roboter, Lernen interaktive statt mit zweitem Rechner. Lernen durch Vormachen, Modellierung zusammen mit Rechner, Umwandeln der Infos vom Roboter selbst
+	\item[Constraint Representation] position constraints from learning or knowing, distance, orientation $\dots$
+	\item[Structural Bootstrapping] deduce from existing data, filter additional information
+	\item[Neurorobotics] biologydriven approach, improve medicine, neuroscience, computing
+\end{description}
