@@ -230,62 +230,34 @@ DPLL zur Überprüfung von Erfüllbarkeit:
 
 \subsection{Prädikatenlogik}
 
+Prädikate $P$, Funktionen $f$ etc möglich.
+
+\subsubsection{Substitution}
+
+\subsubsection{Resolution}
+
 \section{Planung}
 
 \subsubsection*{Repräsentation von Plänen}
 
-Wie kann man Probleme so formulieren, dass
+Probleme formuliert, sodass
 \begin{itemize}
-\item ein Lösungsplan einfach zu erstellen ist?
-\item die Existenz einer Lösung bewiesen/widerlegt werden kann?
+\item (Existenz eines) Lösungsplan einfach
 \end{itemize}
-$\to$ Einschränkungsregeln für formelle Spezifikation von Zuständen, Zielen, Aktionen. Beispiele solcher Regelsysteme: STRIPS, ADL
+$\to$ Einschränkungsregeln für formelle Spezifikation von Zuständen, Zielen, Aktionen.
 
-\subsection{STRIPS\index{STRIPS}}
+\subsection{STandford Research Institute Problem Solver (STRIPS)\index{STRIPS}}
 
-\begin{itemize}
-\item \textbf{ST}anford \textbf{R}esearch \textbf{I}nstitute \textbf{P}roblem \textbf{S}olver
-\item "{}Urvater"{} vieler Planungssysteme
-\item sehr einfach aufgebaut
-\item teilweise eingeschränkt
-\end{itemize}
-Repräsentation von Zuständen:
-\begin{itemize}
-\item Konjunktion positiver aussagenlogischer Literale $$Blau \wedge Rund$$
-\item Literale erster Ordnung ($L1$) $$IstTasse(T1) \wedge IstUntertasse(U1) \wedge StehtAuf(T1,U1)$$
-\item $L1$ müssen funktions- und variablenfrei sein!
-\end{itemize}
-\textbf{\textsl{Closed-World Assumption}}
-\begin{itemize}
-\item geschlossene Welt: was nicht im Zustand vorkommt, ist falsch!
-\item keine Negationen im Zustand und Vorbedingungen, aber in Nachbedingungen benötigt:
-$$b \quad \Rightarrow \quad \begin{array}{l} a \textrm{ darf nicht im Weltmodell vorkommen} \\ b \textrm{ muss im Weltmodell vorkommen} \end{array}$$
-\item Negationen in Nachbedingungen:
-$$\neg c \wedge d \quad \Rightarrow \quad \begin{array}{l} \textrm{entferne } c \textrm{ aus dem Weltmodell} \\ \textrm{füge } d \textrm{ dem Weltmodell hinzu} \end{array}$$
-\end{itemize}
-Repräsentation von Zielen:
-\begin{itemize}
-\item Ziel: teilweise spezifizierter Zustand
-\item angegeben als Konjunktion von positiven Literalen
-$$StehtAuf(T1,U1) \wedge StehtAuf(U1,Tisch)$$
-\item ein Zustand $S$ erfüllt ein Ziel $Z$, wenn er alle Literale in $Z$ enthält
-$$StehtAuf(T1,U1) \wedge StehtAuf(U1,Tisch) \wedge StehtAuf(Teller,Tisch)$$
-erfüllt $$StehtAuf(T1,U1) \wedge StehtAuf(U1,Tisch)$$
-\end{itemize}
-Aktionen werden angegeben durch
-\begin{itemize}
-\item Aktionsname
-\item Parameter
-\item Vorbedingungen
-\item Effekte
-\end{itemize}
-$$A = (N_A,P_A,V_A,E_A)$$
-\begin{center}
-\begin{tabular}{l}
-$(StelleAuf,$ \\ $(Obj1,Obj2),$ \\ $IstUntersatz(Obj2) \wedge Auf(Obj1,Tisch) \wedge Auf(Obj2,Tisch),$ \\ $\neg Auf(Obj1,Tisch \wedge Auf(Obj1,Obj2))$
-\end{tabular}
-\end{center}
-Alternative Schreibweise:
+(teilweise eingeschränkt)
+
+\begin{description}
+	\item[Zustandsrepräsentation] Konjunktion positiver aussagenlogischer Literale und Literale 1. Ordnung (L1) [fkt. und variablenfrei] $$Blau \wedge Rund \wedge IstTasse(T1)$$
+	\item[Closed World Assumption] nicht im Zustand vorkommend $\to$ falsch
+	\item[No Negative Feature] keine Negationen in Zustand / Vorbedingung (in Nachbedingung mgl) \\
+	In Vorbed: $$b \quad \Rightarrow \quad \begin{array}{l} a \textrm{ darf nicht im Weltmodell vorkommen} \\ b \textrm{ muss im Weltmodell vorkommen} \end{array}$$
+	In Nachbed: $$\neg c \wedge d \quad \Rightarrow \quad \begin{array}{l} \textrm{entferne } c \textrm{ aus dem Weltmodell} \\ \textrm{füge } d \textrm{ dem Weltmodell hinzu} \end{array}$$
+	\item[Zielrepräsentation] teilweise spezifiziert, Konjunktion positiver Literale, erfüllt $\leftrightarrow$ Zustand enthält alle Literale des Ziels
+	\item[Aktion] A = (Name $N_A$, Parameter $P_A$, Vorbed. $V_A$, Effekte $E_A$) \underline{oder} 
 \begin{center}
 \begin{tabular}{lll}
 \textbf{Action} ( & \multicolumn{2}{l}{$StelleAuf(Obj1, Obj2),$} \\
@@ -293,54 +265,32 @@ Alternative Schreibweise:
 & \textbf{Effekt:} & $\neg Auf(Obj1, Tisch) \wedge$ \\ && $Auf(Obj, Obj2)$ \qquad \quad )
 \end{tabular}
 \end{center}
-Semantik:
-\begin{description}
-\item[Anwendbarkeit:] Eine Aktion ist anwendbar auf allen Modellen $M$, die ein Modell für die Vorbedingung $V_A$ sind.
-\item[Ergebnis:] Das Ergebnis $M'$ der Ausführung einer Aktion $A$ auf einem Modell $M$ erhält man durch
-\begin{itemize}
-\item entfernen aller negativen Literale des Effekts $E_A$ aus $M$
-\item hinzufügen aller positiven Literale aus $E_A$ zu $M$.
-\end{itemize}
+	\item[Anwendbarkeit] Aktion anwendbar $\equiv$ Modell $M$ ist hat Vorbedingung $V_A$
+	\item[Ergebnis] $\textit{Ergebnis}(M, A) = M + \{ \textit{pos. Literale von } E_A) \} - \{ \textit{neg. Literale von } E_A \}$
 \end{description}
+
 Einschränkunen von STRIPS:
 \begin{itemize}
 \item Literale müssen funktionsfrei sein
 \begin{itemize}
-\item endliche Grammatik
-\item jede Aktion kann als endliche aussagenlogische Konjunktiondargestellt werden
-\item Lösbarkeitsbeweis einfach
+\item endliche Grammatik, Aktion $\equiv$ endliche Konjuktion, Lösbarkeitsbeweis einfach
 \end{itemize}
-\item Nur positive Literale $l$, "{}geschlossene Welt"{}
+\item \underline{nur} positive Literale , "{}geschlossene Welt"{}
 \begin{itemize}
-\item einfachere Planung
-\item aber: Falsch-Sachverhalte nur implizit
+\item einfachere Planung aber Falsch-Sachverhalte nur implizit
 \end{itemize}
 \item keine Quantisierung
 \end{itemize}
 $\Rightarrow$ STRIPS-Aussagen oft lang und unübersichtlich
 
-\subsection{ADL\index{ADL}}
+\subsection{Action Description Language (ADL)\index{ADL}}
 
-\begin{itemize}
-\item \textbf{A}ction \textbf{D}escription \textbf{L}anguage: Weiterentwicklung von STRIPS
-\item "{}offene Welt"{}: Was nicht im Zustand vorkommt, ist unbekannt.
-\item negative Literale und Disjunktionen erlaubt
-\item Effekt $\neg P \wedge Q$:
-\begin{itemize}
-\item füge $\neg P$ und $Q$ hinzu
-\item lösche $P$ und $\neg Q$
-\end{itemize}
-\item Gleichheits-Prädikat "{}="{} eingebaut
-\begin{itemize}
-\item $StelleAuf(T1,T1)$ nicht mehr möglich
-\end{itemize}
-\end{itemize}
-Typüberprüfung
-\begin{itemize}
-\item Typüberprüfung benötigt für Ausführbarkeit bestimmter Aktionen
-\item in STRIPS nur explizit (als Prädikat): $IstUntersetzer(x)$, $IstTasse(y)$
-\item häufig weggelassen (Schreibarbeit!), aber eigentlich nötig
-\item in ADL implizit möglich:
+\begin{description}
+	\item[offene Welt] nicht im Zustand = unbekannt
+	\item[Negative Features] negative Literale / Konjunktionen erlaubt
+	\item[Ergebnis] Effekt $\neg P \wedge Q \rightarrow M' = M + \neg P + Q - P - \neg Q$
+	\item[Gleichheit] "{} $=$ "{} nun dabei, $\textit{StelleAuf}(T1,T1)$ nicht mehr möglich
+	\item[Typüberprüfung] In STRIPS explizit, in ADL implizit möglich:
 \begin{center}
 \begin{tabular}{lll}
 \textbf{Action} ( & \multicolumn{2}{l}{$StelleAuf(Obj1 \, : \, Untersatz, \,\, Obj2 \, : \, Manipulierbar),$} \\
@@ -348,70 +298,135 @@ Typüberprüfung
 & \textbf{Effekt:} & $\neg Auf(Obj1, Tisch) \wedge$ \\ && $Auf(Obj, Obj2)$ \qquad \quad )
 \end{tabular}
 \end{center}
-\end{itemize}
-Suche im Zustandsraum ist einfach:
+\end{description}
+
+\subsection{Heuristik}
+
+\textbf{Suche im Zustandsraum}
 \begin{itemize}
-\item keine Funktionssymbole \\ $\Rightarrow$ endlicher Zustandsraum \\ $\Rightarrow$ Standard-Algorithmen zur Baumsuche (z.B. A*)
-\item Transformation Vorbedingungen $\Leftrightarrow$ Effekte bijektiv \\ $\Rightarrow$ Suche auch rückwärts möglich
+\item einfach, da Effekte bijektiv und keine Funktionssymbole \\ $\Rightarrow$ endlicher Zustandsraum \\ $\Rightarrow$ Standard-Algorithmen zur Baumsuche (z.B. A*)
+\item \underline{aber} Zustandsraum oft sehr groß $2^n$, naiv = ineffizient $\to$ Heuristik / Segmentierung in Teilprobleme
 \end{itemize}
-Aber:
-\begin{itemize}
-\item Zustandsraum oft sehr groß
-\item naive Suche sehr ineffizient
-\item benötigt gute Heuristik oder Segmentierung in Teilprobleme
-\end{itemize}
-Heuristiken für Zustandsraumsuche
+
+\textbf{Heuristiken für Zustandsraumsuche}
 \begin{itemize}
 \item versuche, die Suchtiefe einzuschränken
-\item Def. \textbf{Heuristikfunktion}\index{Heuristikfunktion}: $$h = H(M_0,M_1)$$ angenommene maximale Anzahl von Aktionen, um von $M_0$ zu $M_1$ zu kommen
+\item Def. \textbf{Heuristikfunktion}\index{Heuristikfunktion}: $$h = H(M_0,M_1)$$ angenommene maximale Anzahl von Aktionen, um von $M_0$ zu $M_1$ zu kommen, optimistisch, darf über- aber nicht unterschätzen
 \item beschränke Suche auf Teilbaum der Tiefe $h$
 \item wenn nicht gefunden: suche je eine Ebene tiefer
-\item Problem: finde möglichst gute Heuristikfunktionen
+\item Problem: finde möglichst gute Heuristikfunktionen, denn allg. für Planungsprobleme existiert nicht
+\item Bsp: Suche im Zustandsraum $\to$ Anzahl noch zu erfüllender Literale als Heuristik?? $\to$ \underline{Nein}, denn wenn eine Aktion mehrere Literale erfüllt, überschätzt die Heuristik evtl den verbleibenden Aufwand
 \end{itemize}
-\subsubsection*{Vorranggraph\index{Vorranggraph}}
-Vor- und Nachbedingungen können zur Problemdekomposition verwendet werden. Parralelisierung möglich? $\to$ Vorranggraph \\
-Vorranggraph ermöglicht:
+
+\subsubsection{Greedy}
+
+Immer vom Zustand, der laut Heuristik am nächsten am Ziel ist.
+
 \begin{itemize}
-\item Parallelisierung der Planung
-\item Parallelisierung der Ausführung
-\item bei dynamischen Effekten (Hindernisse, etc.)
+	\item häufig gut, aber große Umwege mgl, i.d.R. nicht optimal
+\end{itemize}
+
+\subsubsection{A* - Algorithmus (allg. für Graphen)}
+
+Expandiere Knoten, für den Summe $$\textit{geschätzte Summe zum Ziel} + \textit{bisher zurückgelegte Strecke von Start}$$
+minimal ist.
+(berücksichtige \underline{alle} nicht expandierten Knoten)
+
+\subsubsection{Partial Order Planning}
+
 \begin{itemize}
-\item Blockierung des momentanen Teilplans
-\item zuerst Ausführung anderer Teilpläne
-\item dann Überprüfung, ob blockierter Teilplan jetzt ausführbar (Hindernis jettz weg?)
-\item ggf. Neuplanung nur ab der letzten Gabelung notwendig
+	\item Aktionen nur soweit ordnen wie nötig (partial order) $\to$ Planung flexibler
+	\item Planung nicht im Zustandsraum, sondern im Raum der gültigen PO-Pläne
+	\begin{itemize}
+		\item Aktionen, Ordnungsbed., Abhängigkeiten, offene Vorbed.
+		\item Pseudoaktionen Start / Ziel
+		\begin{itemize}
+			\item Effekte Start = Literale des Startzustands
+			\item Vorbed. Ziel = Literale des Zielzustands
+		\end{itemize}
+		\item zu Beginn Start < Ziel, keine Abhängigkeiten, offene Vorbed. als Ziel
+	\end{itemize}
 \end{itemize}
+
+Für alle neuen Pläne:
+\begin{algorithmic}
+	\While{$\exists$ offene Vorbed., die nicht durch Startzustand erfüllt werden}
+		\State wähle bel. offene Vorbed. $P$ einer Aktion $B$
+		\ForAll{A | Effekte von A erfüllen P}
+			\State ergänze Abhängigkeiten um $A \rightarrow_P B$
+			\State ergänze Ordnungsbed. um $A < B$
+			\If{$A \notin \textit{Plan}$}
+				\State Füge $A$ zu Aktion hinzu
+				\State Füge Ordnungsbed. $\textit{Start} < A$ und $A < \textit{Ziel}$ hinzu
+			\EndIf
+		\EndFor
+	\EndWhile
+\end{algorithmic}
+
+Gültigkeit eines PO-Plans
+\begin{itemize}
+	\item Ordnungsbed. + Abh. berücksichtigt
+	\item keine Zyklen $A < \dots < A$
+	\item wenn Abh. $A \rightarrow_P B$ ex., dann $P$ nicht durch Aktion $C$ zwischen $A$ und $B$ negiert werden !
 \end{itemize}
+
+Beschleunigung
+\begin{itemize}
+	\item Literal, das wenigste Aktionen benötigt $\to$ geringer Verzweigungsgrad
+	\item In der Praxis beachte zwei Spezialfälle : \\ Literal gar nicht erfüllbar $\to$ Abbruch \\ Literal nur durch eine Möglichkeit erfüllbar $\to$ Sofort
+\end{itemize}
+
+\subsubsection{Planungsgraph}
+
+Polynomieller, spezieller Algorithmus.
+\begin{itemize}
+	\item Abwechselnde Schritte $L_0$, $A_0$, $L_1$, $\dots$ (Literale die wahr sein könnten (einmal unverändert, einmal Aktionsergebnisse), Aktionen die mit geg. Vorbed. erfüllt werden könnten)
+	\item mutex: zwischen Literalen, zwischen Aktionen \\
+	Literale: komplementär oder wenn sie nur aus sich gegenseitig ausschließenden Aktionen resultieren \\
+	Aktionen: komplementäre Effekte, Effekt der einen zerstört Vorbed. der anderen, Vorbed. enthalten komplementäre Literale
+\end{itemize}
+
+\begin{algorithmic}
+	\State Init: Alle Literale des Startzustands
+	\While{Literale verändern sich nicht}
+		\State alle mgl. Aktionen eintragen
+		\State mutexe eintragen
+	\EndWhile
+\end{algorithmic}
+
+$\rightarrow$ Erster Abschnitt, in denen Literale ohne Mutex vorkommen $\equiv$ optimistischer Schätzwert
+$\rightarrow$ Im Planungsgraph nicht erreicht $=$ unerreichbar, aber Umkehrung gilt nicht
 
 \subsection{Umweltmodell\index{Umweltmodell}}
 
-Das Umweltmodell eines kognitiven Systems bildet die reale Umwelt auf eine innere Repräsentation ab. Logisch-semantische Beziehungen genügen für ein System mit Aktorik nicht; zusätzlich:
-\begin{itemize}
-\item geometrisches Modell: Ausdehung und Lage von Objekten
-\item topologisches Modell: (teil-geometrische) Beziehungen zwischen Objekten
-\end{itemize}
+$$\textit{Umweltmodell} : \textit{Reale Umwelt} \to \textit{innere Repräsentation}$$
 
+\begin{center}
+Semantik + Geometrie + Topologie
+\end{center}
+
+\begin{center}
+2D , 2 $\frac{1}{2}$D (senkrechtes Anheben), 3D
+\end{center}
+
+\subsubsection{Umweltbedingungen}
+
+Statisch vs. Dynamisch (mit Positionsänderungen) \\
+
+Bekannte (alle Objekte vorhanden) vs. Unbekannte Umwelt (Kartographierung)
 
 \subsubsection{Objektmodellierung}
 
-\begin{itemize}
-\item Darstellung der Objekte der realen Umwelt (Türen, Wände, Hindernisse)
-\item 3-dim. Darstellung der Umgebung aus Sensorwahrnehmungen
-\item Projektion auf $x$-$y$-Ebene für Navigation bodengebundener Roboter ausreichend
-\end{itemize}
-verschiedene Darstellungen:
-\begin{itemize}
-\item Kantenmodelle: \\
-Ermittlung von markanten Punkten. Verbinden durch geeignete Kanten auf Oberfläche des Objekts
-\item Oberflächenmodelle
-\begin{itemize}
-\item Nachbildung der Objektoberflächen
-\item Darstellung ebener Flächenelemente mit Polygonen
-\item gekrümmte Flächenelemente:
-\begin{itemize}
-\item mathematische Grundflächen (Zylinder, Kegel, Torusflächen)
-\item Bezier-Flächen
-% Nicht in Vorlesungsfolien 
+Darstellung der Objekte der realen Umwelt mittels
+
+\begin{description}
+	\item[Kantenmodell] Ermittlung markanter Punkte, Verbindung durch geeignete Kanten
+	\item[Oberflächenmodell] Nachbildung der Objektoberflächen (Polygone, mathematische Grundflächen, Bezier-Flächen, Freiformflächen [Patches])
+	\item[Volumenmodell] Begrenzungsflächenmodell, Grundkörperdarstellung, Zellzerlegung (Oct-Tree)
+	\item[Bsp. Constructive Solid Geometry] Aus parametrisierbaren Grundflächen, mittels boolescher Operatoren ($\to$ hoher algorithmischer Aufwand)
+\end{description}
+
+% Nicht in Vorlesungsfolien
 %(Erweiterung des Ansatzes der Bezierkurven): \\
 %gegeben ist ein Gitter von Führungspunkten $P_{ij}$ mit $0 \leq i \leq N$ und $0 \leq j \leq M$. Damit ist die Fläche beschrieben durch $$F(u,v) = \sum\limits_{i=0}^N \sum\limits_{j=0}^M P_{ij} \cdot B_{i,N}(u) \cdot B_{j,M}(v)$$ mit
 %\begin{eqnarray*}
@@ -419,327 +434,365 @@ Ermittlung von markanten Punkten. Verbinden durch geeignete Kanten auf Oberfläc
 %B_{j,M}(v) &=& (1-v) B_{j,M-1}(v) + uB_{j+1,M-1}(v) \quad , \quad B_{j,0} = 1
 %\end{eqnarray*}
 %Die $B_{i,N}$ bzw. $B_{j,M}$ heißen auch Bernsteinpolynome.
-\item näherungsweise durch Freiformflächen (Patches)
-\end{itemize}
-\end{itemize}
-\item Volumenmodelle:
-\begin{itemize}
-\item Unterscheidung von Raumpunkten hinsichtlich ihrer Lage zum Objekt (innen-/außenliegend)
-\item Repräsentationsmöglichkeiten: Begrenzungsflächenmethode, Grundkörperdarstellung, Zellenzerlegung (Octtree), Volumenapproximation, einhüllende Quader, Geradensegmente
-\end{itemize}
-\end{itemize}
 
+%\begin{description}
+%\item[Geometrisches Modell:] Anwendungen:
+%\begin{itemize}
+%\item Bahnplanung feinkörnig
+%\item aktives Messen
+%\item Objekterkennung (Basisobjekte)
+%\item fahren von $x_s,y_s,z_s$ nach $x_e,y_e,z_e$
+%\end{itemize}
+%\item[Topologisches Modell:] Anwendungen:
+%\begin{itemize}
+%\item Planung (Manipulationsplanung, mittlere Körnigkeit, Bewegungsplanung)
+%\item "{}fahre von Raum1 nach Raum5"{}
+%\end{itemize}
+%Über topologische Modelle:
+%\begin{itemize}
+%\item Anordnung von Objekten und Umwelt relativ zueinander gespeichert
+%\item abgeleitet aus geometrischen Modellen: \\ Pfade z.B. aus Voronoi.Diagrammen, Quadtree, Potentialfeldern
+%\item grobe Aktionsplanung aus topologischen Modellen
+%\item kurzfristige Verwendung anderer Modelle bei unerwarteten Hindernissen (geometrischer Bodenplan, ad-hoc erzeugte Kantenmodelle aus Laserscan, Kamera)
+%\end{itemize}
+%\item[Semantisches Modell:] Anwendung: Planung auf Aufgabeneben $\to$ "{}fahre durch alle Büros"{} \\
+%Über semantische Modelle:
+%\begin{itemize}
+%\item besondere Bedeutung im Rahmen der Mensch-Maschine-Kommunikation
+%\item belegte Fläche als Objekt klassifiziert (z.B Schrank, Stuhl)
+%\item eingeordnet in topologische Beschreibung
+%\item Objekteigenschaften verwertbar: Objektzustand (Tür offen, Tasse leer); äußere Erscheinung des Objekts (Form, Farbe) als Diskriminator und Hilfe für die Sensorik; geometrisches Objektmodell für Greifplanung etc.
+%\end{itemize}
+%zugehörig zu semantischen Umweltbeschreibungen:
+%\begin{itemize}
+%\item Funktion eines Objektes
+%\item Landmarken
+%\item geometrische Objekte
+%\item topologische Umweltdarstellungen
+%\item Positionen
+%\end{itemize}
+%\end{description}
+%
+%Umweltrepräsentation der Information:
+%\begin{itemize}
+%\item Pfade \item Freiraum \item Objekte \item gemischte Modelle
+%\end{itemize}
 
+%\subsubsection*{Pfade}
+%
+%Normal: 2-dimensionaler Raum
+%\begin{itemize}
+%\item Polygonale Beschreibung der Objekte
+%\item Pfad: lineare oder nichtlineare Verbindung zweier Punkte im Operationsraum
+%\item Speicherung der Umwelt und Planungsinformation
+%\item Repräsentation als ungerichteter Graph
+%\end{itemize}
+%Sichtbarkeitsgraphen:
+%\begin{itemize}
+%\item einfache Umweltdarstellung, partielle Modellierung
+%\item kollisionsfreie Bewegung nur auf gespeicherten Pfaden
+%\item Sichtbarkeitsgraphen zur automatischen Generierung von Pfaden
+%\end{itemize}
+%Erstellung eines Sichtbarkeitsgraphen:
+%\begin{center}
+%\begin{tabular}{l}
+%\verb|for i = 1..#Obj| \\
+%\verb|  for j = 1..#Objekte[i]| \\
+%\verb|    for k = i..#Obj| \\
+%\verb|      for l = 1..#Objekte[k]| \\
+%\verb|        if (Sichtbarkeitstest(objekte[i][j], objekte[k],[l] == ok)| \\
+%\verb|          neuer Pfad(i,j,k,l)|
+%\end{tabular}
+%\end{center}
+%\begin{description}
+%\item[Voronoi-Diagramme\index{Voronoi-Diagramme}:] Fahrwege liegen auf maximalem Abstand zu den Hindernissen. Das Voronoi-Diagramm ist der duale Graph der Delaunay-Triangulation.
+%\end{description}
 
+\subsubsection{Umgebungskarte}
+
+Durch Sensordaten.
 
 \begin{description}
-\item[Geometrisches Modell:] Anwendungen:
-\begin{itemize}
-\item Bahnplanung feinkörnig
-\item aktives Messen
-\item Objekterkennung (Basisobjekte)
-\item fahren von $x_s,y_s,z_s$ nach $x_e,y_e,z_e$
-\end{itemize}
-\item[Topologisches Modell:] Anwendungen:
-\begin{itemize}
-\item Planung (Manipulationsplanung, mittlere Körnigkeit, Bewegungsplanung)
-\item "{}fahre von Raum1 nach Raum5"{}
-\end{itemize}
-Über topologische Modelle:
-\begin{itemize}
-\item Anordnung von Objekten und Umwelt relativ zueinander gespeichert
-\item abgeleitet aus geometrischen Modellen: \\ Pfade z.B. aus Voronoi.Diagrammen, Quadtree, Potentialfeldern
-\item grobe Aktionsplanung aus topologischen Modellen
-\item kurzfristige Verwendung anderer Modelle bei unerwarteten Hindernissen (geometrischer Bodenplan, ad-hoc erzeugte Kantenmodelle aus Laserscan, Kamera)
-\end{itemize}
-\item[Semantisches Modell:] Anwendung: Planung auf Aufgabeneben $\to$ "{}fahre durch alle Büros"{} \\
-Über semantische Modelle:
-\begin{itemize}
-\item besondere Bedeutung im Rahmen der Mensch-Maschine-Kommunikation
-\item belegte Fläche als Objekt klassifiziert (z.B Schrank, Stuhl)
-\item eingeordnet in topologische Beschreibung
-\item Objekteigenschaften verwertbar: Objektzustand (Tür offen, Tasse leer); äußere Erscheinung des Objekts (Form, Farbe) als Diskriminator und Hilfe für die Sensorik; geometrisches Objektmodell für Greifplanung etc.
-\end{itemize}
-zugehörig zu semantischen Umweltbeschreibungen:
-\begin{itemize}
-\item Funktion eines Objektes
-\item Landmarken
-\item geometrische Objekte
-\item topologische Umweltdarstellungen
-\item Positionen
-\end{itemize}
+	\item[Freiraum] $F_R$ Gesamter Raum - Hindernisse
+	\item[Konfigurationsraum] $K_R$: Raum aller möglichen Konfigurationen vom Roboter (bspw. Anpassung zur Unterstützung der Planung, Hindernisse vergrößern)
+	\item[Hindernisraum] $H$ Raum der Hindernisse
 \end{description}
 
-Umweltrepräsentation der Information:
-\begin{itemize}
-\item Pfade \item Freiraum \item Objekte \item gemischte Modelle
-\end{itemize}
+%\subsubsection*{Freiraum}
+%
+%\begin{itemize}
+%\item Projektion der realen Welt in 2D/3D-Grundrissdarstellung
+%\item kollisionsfrei befahrbare Freiräume in geeignete Bereiche zerlegt
+%\item vorhandene Objekte und Hindernisse nicht berücksichtigt
+%\end{itemize}
+%Freiraumgraph:
+%\begin{itemize}
+%\item Knoten: Freiraumbereiche
+%\item Kanten: Verbindung der Gebiete
+%\end{itemize}
+%Vorteile:
+%\begin{itemize}
+%\item geringere Komplexität der Wegplanung
+%\item reduzierter Zeit- und Rechenaufwand
+%\item Fahrsicherheitsüberlegungen deutlich vereinfacht
+%\item Verbesserung der Anpassungsfähigkeit der Algorithmen an verschiedene Umwelten
+%\end{itemize}
+%Darstellungsformen der Freiflächen:
+%\begin{itemize}
+%\item Kacheln (Quader)
+%\begin{itemize}
+%\item Darstellung von besetzten Räumen durch orthogonale begrenzende Linien (Näherungen)
+%\item Verlängerung der Linien bis zum nächsten besetzten Raum
+%\item bildet Mosaik von besetzten und freien Kacheln/Quadern
+%\item freie Kacheln $\to$ Graph, durch den Bewegung möglich ist
+%\end{itemize}
+%Quadtree-/Octtree-Aufteilung:
+%\begin{itemize}
+%\item hierarchische Aufteilung in freie und belegte Zellen
+%\item Aufteilung teilbelegter Zellen in 4 (2D) bzw. 8 (3D) Unterzellen
+%\item Resultat: Baumstruktur
+%\item Pfadplanung: Aufstieg von Start- und Zielknoten bis zum ersten gemeinsamen Knoten; Liste besuchter Knoten: Pfad
+%\end{itemize}
+%\item konvexe Polygone (Polyeder)
+%\end{itemize}
 
-\subsubsection*{Pfade}
-
-Normal: 2-dimensionaler Raum
-\begin{itemize}
-\item Polygonale Beschreibung der Objekte
-\item Pfad: lineare oder nichtlineare Verbindung zweier Punkte im Operationsraum
-\item Speicherung der Umwelt und Planungsinformation
-\item Repräsentation als ungerichteter Graph
-\end{itemize}
-Sichtbarkeitsgraphen:
-\begin{itemize}
-\item einfache Umweltdarstellung, partielle Modellierung
-\item kollisionsfreie Bewegung nur auf gespeicherten Pfaden
-\item Sichtbarkeitsgraphen zur automatischen Generierung von Pfaden
-\end{itemize}
-Erstellung eines Sichtbarkeitsgraphen:
-\begin{center}
-\begin{tabular}{l}
-\verb|for i = 1..#Obj| \\
-\verb|  for j = 1..#Objekte[i]| \\
-\verb|    for k = i..#Obj| \\
-\verb|      for l = 1..#Objekte[k]| \\
-\verb|        if (Sichtbarkeitstest(objekte[i][j], objekte[k],[l] == ok)| \\
-\verb|          neuer Pfad(i,j,k,l)|
-\end{tabular}
-\end{center}
-\begin{description}
-\item[Voronoi-Diagramme\index{Voronoi-Diagramme}:] Fahrwege liegen auf maximalem Abstand zu den Hindernissen. Das Voronoi-Diagramm ist der duale Graph der Delaunay-Triangulation.
-\end{description}
-
-\subsubsection*{Freiraum}
-
-\begin{itemize}
-\item Projektion der realen Welt in 2D/3D-Grundrissdarstellung
-\item kollisionsfrei befahrbare Freiräume in geeignete Bereiche zerlegt
-\item vorhandene Objekte und Hindernisse nicht berücksichtigt
-\end{itemize}
-Freiraumgraph:
-\begin{itemize}
-\item Knoten: Freiraumbereiche
-\item Kanten: Verbindung der Gebiete
-\end{itemize}
-Vorteile:
-\begin{itemize}
-\item geringere Komplexität der Wegplanung
-\item reduzierter Zeit- und Rechenaufwand
-\item Fahrsicherheitsüberlegungen deutlich vereinfacht
-\item Verbesserung der Anpassungsfähigkeit der Algorithmen an verschiedene Umwelten
-\end{itemize}
-Darstellungsformen der Freiflächen:
-\begin{itemize}
-\item Kacheln (Quader)
-\begin{itemize}
-\item Darstellung von besetzten Räumen durch orthogonale begrenzende Linien (Näherungen)
-\item Verlängerung der Linien bis zum nächsten besetzten Raum
-\item bildet Mosaik von besetzten und freien Kacheln/Quadern
-\item freie Kacheln $\to$ Graph, durch den Bewegung möglich ist
-\end{itemize}
-Quadtree-/Octtree-Aufteilung:
-\begin{itemize}
-\item hierarchische Aufteilung in freie und belegte Zellen
-\item Aufteilung teilbelegter Zellen in 4 (2D) bzw. 8 (3D) Unterzellen
-\item Resultat: Baumstruktur
-\item Pfadplanung: Aufstieg von Start- und Zielknoten bis zum ersten gemeinsamen Knoten; Liste besuchter Knoten: Pfad
-\end{itemize}
-\item konvexe Polygone (Polyeder)
-\end{itemize}
-
-
-
-\subsubsection*{Modelle}
-
-Aufgliederung des benötigten Wissens:
-\begin{itemize}
-\item Ausführung von Aufgaben
-\begin{itemize}
-\item semantisches Aufgabenmodell
-\item Umweltmodell vorher, nachher
-\end{itemize}
-\item Bewegung über Grund in 2D, Bewegung des Arms in 3D
-\begin{itemize}
-\item statische Umweltkarte (geometrisch und topologisch)
-\item dynamische Hinderniserfassung in 3D
-\item Freiraum-, Hindernismodell
-\end{itemize}
-\item Manipulation von Objekten
-\begin{itemize}
-\item Objektpositionen
-\item geometrische und topologische Objektmodelle
-\end{itemize}
-\end{itemize}
+%\subsubsection*{Modelle}
+%
+%Aufgliederung des benötigten Wissens:
+%\begin{itemize}
+%\item Ausführung von Aufgaben
+%\begin{itemize}
+%\item semantisches Aufgabenmodell
+%\item Umweltmodell vorher, nachher
+%\end{itemize}
+%\item Bewegung über Grund in 2D, Bewegung des Arms in 3D
+%\begin{itemize}
+%\item statische Umweltkarte (geometrisch und topologisch)
+%\item dynamische Hinderniserfassung in 3D
+%\item Freiraum-, Hindernismodell
+%\end{itemize}
+%\item Manipulation von Objekten
+%\begin{itemize}
+%\item Objektpositionen
+%\item geometrische und topologische Objektmodelle
+%\end{itemize}
+%\end{itemize}
 
 \subsection{Geometrisches Planen}
 
-\subsubsection*{Grundlagen der Bahnplanung\index{Bahnplanung}}
+\subsubsection*{Bahnplanung\index{Bahnplanung}}
 
-Bewegung eines Roboters:
-\begin{itemize}
-\item Zustandsänderungen über der Zeit (Trajektorie)
-\item relativ zu stationärem Koordinatensystem (kartesischer Raum, Gelenkwinkelraum)
-\item häufig Gütekriterien, Neben-, Randbedingungen
-\end{itemize}
-Bekannt:
-\begin{itemize}
-\item $S_{start}$: Zustand zum Startzeitpunkt
-\item $S_{ziel}$: Zustand zum Zielzeitpunkt
-\end{itemize}
-Gesucht:
-\begin{itemize}
-\item $S_I$: Zwischenzustände (Stützpunkte)
-\item glatte, stetige Trajektorie
-\end{itemize}
-Bahnplanungsverfahren nach Zustandsraum:
-\begin{itemize}
-\item Gelenkwinkelzustandsraum (Konfigurationsraum)
-\item 3-dim. euklidischer Raum
-\item Sensorzustandsraum, Objektzustandsraum, \dots
-\end{itemize}
-Bahnplanungsverfahren nach Art des Roboters:
-\begin{itemize}
-\item Bahnplanung für Manipulatoren
-\item Bahnplanung für mobile Roboter
-\item Bahnplanung für Laufmaschinen und antropomorphe Systeme
-\item Greif- und Montageplanung
-\end{itemize}
+Geg.: Karte des Raumes \\
+Ges.: Wege, potentiell der kürzeste \\
 
-\subsubsection*{Bahnplanung im Gelenkwinkelraum}
+Ansatz: Wegenetz anlegen, als Graph repräsentieren, Wegsuche im Graph
 
-\begin{itemize}
-\item Trajektorie als Funktion der Gelenkwinkel
-\item Ausführung solcher Trajektoren durch
-\begin{itemize}
-\item Steuerung der Achsen unabhängig voneinander (Punkt zu Punkt) oder
-\item achsinterpolierte Steuerung (Bewegung aller Achsen beginnt und endet zum gleichen Zeitpunkt) erfolgen
-\end{itemize}
-\item Bahnverlauf muss im kartesischen Raum nicht definiert sein
-\item Vorteile: einfach; keine Singularitäten
-\end{itemize}
+\paragraph{Polygonzerlegung}
 
-\subsubsection*{Bahnplanung im kartesischen Raum}
-
-\begin{itemize}
-\item Trajektorie angegeben als Funktion der Endeffektorposition
-\item Funktionen z.B.: lineare Bahnen, Polynombahnen, Splines
-\item Vorteile:
-\begin{itemize}
-\item Verlauf der Trajektorie explizit in 3D
-\item einfach nachvollziehbar, visualisierbar
-\end{itemize}
-\item Nachteile:
-\begin{itemize}
-\item für jeden Punkt muss Gelenkwinkelrücktransformation berechnet werden
-\item Trajektorie nicht immer ausführbar (Arbeitsraumbegrenzung, Singularitäten des Roboters)
-\end{itemize}
-\end{itemize}
-
-\subsubsection*{Bahnplanungs-Schema}
-
-gegeben: Robotermodell (Geometrie, Kinematik), Umweltmodell
+Schnell, aber evtl. große Umwege
 
 \begin{enumerate}
-\item Berechnung des Konfigurationsraums $K$
-\item Berechnung des Hindernisraums $H$
-\item Berechnung des Freiraums $F = K \backslash H$
-\item Zerlegung des Freiraums in Unterräume
-\item Bahnplanung im Unterraum
-\item Integration der lokalen Lösungen in Gasamtlösung
+	\item Von jeder Hindernissecke eine Trennlinie nach oben/unten bis zur nächsten Hinderniskante (komplett frei \underline{oder} komplett unpassierbar)
+	\item Mittelpunkte verwenden um Graph zu bilden, A* Algorithmus
 \end{enumerate}
 
-\subsubsection*{Konfiguration}
+\paragraph{Sichtgraph}
 
-\begin{description}
-\item[Konfiguration $k_R$:] beschreibt den Zustand eines Roboters $R$
-\begin{itemize}
-\item im euklidischen Raum durch Lage und Orientierung
-\item im Gelenkwinkelraum durch die Werte der Gelenke
-\end{itemize}
-\item[Konfigurationsraum $K_R$:] Raum aller möglichen Konfigurationen von $R$
-\item[Weg $w$ von $k_{start}$ bis $k_{ziel}$:] stetige Abbildung $$w \, : \, [0,1] \to K \quad \textrm{mit} \quad w(0) = k_{start} \, , \, w(1) = k_{ziel}$$
-\item[Arbeitsraum-Hindernis $h_{A,O}$:] Raum, der von einem Objekt $O$ im Arbeitsraum $A$ eingenommen wird
-\item[Konfigurationsraum-Hindernis $h_{K,O}$:] Raum, der von einem Objekt $O$ im Konfigurationsraum $K$ eingenommen wird
-\item[Hindernisraum $H$:] \quad $$H = \bigcup\limits_{O} h_{K,O}$$
-\end{description}
+Sichtgraph erstellen, Kanten sind alle Kanten der Hindernisse \underline{und} Sichtlinien zu allen anderen Ecken. ($\to$ A* - Algorithmus) \\
 
-\subsubsection*{Freiraum}
+Gitter als Annäherung der Hindernisse! \\
 
-\begin{itemize}
-\item Freiraum $F_R \, : \, F_R = K_R \backslash H$
-\item Aufwand für Freiraumberechnung: $O(m^n)$ mit
-\begin{itemize}
-\item $n$: Anzahl der Freiheitsgrade des Roboters
-\item $m$: Anzahl der Hindernisse
-\end{itemize}
-\item Deshalb oft approximative Verfahren zur Vereinfachung des Freiraums
-\begin{itemize}
-\item Sichtgraphen
-\item Quadtree, Octtree
-\end{itemize}
-\end{itemize}
+$\rightarrow$ kürzeste Wege in 2D (nicht 3D!), wenn Hindernisse als Polygone darstellbar
+$\rightarrow$ Hindernisse vergrößern, um Anfahrt zu ermöglichen
 
-\subsection{Bahnplanung in 2D}
+\paragraph{Quadtree (Octtrees)}
 
-Einfacher Algorithmus: "{}Strassenkarten"{} \\
-gegeben: 2-dim. Weltmodell, Start und Ziel \\
-gesucht: güstigste Verbindung von Start zu Ziel \\
-Lösung:
-\begin{enumerate}
-\item konstruiere Netz von Wegen $W$ in $F_R$
-\item bilde $k_{start}$ und $k_{ziel}$ auf $W$ ab: $(W(k_{start}), W(k_{ziel})$
-\item suche Weg $w$, der $W(k_{start})$ mit $W(k_{ziel})$ verbindet
-\end{enumerate}
+Raum unterteilt in Quadrat. Quadrat kann frei, unpassierbar oder gemischt sein. Gemischte aufteilen. (bis Untergrenze mgl, dann gemischte $\equiv$ unpassierbar) \\
 
-\subsubsection*{Wegkonstruktion}
+$\rightarrow$ so genau wie nötig!
 
-Wegkonstruktion mit
-\begin{itemize}
-\item Retraktionverfahren (z.B. Voronoi-Diagramm)
-\item Sichtgraphen
-\item Zellzerlegungsmethoden
-\end{itemize}
-Suche im Wegnetz mit z.B.
-\begin{itemize}
-\item A*-Algorithmus (Baumsuche)
-\item euklidischer Abstand
-\item Potentialfeld
-\end{itemize}
+\paragraph{Voronoi-Diagram}
 
-\begin{description}
-\item[Retraktion\index{Retraktion}:] Sei $X$ eine Menge und $Y \subset X$. Eine surjektive Abbildung $$p \, : \, X \to Y$$ heisst Retraktion genau dann, wenn $p$ stetig ist und $p(y) = y$ für alle $y \in Y$ gilt. \\
-D.h. die Abbildung der Menge $X$ auf ihre Teilmenge $Y$, wobei die Menge $Y$ auf sich selbst abgebildet wird. Für die Bahnplanung gilt:
-\begin{itemize}
-\item $Y$ ist ein Netz von eindimensionalen Kurven (Wegenetz).
-\item Retraktionsmethoden unterscheiden sich in Wahl von $p$.
-\end{itemize}
-\end{description}
+Für Maximalabstand zu Hindernissen. Grenzlinie so, dass alle Punkte bei nähster Fläche. ($\to$ 2 punktförmige = Gerade, Punkte+Gerade = Parabel) \\
+$\rightarrow$ definitiv hindernisfrei (max. Freiheit), große Umwege mgl.\\
+$\to$ bei komplexen Hindernissen Potentialfeld
 
-\subsubsection*{Sichtgraphen}
+\paragraph{Potentialfeldmethode}
 
-Konstruktion:
-\begin{itemize}
-\item Verbinde jedes Paar von Eckpunkten auf dem Rand von $F_R$ durch gerades Liniensegment, wenn das Segment kein Hindernis schneidet.
-\item Verbinde $k_{start}$ mit $k_{ziel}$ analog dazu.
-\end{itemize}
-Anmerkungen:
-\begin{enumerate}
-\item Wege sind nur "{}halbfrei"{} (nicht kollisionsfrei), da Hinderniskanten auch Wegsegmente sein können. \\ Abhilfe: Erweiterung der Hindernisse
-\item Wenn ein Weg gefunden ist, ist es auch der kürzeste Weg.
-\item Methode ist exakt, wenn Roboter nur 2 translatorische Freiheitsgrade hat und sowohl Roboter als auch Hindernisse durch Polygone dargestellt werden können.
-\item Methoden auch im $R^3$ anwendbar, jedoch sind die gefundenen Wege i.A. keine kürzesten Wege mehr.
-\end{enumerate}
+Potentialfeld im Konfigurationsraum definieren (1. globales Min. im Zielpunkt, linear ansteigend 2.Hindernisse sehr hohes Potential. Multiplizieren. Gradiend Descend) \\
 
-\subsubsection*{Kürzester Pfad im Graphen}
+$\rightarrow$ guter Kompromiss, aber lokale Minima
 
-vom Startknoten ausgehend:
-\begin{itemize}
-\item wähle Nachbarknoten $N_k$ so, dass Evaluationsfunktion $f(N_k)$ minimal
-\item suche von $N_k$ ausgehend weiter
-\item wenn $f(N_k)$ nicht mehr kleiner wird, mache weiter oben im Baum weiter
-\item Problem: $f(N_k)$ darf nicht vom Teilbaum an $N_k$ abhängen! \\ (Würden wir den kennen, bräuchten wir nicht suchen.)
-\item Lösung: verwende Heuristik $h(N_k)$
-\item beliebt für die Heuristikfunktion in 2D: euklidischer Abstand $$h(N_k) = ||N_k - N_{ziel}||$$
-\item rein heuristikbasierte Suche ist nicht optimal und führt nur unter Einschränkungen zum Ziel
-\item A*-Algorithmus\index{A*-Algorithmus}: \\ mit $g(N_k)$ Kosten zum Erreichen von $N_k$
-\item beweisbar optimal $$f(N_k) = g(N_k) + h(N_k)$$
-\end{itemize}
+%
+%Bewegung eines Roboters:
+%\begin{itemize}
+%\item Zustandsänderungen über der Zeit (Trajektorie)
+%\item relativ zu stationärem Koordinatensystem (kartesischer Raum, Gelenkwinkelraum)
+%\item häufig Gütekriterien, Neben-, Randbedingungen
+%\end{itemize}
+%Bekannt:
+%\begin{itemize}
+%\item $S_{start}$: Zustand zum Startzeitpunkt
+%\item $S_{ziel}$: Zustand zum Zielzeitpunkt
+%\end{itemize}
+%Gesucht:
+%\begin{itemize}
+%\item $S_I$: Zwischenzustände (Stützpunkte)
+%\item glatte, stetige Trajektorie
+%\end{itemize}
+%Bahnplanungsverfahren nach Zustandsraum:
+%\begin{itemize}
+%\item Gelenkwinkelzustandsraum (Konfigurationsraum)
+%\item 3-dim. euklidischer Raum
+%\item Sensorzustandsraum, Objektzustandsraum, \dots
+%\end{itemize}
+%Bahnplanungsverfahren nach Art des Roboters:
+%\begin{itemize}
+%\item Bahnplanung für Manipulatoren
+%\item Bahnplanung für mobile Roboter
+%\item Bahnplanung für Laufmaschinen und antropomorphe Systeme
+%\item Greif- und Montageplanung
+%\end{itemize}
+%
+%\subsubsection*{Bahnplanung im Gelenkwinkelraum}
+%
+%\begin{itemize}
+%\item Trajektorie als Funktion der Gelenkwinkel
+%\item Ausführung solcher Trajektoren durch
+%\begin{itemize}
+%\item Steuerung der Achsen unabhängig voneinander (Punkt zu Punkt) oder
+%\item achsinterpolierte Steuerung (Bewegung aller Achsen beginnt und endet zum gleichen Zeitpunkt) erfolgen
+%\end{itemize}
+%\item Bahnverlauf muss im kartesischen Raum nicht definiert sein
+%\item Vorteile: einfach; keine Singularitäten
+%\end{itemize}
+%
+%\subsubsection*{Bahnplanung im kartesischen Raum}
+%
+%\begin{itemize}
+%\item Trajektorie angegeben als Funktion der Endeffektorposition
+%\item Funktionen z.B.: lineare Bahnen, Polynombahnen, Splines
+%\item Vorteile:
+%\begin{itemize}
+%\item Verlauf der Trajektorie explizit in 3D
+%\item einfach nachvollziehbar, visualisierbar
+%\end{itemize}
+%\item Nachteile:
+%\begin{itemize}
+%\item für jeden Punkt muss Gelenkwinkelrücktransformation berechnet werden
+%\item Trajektorie nicht immer ausführbar (Arbeitsraumbegrenzung, Singularitäten des Roboters)
+%\end{itemize}
+%\end{itemize}
+%
+%\subsubsection*{Bahnplanungs-Schema}
+%
+%gegeben: Robotermodell (Geometrie, Kinematik), Umweltmodell
+%
+%\begin{enumerate}
+%\item Berechnung des Konfigurationsraums $K$
+%\item Berechnung des Hindernisraums $H$
+%\item Berechnung des Freiraums $F = K \backslash H$
+%\item Zerlegung des Freiraums in Unterräume
+%\item Bahnplanung im Unterraum
+%\item Integration der lokalen Lösungen in Gasamtlösung
+%\end{enumerate}
+%
+%\subsubsection*{Konfiguration}
+%
+%\begin{description}
+%\item[Konfiguration $k_R$:] beschreibt den Zustand eines Roboters $R$
+%\begin{itemize}
+%\item im euklidischen Raum durch Lage und Orientierung
+%\item im Gelenkwinkelraum durch die Werte der Gelenke
+%\end{itemize}
+%\item[Konfigurationsraum $K_R$:] Raum aller möglichen Konfigurationen von $R$
+%\item[Weg $w$ von $k_{start}$ bis $k_{ziel}$:] stetige Abbildung $$w \, : \, [0,1] \to K \quad \textrm{mit} \quad w(0) = k_{start} \, , \, w(1) = k_{ziel}$$
+%\item[Arbeitsraum-Hindernis $h_{A,O}$:] Raum, der von einem Objekt $O$ im Arbeitsraum $A$ eingenommen wird
+%\item[Konfigurationsraum-Hindernis $h_{K,O}$:] Raum, der von einem Objekt $O$ im Konfigurationsraum $K$ eingenommen wird
+%\item[Hindernisraum $H$:] \quad $$H = \bigcup\limits_{O} h_{K,O}$$
+%\end{description}
+%
+%\subsubsection*{Freiraum}
+%
+%\begin{itemize}
+%\item Freiraum $F_R \, : \, F_R = K_R \backslash H$
+%\item Aufwand für Freiraumberechnung: $O(m^n)$ mit
+%\begin{itemize}
+%\item $n$: Anzahl der Freiheitsgrade des Roboters
+%\item $m$: Anzahl der Hindernisse
+%\end{itemize}
+%\item Deshalb oft approximative Verfahren zur Vereinfachung des Freiraums
+%\begin{itemize}
+%\item Sichtgraphen
+%\item Quadtree, Octtree
+%\end{itemize}
+%\end{itemize}
+%
+%\subsection{Bahnplanung in 2D}
+%
+%Einfacher Algorithmus: "{}Strassenkarten"{} \\
+%gegeben: 2-dim. Weltmodell, Start und Ziel \\
+%gesucht: güstigste Verbindung von Start zu Ziel \\
+%Lösung:
+%\begin{enumerate}
+%\item konstruiere Netz von Wegen $W$ in $F_R$
+%\item bilde $k_{start}$ und $k_{ziel}$ auf $W$ ab: $(W(k_{start}), W(k_{ziel})$
+%\item suche Weg $w$, der $W(k_{start})$ mit $W(k_{ziel})$ verbindet
+%\end{enumerate}
+%
+%\subsubsection*{Wegkonstruktion}
+%
+%Wegkonstruktion mit
+%\begin{itemize}
+%\item Retraktionverfahren (z.B. Voronoi-Diagramm)
+%\item Sichtgraphen
+%\item Zellzerlegungsmethoden
+%\end{itemize}
+%Suche im Wegnetz mit z.B.
+%\begin{itemize}
+%\item A*-Algorithmus (Baumsuche)
+%\item euklidischer Abstand
+%\item Potentialfeld
+%\end{itemize}
+%
+%\begin{description}
+%\item[Retraktion\index{Retraktion}:] Sei $X$ eine Menge und $Y \subset X$. Eine surjektive Abbildung $$p \, : \, X \to Y$$ heisst Retraktion genau dann, wenn $p$ stetig ist und $p(y) = y$ für alle $y \in Y$ gilt. \\
+%D.h. die Abbildung der Menge $X$ auf ihre Teilmenge $Y$, wobei die Menge $Y$ auf sich selbst abgebildet wird. Für die Bahnplanung gilt:
+%\begin{itemize}
+%\item $Y$ ist ein Netz von eindimensionalen Kurven (Wegenetz).
+%\item Retraktionsmethoden unterscheiden sich in Wahl von $p$.
+%\end{itemize}
+%\end{description}
+%
+%\subsubsection*{Sichtgraphen}
+%
+%Konstruktion:
+%\begin{itemize}
+%\item Verbinde jedes Paar von Eckpunkten auf dem Rand von $F_R$ durch gerades Liniensegment, wenn das Segment kein Hindernis schneidet.
+%\item Verbinde $k_{start}$ mit $k_{ziel}$ analog dazu.
+%\end{itemize}
+%Anmerkungen:
+%\begin{enumerate}
+%\item Wege sind nur "{}halbfrei"{} (nicht kollisionsfrei), da Hinderniskanten auch Wegsegmente sein können. \\ Abhilfe: Erweiterung der Hindernisse
+%\item Wenn ein Weg gefunden ist, ist es auch der kürzeste Weg.
+%\item Methode ist exakt, wenn Roboter nur 2 translatorische Freiheitsgrade hat und sowohl Roboter als auch Hindernisse durch Polygone dargestellt werden können.
+%\item Methoden auch im $R^3$ anwendbar, jedoch sind die gefundenen Wege i.A. keine kürzesten Wege mehr.
+%\end{enumerate}
+%
+%\subsubsection*{Kürzester Pfad im Graphen}
+%
+%vom Startknoten ausgehend:
+%\begin{itemize}
+%\item wähle Nachbarknoten $N_k$ so, dass Evaluationsfunktion $f(N_k)$ minimal
+%\item suche von $N_k$ ausgehend weiter
+%\item wenn $f(N_k)$ nicht mehr kleiner wird, mache weiter oben im Baum weiter
+%\item Problem: $f(N_k)$ darf nicht vom Teilbaum an $N_k$ abhängen! \\ (Würden wir den kennen, bräuchten wir nicht suchen.)
+%\item Lösung: verwende Heuristik $h(N_k)$
+%\item beliebt für die Heuristikfunktion in 2D: euklidischer Abstand $$h(N_k) = ||N_k - N_{ziel}||$$
+%\item rein heuristikbasierte Suche ist nicht optimal und führt nur unter Einschränkungen zum Ziel
+%\item A*-Algorithmus\index{A*-Algorithmus}: \\ mit $g(N_k)$ Kosten zum Erreichen von $N_k$
+%\item beweisbar optimal $$f(N_k) = g(N_k) + h(N_k)$$
+%\end{itemize}
 
 
 
