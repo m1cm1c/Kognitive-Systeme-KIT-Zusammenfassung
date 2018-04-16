@@ -1,4 +1,7 @@
+auto
+
 *.aux
+*.brf
 *.glo
 *.idx
 *.log
